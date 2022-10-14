@@ -1,0 +1,19 @@
+version: 3.7
+
+services:
+  mysql:
+    # container_name: mysql
+    restart: always
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      # - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=plp
+    ports:
+      - "3307:3306"
+    volumes:
+      - plp_mysql_data:/var/lib/mysql
+
+volumes:
+  plp_mysql_data:
