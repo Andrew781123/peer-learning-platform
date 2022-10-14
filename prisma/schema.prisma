@@ -1,64 +1,76 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading: 
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
-}
-
-model Example {
-    id String @id @default(cuid())
-}
-
-// Necessary for Next auth
-model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? // @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@unique([provider, providerAccountId])
-}
-
-model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+  id               Int                @id
+  username         String             @db.VarChar(255)
+  questionSolution QuestionSolution[]
+  solutionComments SolutionComment[]
 }
 
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+model Course {
+  id         Int           @id
+  title      String        @db.VarChar(255)
+  pastPapers PastPaper[]
+  topics     CourseTopic[]
+}
 
-    @@unique([identifier, token])
+model PastPaper {
+  id        Int        @id
+  course    Course     @relation(fields: [courseId], references: [id])
+  courseId  Int
+  questions Question[]
+}
+
+model Question {
+  id          Int                @id
+  pastPaper   PastPaper          @relation(fields: [pastPaperId], references: [id])
+  pastPaperId Int
+  number      Int                @db.TinyInt
+  answers     QuestionSolution[]
+  topics      QuestionTopic[]
+}
+
+model QuestionSolution {
+  id               Int               @id
+  question         Question          @relation(fields: [questionId], references: [id])
+  questionId       Int
+  user             User              @relation(fields: [userId], references: [id])
+  userId           Int
+  markdown         String            @db.Text
+  difficultyRating Int               @db.TinyInt
+  votes            Int               @default(0) @db.Int
+  comments         SolutionComment[]
+}
+
+model SolutionComment {
+  id         Int              @id
+  solution   QuestionSolution @relation(fields: [solutionId], references: [id])
+  solutionId Int
+  user       User             @relation(fields: [userId], references: [id])
+  userId     Int
+  markdown   String           @db.Text
+}
+
+model CourseTopic {
+  id        Int             @id
+  course    Course          @relation(fields: [courseId], references: [id])
+  courseId  Int
+  questions QuestionTopic[]
+}
+
+model QuestionTopic {
+  id         Int         @id
+  question   Question    @relation(fields: [questionId], references: [id])
+  questionId Int
+  topic      CourseTopic @relation(fields: [topicId], references: [id])
+  topicId    Int
+
+  @@unique([questionId, topicId], name: "question_topic_unique")
 }
