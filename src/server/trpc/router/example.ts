@@ -1,5 +1,5 @@
-import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
+import { publicProcedure, router } from "../trpc";
 
 export const exampleRouter = router({
   hello: publicProcedure
@@ -10,6 +10,6 @@ export const exampleRouter = router({
       };
     }),
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
+    return ctx.prisma.course.findMany();
   }),
 });
