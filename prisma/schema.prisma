@@ -22,11 +22,12 @@ model Course {
 }
 
 model PastPaper {
-  id        Int        @id
-  course    Course     @relation(fields: [courseId], references: [id])
-  courseId  Int
-  link      String     @db.VarChar(255)
-  questions Question[]
+  id           Int        @id
+  course       Course     @relation(fields: [courseId], references: [id])
+  courseId     Int
+  link         String     @db.VarChar(255)
+  academicYear String     @db.VarChar(255)
+  questions    Question[]
 }
 
 model Question {
