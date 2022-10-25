@@ -1,6 +1,6 @@
 const Navbar = () => {
   return (
-    <nav className="flex items-center gap-10 bg-surface p-5 text-onSurface">
+    <nav className="flex items-center gap-10 bg-surface-default p-5 text-onSurface">
       <div className="">
         <p className="text-lg font-bold">Peer Learning Platform</p>
       </div>

@@ -18,7 +18,11 @@ module.exports = {
         onSecondary: "#000000",
         background: "#121212",
         onBackground: "#ffffff",
-        surface: "#1f1f1f",
+        surface: {
+          default: "#1f1f1f",
+          dark: "#121212",
+          light: "#2f2f2f",
+        },
         onSurface: "#ffffff",
       },
     },

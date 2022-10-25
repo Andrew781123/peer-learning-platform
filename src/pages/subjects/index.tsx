@@ -5,6 +5,7 @@ import PageHeader from "../../components/ui/PageHeader";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
 import { trpc } from "../../utils/trpc";
+import SubjectCard from "./SubjectCard";
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
   const ssg = createProxySSGHelpers({
@@ -32,13 +33,13 @@ const SubjectPage = (props: SubjectPageProps) => {
 
   return (
     <div>
-      <PageHeader title="Subjects" />
+      <div className="mb-3">
+        <PageHeader title="Subjects" />
+      </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {subjects.data?.map((subject) => (
-          <div key={subject.id} className="bg-surface p-4">
-            <p>{subject.title}</p>
-          </div>
+          <SubjectCard key={subject.id} subject={subject} />
         ))}
       </div>
     </div>
