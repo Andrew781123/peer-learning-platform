@@ -14,17 +14,17 @@ model User {
   solutionComments SolutionComment[]
 }
 
-model Course {
-  id         Int           @id
-  title      String        @db.VarChar(255)
+model Subject {
+  id         String         @id
+  title      String         @db.VarChar(255)
   pastPapers PastPaper[]
-  topics     CourseTopic[]
+  topics     SubjectTopic[]
 }
 
 model PastPaper {
   id           Int        @id
-  course       Course     @relation(fields: [courseId], references: [id])
-  courseId     Int
+  subject      Subject    @relation(fields: [subjectId], references: [id])
+  subjectId    String
   link         String     @db.VarChar(255)
   academicYear String     @db.VarChar(255)
   questions    Question[]
@@ -60,18 +60,18 @@ model SolutionComment {
   markdown   String           @db.Text
 }
 
-model CourseTopic {
+model SubjectTopic {
   id        Int             @id
-  course    Course          @relation(fields: [courseId], references: [id])
-  courseId  Int
+  subject   Subject         @relation(fields: [subjectId], references: [id])
+  subjectId String
   questions QuestionTopic[]
 }
 
 model QuestionTopic {
-  id         Int         @id
-  question   Question    @relation(fields: [questionId], references: [id])
+  id         Int          @id
+  question   Question     @relation(fields: [questionId], references: [id])
   questionId Int
-  topic      CourseTopic @relation(fields: [topicId], references: [id])
+  topic      SubjectTopic @relation(fields: [topicId], references: [id])
   topicId    Int
 
   @@unique([questionId, topicId], name: "question_topic_unique")
