@@ -10,7 +10,7 @@ const Layout = (props: LayoutProps) => {
   return (
     <>
       <Navbar />
-      <main className="p-5 text-onBackground">{children}</main>
+      <main className="m-auto max-w-3xl p-5 text-onBackground">{children}</main>
     </>
   );
 };
