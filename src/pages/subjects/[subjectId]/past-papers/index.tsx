@@ -12,6 +12,7 @@ import PageHeader from "../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
 import { trpc } from "../../../../utils/trpc";
+import PastPaperCard from "./PastPaperCard";
 
 interface IParams extends ParsedUrlQuery {
   subjectId: string;
@@ -65,11 +66,24 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     subjectId,
   });
 
+  // const pastPapers = useQuery(
+  //   ["pastPaper.getAllBySubject", { subjectId }],
+  //   () => {}
+  // );
+
   console.log({ data: pastPapers.data });
 
   return (
     <div>
-      <PageHeader title="Past Papers" />
+      <div className="mb-3">
+        <PageHeader title="Past Papers" />
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {pastPapers.data?.map((pastPaper) => (
+          <PastPaperCard key={pastPaper.id} pastPaper={pastPaper} />
+        ))}
+      </div>
     </div>
   );
 };
