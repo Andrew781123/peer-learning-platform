@@ -1,6 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { createProxySSGHelpers } from "@trpc/react/ssg";
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
+import {
+  GetStaticPaths,
+  GetStaticProps,
+  GetStaticPropsContext,
+  NextPage,
+} from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
 import PageHeader from "../../../../components/ui/PageHeader";
@@ -53,7 +58,7 @@ type PastPaperPageProps = {
   subjectId: string;
 };
 
-const PastPaperPage = (props: PastPaperPageProps) => {
+const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
   const { subjectId } = props;
 
   const pastPapers = trpc.pastPaper.getAllBySubject.useQuery({
