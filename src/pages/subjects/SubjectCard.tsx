@@ -11,12 +11,14 @@ const SubjectCard = (props: SubjectCardProps) => {
 
   const router = useRouter();
 
+  const onSubjectCardClick = () => {
+    router.push(`${router.pathname}/${subject.id}/past-papers`);
+  };
+
   return (
     <div
       className="hover: flex h-48 cursor-pointer flex-col items-center justify-center bg-surface-default p-4 hover:bg-surface-light"
-      onClick={() =>
-        router.push(`${router.pathname}/${subject.id}/past-papers`)
-      }
+      onClick={onSubjectCardClick}
     >
       <p>{subject.id}</p>
       <p>{subject.title}</p>
