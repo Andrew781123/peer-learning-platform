@@ -65,6 +65,7 @@ model SubjectTopic {
   subject   Subject         @relation(fields: [subjectId], references: [id])
   subjectId String
   questions QuestionTopic[]
+  name      String          @db.VarChar(255)
 }
 
 model QuestionTopic {
