@@ -82,7 +82,7 @@ const QuestionPage: NextPage<QuestionPageProps> = (props) => {
 
       <List>
         {questions.data?.map((question) => (
-          <QuestionCard question={question} />
+          <QuestionCard key={question.id} question={question} />
         ))}
       </List>
     </div>
