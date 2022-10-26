@@ -33,7 +33,7 @@ const PastPaperCard = (props: PastPaperCardProps) => {
     >
       <p className="mr-3">{pastPaper.academicYear}</p>
       <span
-        className="p-1 hover:bg-surface-dark"
+        className="rounded-[50%] p-1 hover:bg-surface-default"
         onClick={(e) => onLinkClick(e, pastPaper.link)}
       >
         <AiOutlineLink />
