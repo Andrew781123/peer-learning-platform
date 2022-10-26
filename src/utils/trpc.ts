@@ -24,6 +24,14 @@ export const trpc = createTRPCNext<AppRouter>({
           url: `${getBaseUrl()}/api/trpc`,
         }),
       ],
+      queryClientConfig: {
+        defaultOptions: {
+          queries: {
+            retry: process.env.NODE_ENV === "production",
+            refetchOnWindowFocus: false,
+          },
+        },
+      },
     };
   },
   ssr: false,
