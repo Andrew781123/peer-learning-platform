@@ -8,9 +8,11 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
+import List from "../../../../../../components/ui/List";
 import PageHeader from "../../../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../../../server/trpc/context";
 import { appRouter } from "../../../../../../server/trpc/router/_app";
+import { trpc } from "../../../../../../utils/trpc";
 
 interface IParams extends ParsedUrlQuery {
   pastPaperId: string;
@@ -19,11 +21,17 @@ interface IParams extends ParsedUrlQuery {
 export const getStaticPaths: GetStaticPaths = async () => {
   const prisma = new PrismaClient();
 
-  const questions = await prisma.question.findMany();
+  const subjects = await prisma.subject.findMany({
+    include: {
+      pastPapers: true,
+    },
+  });
 
-  const paths = questions.map((question) => ({
-    params: { questionId: question.id.toString() },
-  }));
+  const paths = subjects.flatMap((subject) =>
+    subject.pastPapers.map((pastPaper) => ({
+      params: { pastPaperId: pastPaper.id.toString(), subjectId: subject.id },
+    }))
+  );
 
   return {
     paths,
@@ -54,12 +62,26 @@ export const getStaticProps: GetStaticProps = async (
   };
 };
 
-type QuestionPageProps = {};
+type QuestionPageProps = {
+  pastPaperId: string;
+};
 
 const QuestionPage: NextPage<QuestionPageProps> = (props) => {
+  const { pastPaperId } = props;
+
+  const questions = trpc.question.getAllByPastPaper.useQuery({
+    pastPaperId: +pastPaperId,
+  });
+
   return (
     <div>
-      <PageHeader title="Questions" />
+      <div className="mb-3">
+        <PageHeader title="Questions" />
+      </div>
+
+      <List>
+        <p>list</p>
+      </List>
     </div>
   );
 };
