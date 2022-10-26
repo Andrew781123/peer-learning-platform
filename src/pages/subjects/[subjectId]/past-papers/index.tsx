@@ -8,6 +8,7 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
+import List from "../../../../components/ui/List";
 import PageHeader from "../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
@@ -81,11 +82,11 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
         <PageHeader title="Past Papers" />
       </div>
 
-      <div className="flex flex-col gap-3">
+      <List>
         {pastPapers.data?.map((pastPaper) => (
           <PastPaperCard key={pastPaper.id} pastPaper={pastPaper} />
         ))}
-      </div>
+      </List>
     </div>
   );
 };

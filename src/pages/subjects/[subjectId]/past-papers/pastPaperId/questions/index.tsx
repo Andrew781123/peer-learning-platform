@@ -8,6 +8,7 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
+import PageHeader from "../../../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../../../server/trpc/context";
 import { appRouter } from "../../../../../../server/trpc/router/_app";
 
@@ -53,14 +54,14 @@ export const getStaticProps: GetStaticProps = async (
   };
 };
 
-type PastPaperPageProps = {};
+type QuestionPageProps = {};
 
-const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
+const QuestionPage: NextPage<QuestionPageProps> = (props) => {
   return (
     <div>
-      <h1>Questions</h1>
+      <PageHeader title="Questions" />
     </div>
   );
 };
 
-export default PastPaperPage;
+export default QuestionPage;
