@@ -13,6 +13,7 @@ import PageHeader from "../../../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../../../server/trpc/context";
 import { appRouter } from "../../../../../../server/trpc/router/_app";
 import { trpc } from "../../../../../../utils/trpc";
+import QuestionCard from "./QuestionCard";
 
 interface IParams extends ParsedUrlQuery {
   pastPaperId: string;
@@ -80,7 +81,9 @@ const QuestionPage: NextPage<QuestionPageProps> = (props) => {
       </div>
 
       <List>
-        <p>list</p>
+        {questions.data?.map((question) => (
+          <QuestionCard question={question} />
+        ))}
       </List>
     </div>
   );
