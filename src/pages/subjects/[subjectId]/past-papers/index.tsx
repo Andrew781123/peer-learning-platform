@@ -66,6 +66,8 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     subjectId,
   });
 
+  // const pastPapers = trpc.useQuery()
+
   // const pastPapers = useQuery(
   //   ["pastPaper.getAllBySubject", { subjectId }],
   //   () => {}

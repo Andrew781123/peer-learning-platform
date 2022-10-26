@@ -2,12 +2,14 @@
 import { router } from "../trpc";
 import { authRouter } from "./auth";
 import { pastPaperRouter } from "./past-paper";
+import { questionRouter } from "./question";
 import { subjectRouter } from "./subject";
 
 export const appRouter = router({
   auth: authRouter,
   subject: subjectRouter,
   pastPaper: pastPaperRouter,
+  question: questionRouter,
 });
 
 // export type definition of API
