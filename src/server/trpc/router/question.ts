@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 
-const MIN_TAG_COUNT = 2;
+const MIN_TAG_COUNT = 1;
 
 export const questionRouter = router({
   getAllByPastPaper: publicProcedure
@@ -24,6 +24,7 @@ export const questionRouter = router({
             },
             select: {
               id: true,
+              tagCount: true,
               topic: {
                 select: {
                   id: true,
@@ -37,7 +38,9 @@ export const questionRouter = router({
 
       const response = questions.map((question) => ({
         ...question,
-        topics: question.topics.map((topic) => topic.topic.name),
+        topics: question.topics
+          .sort((a, b) => b.tagCount - a.tagCount)
+          .map((topic) => topic.topic.name),
       }));
 
       return response;
