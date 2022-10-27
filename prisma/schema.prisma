@@ -74,6 +74,7 @@ model QuestionTopic {
   questionId Int
   topic      SubjectTopic @relation(fields: [topicId], references: [id])
   topicId    Int
+  tagCount   Int          @default(0) @db.Int
 
   @@unique([questionId, topicId], name: "question_topic_unique")
 }

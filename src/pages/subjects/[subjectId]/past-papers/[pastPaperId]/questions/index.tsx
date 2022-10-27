@@ -60,6 +60,7 @@ export const getStaticProps: GetStaticProps = async (
       pastPaperId: params.pastPaperId,
       trpcState: ssg.dehydrate(),
     },
+    revalidate: 5 * 60,
   };
 };
 
