@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 
-const MIN_TAG_COUNT = 1;
+const MIN_TAG_COUNT = 2;
 
 export const questionRouter = router({
   getAllByPastPaper: publicProcedure
@@ -12,23 +12,22 @@ export const questionRouter = router({
     )
     .query(async ({ input, ctx }) => {
       const questions = await ctx.prisma.question.findMany({
-        where: { pastPaperId: input.pastPaperId },
+        where: {
+          pastPaperId: input.pastPaperId,
+        },
         select: {
           id: true,
           number: true,
           topics: {
-            where: {
-              tagCount: {
-                gt: MIN_TAG_COUNT,
-              },
-            },
             select: {
-              id: true,
-              tagCount: true,
               topic: {
                 select: {
-                  id: true,
                   name: true,
+                  _count: {
+                    select: {
+                      questions: true,
+                    },
+                  },
                 },
               },
             },
@@ -39,7 +38,8 @@ export const questionRouter = router({
       const response = questions.map((question) => ({
         ...question,
         topics: question.topics
-          .sort((a, b) => b.tagCount - a.tagCount)
+          .filter((topic) => topic.topic._count.questions >= MIN_TAG_COUNT)
+          .sort((a, b) => b.topic._count.questions - a.topic._count.questions)
           .map((topic) => topic.topic.name),
       }));
 
