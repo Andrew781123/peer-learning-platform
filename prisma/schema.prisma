@@ -66,6 +66,7 @@ model SubjectTopic {
   subjectId String
   questions QuestionTopic[]
   name      String          @db.VarChar(255)
+  test      Int             @default(0) @db.TinyInt
 }
 
 model QuestionTopic {
