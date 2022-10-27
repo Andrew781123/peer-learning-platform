@@ -35,7 +35,7 @@ model Question {
   pastPaper   PastPaper          @relation(fields: [pastPaperId], references: [id])
   pastPaperId Int
   number      Int                @db.TinyInt
-  answers     QuestionSolution[]
+  solutions   QuestionSolution[]
   topics      QuestionTopic[]
 }
 
