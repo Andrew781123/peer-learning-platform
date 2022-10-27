@@ -12,7 +12,19 @@ const QuestionCard = (props: QuestionCardProps) => {
 
   return (
     <div className="flex items-center  bg-surface-default p-3 hover:cursor-pointer hover:bg-surface-light">
-      <p>Question {question.number}</p>
+      <div className="max-w-[50%]">
+        <p className="mb-1">Question {question.number}</p>
+        <div className="flex  flex-wrap gap-2">
+          {question.topics.map((topic) => (
+            <p
+              key={topic}
+              className="rounded-lg bg-primary-default p-1 text-xs text-onPrimary"
+            >
+              {topic}
+            </p>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

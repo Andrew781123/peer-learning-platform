@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc";
 
-const MIN_TAG_COUNT = 2;
+const MIN_TAG_COUNT = 0;
 
 export const questionRouter = router({
   getAllByPastPaper: publicProcedure
