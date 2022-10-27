@@ -40,15 +40,16 @@ model Question {
 }
 
 model QuestionSolution {
-  id               Int               @id
-  question         Question          @relation(fields: [questionId], references: [id])
-  questionId       Int
-  user             User              @relation(fields: [userId], references: [id])
-  userId           Int
-  markdown         String            @db.Text
-  difficultyRating Int               @db.TinyInt
-  votes            Int               @default(0) @db.Int
-  comments         SolutionComment[]
+  id                 Int                     @id
+  question           Question                @relation(fields: [questionId], references: [id])
+  questionId         Int
+  user               User                    @relation(fields: [userId], references: [id])
+  userId             Int
+  markdown           String                  @db.Text
+  difficultyRating   DifficultyRatingOption? @relation(fields: [difficultyRatingId], references: [id])
+  difficultyRatingId Int?
+  votes              Int                     @default(0) @db.Int
+  comments           SolutionComment[]
 }
 
 model SolutionComment {
@@ -66,7 +67,6 @@ model SubjectTopic {
   subjectId String
   questions QuestionTopic[]
   name      String          @db.VarChar(255)
-  test      Int             @default(0) @db.TinyInt
 }
 
 model QuestionTopic {
@@ -77,4 +77,11 @@ model QuestionTopic {
   topicId    Int
 
   @@unique([questionId, topicId], name: "question_topic_unique")
+}
+
+model DifficultyRatingOption {
+  id                Int                @id
+  name              String             @db.VarChar(255)
+  value             Int                @db.TinyInt
+  questionSolutions QuestionSolution[]
 }

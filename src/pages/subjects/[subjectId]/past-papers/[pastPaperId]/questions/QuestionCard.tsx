@@ -27,7 +27,7 @@ const QuestionCard = (props: QuestionCardProps) => {
       </div>
 
       <div className="flex gap-3">
-        <p>{question.difficultyRating}/5</p>
+        <p>{question.difficultyRating}</p>
         <p>{question.solutionCount}</p>
       </div>
     </div>
