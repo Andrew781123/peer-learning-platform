@@ -63,18 +63,15 @@ type PastPaperPageProps = {
 const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
   const { subjectId } = props;
 
-  const pastPapers = trpc.pastPaper.getAllBySubject.useQuery({
-    subjectId,
-  });
-
-  // const pastPapers = trpc.useQuery()
-
-  // const pastPapers = useQuery(
-  //   ["pastPaper.getAllBySubject", { subjectId }],
-  //   () => {}
-  // );
-
-  console.log({ data: pastPapers.data });
+  const pastPapers = trpc.pastPaper.getAllBySubject.useQuery(
+    {
+      subjectId,
+    },
+    {
+      staleTime: Infinity,
+      cacheTime: Infinity,
+    }
+  );
 
   return (
     <div>

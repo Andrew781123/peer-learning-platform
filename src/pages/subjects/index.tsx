@@ -29,7 +29,10 @@ type SubjectPageProps = {};
 const SubjectPage = (props: SubjectPageProps) => {
   const {} = props;
 
-  const subjects = trpc.subject.getAll.useQuery();
+  const subjects = trpc.subject.getAll.useQuery(undefined, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+  });
 
   return (
     <div>

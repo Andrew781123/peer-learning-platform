@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Navbar = () => {
@@ -15,7 +16,9 @@ const Navbar = () => {
 
       <ul className="flex gap-7">
         <li>Create</li>
-        <li>About</li>
+        <Link href="/about">
+          <li>About</li>
+        </Link>
       </ul>
 
       <ul className="ml-auto mr-2 flex gap-7">
