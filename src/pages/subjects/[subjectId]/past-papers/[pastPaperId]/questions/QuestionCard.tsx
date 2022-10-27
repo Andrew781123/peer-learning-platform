@@ -11,7 +11,7 @@ const QuestionCard = (props: QuestionCardProps) => {
   const { question } = props;
 
   return (
-    <div className="flex items-center  bg-surface-default p-3 hover:cursor-pointer hover:bg-surface-light">
+    <div className="flex items-center  justify-between bg-surface-default p-3 hover:cursor-pointer hover:bg-surface-light">
       <div className="max-w-[50%]">
         <p className="mb-1">Question {question.number}</p>
         <div className="flex  flex-wrap gap-2">
@@ -24,6 +24,11 @@ const QuestionCard = (props: QuestionCardProps) => {
             </p>
           ))}
         </div>
+      </div>
+
+      <div className="flex gap-3">
+        <p>{question.difficultyRating}/5</p>
+        <p>{question.solutionCount}</p>
       </div>
     </div>
   );

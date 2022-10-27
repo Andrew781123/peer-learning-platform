@@ -48,8 +48,6 @@ export const questionRouter = router({
         _count: true,
       });
 
-      console.log({ questionReports });
-
       const questionReportsMap = new Map(
         questionReports.map((report) => [report.questionId, report])
       );
