@@ -1,4 +1,5 @@
 import { inferProcedureOutput } from "@trpc/server";
+import DifficultyLevelChip from "../../../../../../components/ui/DifficultyLevelChip";
 import { AppRouter } from "../../../../../../server/trpc/router/_app";
 
 type QuestionCardProps = {
@@ -27,7 +28,7 @@ const QuestionCard = (props: QuestionCardProps) => {
       </div>
 
       <div className="flex gap-3">
-        <p>{question.difficultyRating}</p>
+        <DifficultyLevelChip level={question.difficultyLevel} />
         <p>{question.solutionCount}</p>
       </div>
     </div>

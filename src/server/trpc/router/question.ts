@@ -1,5 +1,5 @@
 import { z } from "zod";
-import getDifficultyRating from "../../utils/getDifficultyRating";
+import getDifficultyLevel from "../../utils/getDifficultyRating";
 import { publicProcedure, router } from "../trpc";
 
 const MIN_TAG_COUNT = 0;
@@ -68,7 +68,7 @@ export const questionRouter = router({
           .sort((a, b) => b.topic._count.questions - a.topic._count.questions)
           .map((topic) => topic.topic.name),
         solutionCount: question._count.solutions,
-        difficultyRating: getDifficultyRating(
+        difficultyLevel: getDifficultyLevel(
           getAverageDifficultyRatingScore(question)
         ),
       }));
