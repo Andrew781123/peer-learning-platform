@@ -1,4 +1,5 @@
 import { inferProcedureOutput } from "@trpc/server";
+import { AiOutlineSolution } from "react-icons/ai";
 import DifficultyLevelChip from "../../../../../../components/ui/DifficultyLevelChip";
 import { AppRouter } from "../../../../../../server/trpc/router/_app";
 
@@ -27,9 +28,12 @@ const QuestionCard = (props: QuestionCardProps) => {
         </div>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex items-center gap-5">
         <DifficultyLevelChip level={question.difficultyLevel} />
-        <p>{question.solutionCount}</p>
+        <div className="flex items-center gap-1">
+          <AiOutlineSolution />
+          <p>{question.solutionCount}</p>
+        </div>
       </div>
     </div>
   );
