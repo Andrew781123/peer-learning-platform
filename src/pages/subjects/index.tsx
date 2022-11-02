@@ -1,6 +1,5 @@
 import { createProxySSGHelpers } from "@trpc/react/ssg";
 import { GetStaticPropsContext } from "next";
-import { signIn } from "next-auth/react";
 import superjson from "superjson";
 import PageHeader from "../../components/ui/PageHeader";
 import { createContextInner } from "../../server/trpc/context";
@@ -46,7 +45,6 @@ const SubjectPage = (props: SubjectPageProps) => {
           <SubjectCard key={subject.id} subject={subject} />
         ))}
       </div>
-      <button onClick={() => signIn()}>CLick me</button>
     </div>
   );
 };
