@@ -6,7 +6,6 @@ import EmailProvider from "next-auth/providers/email";
 import { prisma } from "../../../server/db/client";
 
 export const authOptions: NextAuthOptions = {
-  // Include user.id on session
   callbacks: {
     async signIn({ email, user, account, profile }) {
       const emailDomain = user.email?.split("@")[1];
