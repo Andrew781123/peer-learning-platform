@@ -1,5 +1,5 @@
 import { createProxySSGHelpers } from "@trpc/react/ssg";
-import { GetStaticPropsContext } from "next";
+import { GetStaticPropsContext, NextPage } from "next";
 import superjson from "superjson";
 import PageHeader from "../../components/ui/PageHeader";
 import { createContextInner } from "../../server/trpc/context";
@@ -26,7 +26,7 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
 
 type SubjectPageProps = {};
 
-const SubjectPage = (props: SubjectPageProps) => {
+const SubjectPage: NextPage = (props: SubjectPageProps) => {
   const {} = props;
 
   const subjects = trpc.subject.getAll.useQuery(undefined, {
