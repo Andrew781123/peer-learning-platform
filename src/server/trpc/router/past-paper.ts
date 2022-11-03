@@ -13,4 +13,11 @@ export const pastPaperRouter = router({
         where: { subjectId: input.subjectId },
       });
     }),
+  getOne: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ input, ctx }) => {
+      return ctx.prisma.pastPaper.findFirst({
+        where: { id: input.id },
+      });
+    }),
 });

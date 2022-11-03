@@ -40,7 +40,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async (
+export const getStaticProps: GetStaticProps<QuestionPageProps> = async (
   context: GetStaticPropsContext
 ) => {
   const ssg = createProxySSGHelpers({
@@ -55,9 +55,14 @@ export const getStaticProps: GetStaticProps = async (
     pastPaperId: +params.pastPaperId,
   });
 
+  const pastPaper = await ssg.pastPaper.getOne.fetch({
+    id: +params.pastPaperId,
+  });
+
   return {
     props: {
       pastPaperId: params.pastPaperId,
+      pastPaperLink: pastPaper!.link,
       trpcState: ssg.dehydrate(),
     },
     revalidate: 5 * 60,
@@ -66,10 +71,11 @@ export const getStaticProps: GetStaticProps = async (
 
 type QuestionPageProps = {
   pastPaperId: string;
+  pastPaperLink: string;
 };
 
 const QuestionPage: NextPage<QuestionPageProps> = (props) => {
-  const { pastPaperId } = props;
+  const { pastPaperId, pastPaperLink } = props;
 
   const questions = trpc.question.getAllByPastPaper.useQuery({
     pastPaperId: +pastPaperId,
@@ -80,6 +86,12 @@ const QuestionPage: NextPage<QuestionPageProps> = (props) => {
       <div className="mb-3">
         <PageHeader title="Questions" />
       </div>
+      <p className="mb-2">
+        Link to exam paper:{" "}
+        <a href={pastPaperLink} className="underline">
+          {pastPaperLink}
+        </a>
+      </p>
 
       <List>
         {questions.data?.map((question) => (
