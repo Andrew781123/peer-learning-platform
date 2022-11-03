@@ -8,6 +8,12 @@ import { prisma } from "../../../server/db/client";
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
+    async signIn({ user }) {
+      const emailDomain = user.email?.split("@")[1];
+      if (emailDomain !== "connect.polyu.hk")
+        return "/api/auth/error?error=invalidEmailDomain";
+      return true;
+    },
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
