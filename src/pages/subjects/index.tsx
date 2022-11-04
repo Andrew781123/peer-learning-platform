@@ -43,7 +43,7 @@ const SubjectPage: NextPage = (props: SubjectPageProps) => {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {subjects.data
+        {subjects.data && subjects.data.length > 0
           ? subjects.data.map((subject) => (
               <SubjectCard key={subject.id} subject={subject} />
             ))
