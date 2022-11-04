@@ -88,7 +88,12 @@ const QuestionPage: NextPage<QuestionPageProps> = (props) => {
       </div>
       <p className="mb-2">
         Link to exam paper:{" "}
-        <a href={pastPaperLink} target="_blank" className="underline">
+        <a
+          href={pastPaperLink}
+          target="_blank"
+          rel="noreferrer"
+          className="underline"
+        >
           {pastPaperLink}
         </a>
       </p>

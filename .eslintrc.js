@@ -33,7 +33,7 @@ module.exports = {
       { singleQuote: false },
       { endOfLine: "auto" },
     ],
-    "import/no-relative-parent-imports": "error",
+    "import/no-relative-parent-imports": "off",
     "import/no-unresolved": "off",
   },
 };
