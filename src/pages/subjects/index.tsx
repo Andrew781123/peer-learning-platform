@@ -34,6 +34,8 @@ const SubjectPage: NextPage = (props: SubjectPageProps) => {
     cacheTime: Infinity,
   });
 
+  console.log(123123, subjects);
+
   return (
     <div>
       <div className="mb-3">
