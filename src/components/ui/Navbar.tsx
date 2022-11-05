@@ -32,14 +32,14 @@ const Navbar = () => {
               Sign in
             </li>
           </>
-        ) : (
+        ) : status === "authenticated" ? (
           <>
             <li className="hover:cursor-default">{session?.user?.name}</li>
             <li className="hover:cursor-pointer" onClick={() => signOut()}>
               Sign out
             </li>
           </>
-        )}
+        ) : null}
       </ul>
     </nav>
   );
