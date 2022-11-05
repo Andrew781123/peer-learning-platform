@@ -1,7 +1,7 @@
 import { inferProcedureOutput } from "@trpc/server";
 import { useRouter } from "next/router";
 import { AiOutlineLink } from "react-icons/ai";
-import { AppRouter } from "../../../../server/trpc/router/_app";
+import { AppRouter } from "../../server/trpc/router/_app";
 
 type PastPaperCardProps = {
   pastPaper: inferProcedureOutput<

@@ -1,13 +1,13 @@
 import { createProxySSGHelpers } from "@trpc/react/ssg";
-import { GetStaticPropsContext, NextPage } from "next";
+import { NextPage } from "next";
 import superjson from "superjson";
+import SubjectCard from "../../components/subject/SubjectCard";
 import PageHeader from "../../components/ui/PageHeader";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
 import { trpc } from "../../utils/trpc";
-import SubjectCard from "./SubjectCard";
 
-export const getStaticProps = async (context: GetStaticPropsContext) => {
+export const getStaticProps = async () => {
   const ssg = createProxySSGHelpers({
     router: appRouter,
     ctx: await createContextInner({ session: null }),
@@ -43,11 +43,9 @@ const SubjectPage: NextPage = (props: SubjectPageProps) => {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {subjects.data && subjects.data.length > 0
-          ? subjects.data.map((subject) => (
-              <SubjectCard key={subject.id} subject={subject} />
-            ))
-          : null}
+        {subjects.data?.map((subject) => (
+          <SubjectCard key={subject.id} subject={subject} />
+        ))}
       </div>
     </div>
   );

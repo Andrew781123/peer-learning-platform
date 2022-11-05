@@ -1,7 +1,7 @@
 import { inferProcedureOutput } from "@trpc/server";
 import { AiOutlineSolution } from "react-icons/ai";
-import DifficultyLevelChip from "../../../../../../components/ui/DifficultyLevelChip";
-import { AppRouter } from "../../../../../../server/trpc/router/_app";
+import { AppRouter } from "../../server/trpc/router/_app";
+import DifficultyLevelChip from "../ui/DifficultyLevelChip";
 
 type QuestionCardProps = {
   question: inferProcedureOutput<

@@ -8,12 +8,12 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
+import PastPaperCard from "../../../../components/past-paper/PastPaperCard";
 import List from "../../../../components/ui/List";
 import PageHeader from "../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
 import { trpc } from "../../../../utils/trpc";
-import PastPaperCard from "./PastPaperCard";
 
 interface IParams extends ParsedUrlQuery {
   subjectId: string;
