@@ -19,7 +19,7 @@ interface IParams extends ParsedUrlQuery {
   subjectId: string;
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths<IParams> = async () => {
   const prisma = new PrismaClient();
 
   const subjects = await prisma.subject.findMany();
@@ -34,16 +34,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async (
-  context: GetStaticPropsContext
-) => {
+export const getStaticProps: GetStaticProps<
+  PastPaperPageProps,
+  IParams
+> = async (context: GetStaticPropsContext<IParams>) => {
   const ssg = createProxySSGHelpers({
     router: appRouter,
     ctx: await createContextInner({ session: null }),
     transformer: superjson,
   });
 
-  const params = context.params as IParams;
+  const params = context.params;
+
+  if (params === undefined) return { notFound: true };
 
   await ssg.pastPaper.getAllBySubject.prefetch({ subjectId: params.subjectId });
 

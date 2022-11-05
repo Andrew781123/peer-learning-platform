@@ -1,5 +1,5 @@
 import { createProxySSGHelpers } from "@trpc/react/ssg";
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import superjson from "superjson";
 import SubjectCard from "../../components/subject/SubjectCard";
 import PageHeader from "../../components/ui/PageHeader";
@@ -7,7 +7,7 @@ import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
 import { trpc } from "../../utils/trpc";
 
-export const getStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const ssg = createProxySSGHelpers({
     router: appRouter,
     ctx: await createContextInner({ session: null }),

@@ -19,7 +19,7 @@ interface IParams extends ParsedUrlQuery {
   pastPaperId: string;
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths<IParams> = async () => {
   const prisma = new PrismaClient();
 
   const subjects = await prisma.subject.findMany({
@@ -40,16 +40,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps<QuestionPageProps> = async (
-  context: GetStaticPropsContext
-) => {
+export const getStaticProps: GetStaticProps<
+  QuestionPageProps,
+  IParams
+> = async (context: GetStaticPropsContext<IParams>) => {
   const ssg = createProxySSGHelpers({
     router: appRouter,
     ctx: await createContextInner({ session: null }),
     transformer: superjson,
   });
 
-  const params = context.params as IParams;
+  const params = context.params;
+
+  if (params === undefined) return { notFound: true };
 
   await ssg.question.getAllByPastPaper.prefetch({
     pastPaperId: +params.pastPaperId,
@@ -59,10 +62,12 @@ export const getStaticProps: GetStaticProps<QuestionPageProps> = async (
     id: +params.pastPaperId,
   });
 
+  if (!pastPaper) return { notFound: true };
+
   return {
     props: {
       pastPaperId: params.pastPaperId,
-      pastPaperLink: pastPaper!.link,
+      pastPaperLink: pastPaper.link,
       trpcState: ssg.dehydrate(),
     },
     revalidate: 5 * 60,
