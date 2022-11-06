@@ -5,7 +5,7 @@ type PageHeaderProps = {
 const PageHeader = (props: PageHeaderProps) => {
   const { title } = props;
 
-  return <h1 className="text-xl font-bold">{title}</h1>;
+  return <h1 className="text-xl font-bold underline">{title}</h1>;
 };
 
 export default PageHeader;

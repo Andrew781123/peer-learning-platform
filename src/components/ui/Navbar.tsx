@@ -19,7 +19,9 @@ const Navbar = () => {
       </div>
 
       <ul className="flex gap-7">
-        <li className="hover:cursor-pointer">Create</li>
+        <Link href="/solutions/new">
+          <li className="hover:cursor-pointer">Create</li>
+        </Link>
         <Link href="/about">
           <li className="hover:cursor-pointer">About</li>
         </Link>
@@ -28,7 +30,10 @@ const Navbar = () => {
       <ul className="ml-auto mr-2 flex gap-7">
         {status === "unauthenticated" ? (
           <>
-            <li className="hover:cursor-pointer" onClick={() => signIn()}>
+            <li
+              className="hover:cursor-pointer"
+              onClick={() => signIn("email")}
+            >
               Sign in
             </li>
           </>
