@@ -23,10 +23,13 @@ const NewSolutionPage: NextPage = (props: NewSolutionPageProps) => {
         </Select>
       </FormGroup>
 
-      <FormGroup className="my-2">
-        <Label text="Question Number" />
-        <Input type="number" />
-      </FormGroup>
+      <h2 className="mb-1 text-lg">Solutions</h2>
+      <div className="bg-surface-default p-3">
+        <FormGroup className="my-2">
+          <Label text="Question Number" />
+          <Input type="number" />
+        </FormGroup>
+      </div>
     </div>
   );
 };
