@@ -1,16 +1,20 @@
 import clsx from "clsx";
-import { ReactNode } from "react";
+import { DetailedHTMLProps, ReactNode, SelectHTMLAttributes } from "react";
 
-type SelectProps = { children: ReactNode };
+type SelectProps = DetailedHTMLProps<
+  SelectHTMLAttributes<HTMLSelectElement>,
+  HTMLSelectElement
+> & { children: ReactNode };
 
 const Select = (props: SelectProps) => {
-  const { children } = props;
+  const { children, ...otherProps } = props;
 
   return (
     <select
       className={clsx(
         "rounded-lg border  border-gray-300 bg-surface-light focus:border-primary-dark focus:ring-primary-dark"
       )}
+      {...otherProps}
     >
       {children}
     </select>
