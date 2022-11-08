@@ -1,9 +1,10 @@
 import { inferProcedureOutput } from "@trpc/server";
+import { useState } from "react";
 import { AppRouter } from "../../server/trpc/router/_app";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
 import Label from "../form/Label";
-import Select from "../form/Select";
+import Select, { Option } from "../form/Select";
 
 type NewSolutionFormProps = {
   subjectTopics: inferProcedureOutput<
@@ -14,13 +15,19 @@ type NewSolutionFormProps = {
 const NewSolutionForm = (props: NewSolutionFormProps) => {
   const { subjectTopics } = props;
 
+  const subjectTopicOptions = subjectTopics.map<Option>((topic) => ({
+    label: topic.name,
+    value: topic.id.toString(),
+  }));
+
+  const [value, setValue] = useState<Option | undefined>(
+    subjectTopicOptions[0] ?? undefined
+  );
+
   return (
     <div>
       <FormGroup className="my-2">
         <Label text="Subject" />
-        <Select>
-          <option>EIE3112</option>
-        </Select>
       </FormGroup>
 
       <h2 className="mb-1 text-lg">Solutions</h2>
@@ -32,13 +39,14 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
         <FormGroup>
           <Label text="Topics" />
-          <Select multiple>
-            {subjectTopics.map((subjectTopic) => (
-              <option key={subjectTopic.id} value={subjectTopic.name}>
-                {subjectTopic.name}
-              </option>
-            ))}
-          </Select>
+          <Select
+            value={value}
+            onChange={setValue}
+            options={subjectTopics.map((topic) => ({
+              label: topic.name,
+              value: topic.id.toString(),
+            }))}
+          />
         </FormGroup>
       </div>
     </div>
