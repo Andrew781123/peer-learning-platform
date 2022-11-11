@@ -18,6 +18,8 @@ export const getStaticProps: GetStaticProps<
 
   await ssg.subjectTopic.getAllBySubject.prefetch({ subjectId: "EIE3112" });
 
+  await ssg.subject.getAll.prefetch();
+
   return {
     props: {
       trpcState: ssg.dehydrate(),
@@ -31,9 +33,10 @@ type NewSolutionPageProps = {};
 const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
   const {} = props;
 
-  const subjectTopics = trpc.subjectTopic.getAllBySubject.useQuery({
+  const subjectTopic = trpc.subjectTopic.getAllBySubject.useQuery({
     subjectId: "EIE3112",
   });
+  const subject = trpc.subject.getAll.useQuery();
 
   return (
     <div>
@@ -41,7 +44,14 @@ const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
         <PageHeader title="Submit Solution" />
       </div>
 
-      <NewSolutionForm subjectTopics={subjectTopics.data ?? []} />
+      {subjectTopic.isLoading || subject.isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <NewSolutionForm
+          subjectTopics={subjectTopic.data ?? []}
+          subjects={subject.data!}
+        />
+      )}
     </div>
   );
 };

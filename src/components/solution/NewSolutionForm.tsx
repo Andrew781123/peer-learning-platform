@@ -10,23 +10,20 @@ type NewSolutionFormProps = {
   subjectTopics: inferProcedureOutput<
     AppRouter["subjectTopic"]["getAllBySubject"]
   >;
+  subjects: inferProcedureOutput<AppRouter["subject"]["getAll"]>;
 };
 
 const NewSolutionForm = (props: NewSolutionFormProps) => {
-  const { subjectTopics } = props;
+  const { subjectTopics, subjects } = props;
 
-  const subjectTopicOptions = [
-    ...subjectTopics,
-    ...subjectTopics,
-    ...subjectTopics,
-    ...subjectTopics,
-    ...subjectTopics,
-    ...subjectTopics,
-    ...subjectTopics,
-    ...subjectTopics,
-  ].map<Option>((topic, i) => ({
+  const subjectTopicOptions = subjectTopics.map<Option>((topic) => ({
     label: topic.name,
-    value: topic.id.toString() + i.toString(),
+    value: topic.id.toString(),
+  }));
+
+  const subjectOptions = subjects.map<Option>((subject) => ({
+    label: subject.id,
+    value: subject.id.toString(),
   }));
 
   // const [value, setValue] = useState<Option | undefined>(
@@ -38,6 +35,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     <div>
       <FormGroup className="my-2">
         <Label text="Subject" />
+        <Select
+          multiple={false}
+          value={subjectOptions[0]}
+          onChange={() => {}}
+          options={subjectOptions}
+        />
       </FormGroup>
 
       <h2 className="mb-1 text-lg">Solutions</h2>
