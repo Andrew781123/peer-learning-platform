@@ -1,5 +1,7 @@
 import { inferProcedureOutput } from "@trpc/server";
 import { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
 import { AppRouter } from "../../server/trpc/router/_app";
 import FormGroup from "../form/FormGroup";
@@ -33,6 +35,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   // );
   const [value, setValue] = useState<Option[]>([]);
 
+  const [solutionText, setSolutionText] = useState("");
+
   return (
     <div>
       <FormGroup className="my-2">
@@ -47,17 +51,17 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
       <h2 className="mb-1 text-lg">Solutions</h2>
       <div className="bg-surface-default p-3">
-        <FormGroup className="my-2">
+        <FormGroup className="my-4">
           <Label text="Question Number" />
           <Input type="number" />
         </FormGroup>
 
-        <FormGroup className="my-2">
+        <FormGroup className="my-4">
           <Label text="Difficulty" />
           <RadioGroup radios={DIFFICULTY_RADIOS} />
         </FormGroup>
 
-        <FormGroup>
+        <FormGroup className="my-4">
           <Label text="Topics" />
           <Select
             multiple={true}
@@ -66,6 +70,13 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             options={subjectTopicOptions}
           />
         </FormGroup>
+
+        <h2 className="mb-2">Write your solution here</h2>
+        <ReactQuill
+          theme="snow"
+          value={solutionText}
+          onChange={setSolutionText}
+        />
       </div>
     </div>
   );
