@@ -15,14 +15,24 @@ type NewSolutionFormProps = {
 const NewSolutionForm = (props: NewSolutionFormProps) => {
   const { subjectTopics } = props;
 
-  const subjectTopicOptions = subjectTopics.map<Option>((topic) => ({
+  const subjectTopicOptions = [
+    ...subjectTopics,
+    ...subjectTopics,
+    ...subjectTopics,
+    ...subjectTopics,
+    ...subjectTopics,
+    ...subjectTopics,
+    ...subjectTopics,
+    ...subjectTopics,
+  ].map<Option>((topic, i) => ({
     label: topic.name,
-    value: topic.id.toString(),
+    value: topic.id.toString() + i.toString(),
   }));
 
-  const [value, setValue] = useState<Option | undefined>(
-    subjectTopicOptions[0] ?? undefined
-  );
+  // const [value, setValue] = useState<Option | undefined>(
+  //   subjectTopicOptions[0] ?? undefined
+  // );
+  const [value, setValue] = useState<Option[]>([]);
 
   return (
     <div>
@@ -40,12 +50,10 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
         <FormGroup>
           <Label text="Topics" />
           <Select
+            multiple={true}
             value={value}
             onChange={setValue}
-            options={subjectTopics.map((topic) => ({
-              label: topic.name,
-              value: topic.id.toString(),
-            }))}
+            options={subjectTopicOptions}
           />
         </FormGroup>
       </div>
