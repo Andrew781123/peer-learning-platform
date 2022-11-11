@@ -19,7 +19,7 @@ const RadioGroup = (props: RadioGroupProps) => {
             type="radio"
             value={radio.value}
             name={radio.label}
-            className="h-4 w-4 border-gray-300 bg-gray-100 text-red-600 focus:ring-2 focus:ring-red-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-red-600"
+            className="focus:primary-dark h-4 w-4 border-gray-300 bg-gray-100 text-primary-default focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-dark"
           />
           <label
             htmlFor={radio.label}
