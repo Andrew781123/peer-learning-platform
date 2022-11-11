@@ -48,6 +48,7 @@ const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
         <div>Loading...</div>
       ) : (
         <NewSolutionForm
+          // TODO - fix this
           subjectTopics={subjectTopic.data ?? []}
           subjects={subject.data!}
         />

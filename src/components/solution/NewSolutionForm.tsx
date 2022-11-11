@@ -1,9 +1,11 @@
 import { inferProcedureOutput } from "@trpc/server";
 import { useState } from "react";
+import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
 import { AppRouter } from "../../server/trpc/router/_app";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
 import Label from "../form/Label";
+import RadioGroup from "../form/RadioGroup";
 import Select, { Option } from "../form/Select";
 
 type NewSolutionFormProps = {
@@ -48,6 +50,11 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
         <FormGroup className="my-2">
           <Label text="Question Number" />
           <Input type="number" />
+        </FormGroup>
+
+        <FormGroup className="my-2">
+          <Label text="Difficulty" />
+          <RadioGroup radios={DIFFICULTY_RADIOS} />
         </FormGroup>
 
         <FormGroup>
