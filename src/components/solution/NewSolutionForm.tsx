@@ -3,6 +3,7 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
+import useSelectOptions from "../../hooks/useSelectOptions";
 import { AppRouter } from "../../server/trpc/router/_app";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
@@ -20,19 +21,18 @@ type NewSolutionFormProps = {
 const NewSolutionForm = (props: NewSolutionFormProps) => {
   const { subjectTopics, subjects } = props;
 
-  const subjectTopicOptions = subjectTopics.map<Option>((topic) => ({
-    label: topic.name,
-    value: topic.id.toString(),
-  }));
+  const { options: subjectTopicOptions } = useSelectOptions({
+    data: subjectTopics,
+    labelKey: "name",
+    valueKey: "id",
+  });
 
-  const subjectOptions = subjects.map<Option>((subject) => ({
-    label: subject.id,
-    value: subject.id.toString(),
-  }));
+  const { options: subjectOptions } = useSelectOptions({
+    data: subjectTopics,
+    labelKey: "id",
+    valueKey: "id",
+  });
 
-  // const [value, setValue] = useState<Option | undefined>(
-  //   subjectTopicOptions[0] ?? undefined
-  // );
   const [value, setValue] = useState<Option[]>([]);
 
   const [solutionText, setSolutionText] = useState("");

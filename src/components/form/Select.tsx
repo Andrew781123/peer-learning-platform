@@ -5,7 +5,7 @@ import MultiSelectBadge from "./MultiSelcctBadge";
 
 export interface Option {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 type SingleSelectProps<TOption extends Option = Option> = {
