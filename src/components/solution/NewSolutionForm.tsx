@@ -1,6 +1,5 @@
 import { inferProcedureOutput } from "@trpc/server";
 import { useState } from "react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
 import useSelectOptions from "../../hooks/useSelectOptions";
@@ -10,6 +9,9 @@ import Input from "../form/Input";
 import Label from "../form/Label";
 import RadioGroup from "../form/RadioGroup";
 import Select, { Option } from "../form/Select";
+import reactQuillModules from "./react-quill-modules";
+const ReactQuill =
+  typeof window === "object" ? require("react-quill") : () => false;
 
 type NewSolutionFormProps = {
   subjectTopics: inferProcedureOutput<
@@ -28,7 +30,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   });
 
   const { options: subjectOptions } = useSelectOptions({
-    data: subjectTopics,
+    data: subjects,
     labelKey: "id",
     valueKey: "id",
   });
@@ -51,7 +53,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
       <h2 className="mb-1 text-lg">Solutions</h2>
       <div className="bg-surface-default p-3">
-        <FormGroup className="my-4">
+        <FormGroup className="mb-4">
           <Label text="Question Number" />
           <Input type="number" />
         </FormGroup>
@@ -72,12 +74,16 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
         </FormGroup>
 
         <h2 className="mb-2">Write your solution here</h2>
-        <ReactQuill
-          theme="snow"
-          value={solutionText}
-          onChange={setSolutionText}
-        />
+        {ReactQuill ? (
+          <ReactQuill
+            theme="snow"
+            value={solutionText}
+            onChange={setSolutionText}
+            modules={reactQuillModules}
+          />
+        ) : null}
       </div>
+      <button onClick={() => console.log({ solutionText })}>Submit</button>
     </div>
   );
 };
