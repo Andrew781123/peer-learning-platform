@@ -1,5 +1,5 @@
 import { inferProcedureOutput } from "@trpc/server";
-import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
 import useSelectOptions from "../../hooks/useSelectOptions";
@@ -35,19 +35,29 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     valueKey: "id",
   });
 
-  const [value, setValue] = useState<Option[]>([]);
+  const { handleSubmit, register, control } = useForm({
+    defaultValues: {
+      questionNumber: "",
+      subject: subjectOptions[0],
+      topics: [] as Option[],
+      solutionText: "",
+    },
+  });
 
-  const [solutionText, setSolutionText] = useState("");
+  const onSubmit = (data: any) => {
+    console.log({ data });
+  };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <FormGroup className="my-2">
         <Label text="Subject" />
-        <Select
-          multiple={false}
-          value={subjectOptions[0]}
-          onChange={() => {}}
-          options={subjectOptions}
+        <Controller
+          name="subject"
+          control={control}
+          render={({ field }) => (
+            <Select {...field} multiple={false} options={subjectOptions} />
+          )}
         />
       </FormGroup>
 
@@ -55,7 +65,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       <div className="bg-surface-default p-3">
         <FormGroup className="mb-4">
           <Label text="Question Number" />
-          <Input type="number" />
+          <Input type="number" {...register("questionNumber")} />
         </FormGroup>
 
         <FormGroup className="my-4">
@@ -65,26 +75,32 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
         <FormGroup className="my-4">
           <Label text="Topics" />
-          <Select
-            multiple={true}
-            value={value}
-            onChange={setValue}
-            options={subjectTopicOptions}
+          <Controller
+            name="topics"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                multiple={true}
+                options={subjectTopicOptions}
+              />
+            )}
           />
         </FormGroup>
 
         <h2 className="mb-2">Write your solution here</h2>
         {ReactQuill ? (
-          <ReactQuill
-            theme="snow"
-            value={solutionText}
-            onChange={setSolutionText}
-            modules={reactQuillModules}
+          <Controller
+            name="solutionText"
+            control={control}
+            render={({ field }) => (
+              <ReactQuill {...field} theme="snow" modules={reactQuillModules} />
+            )}
           />
         ) : null}
       </div>
-      <button onClick={() => console.log({ solutionText })}>Submit</button>
-    </div>
+      <button>Submit</button>
+    </form>
   );
 };
 

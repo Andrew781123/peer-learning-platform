@@ -35,5 +35,6 @@ module.exports = {
     ],
     "import/no-relative-parent-imports": "off",
     "import/no-unresolved": "off",
+    "react/display-name": "off",
   },
 };

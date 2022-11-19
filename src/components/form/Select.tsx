@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import CrossButton from "../ui/CrossButton";
 import MultiSelectBadge from "./MultiSelcctBadge";
 
@@ -26,7 +26,7 @@ type SelectProps<TOption extends Option = Option> = {
   options: TOption[];
 } & (MultipleSelectProps<TOption> | SingleSelectProps<TOption>);
 
-const Select = (props: SelectProps) => {
+const Select = forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
   const { multiple, options, defaultValue, value, onChange } = props;
 
   const [isShown, setIsShown] = useState(false);
@@ -60,6 +60,7 @@ const Select = (props: SelectProps) => {
 
   return (
     <div
+      ref={ref}
       onClick={toggleIsShown}
       onBlur={() => setIsShown(false)}
       tabIndex={0}
@@ -118,6 +119,6 @@ const Select = (props: SelectProps) => {
       </ul>
     </div>
   );
-};
+});
 
 export default Select;
