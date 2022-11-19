@@ -96,11 +96,11 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       </FormGroup>
 
       <h2 className="mb-1 text-lg">Solutions</h2>
-      <div className="flex flex-col items-center gap-5 bg-surface-default p-6">
+      <div className="flex flex-col items-center gap-5 rounded-lg bg-surface-default p-6">
         {fields.map((solution, index) => (
           <div
             key={solution.id}
-            className="relative w-full border border-onBackground p-3 focus:border-primary-default"
+            className="relative w-full rounded-lg border border-onBackground p-3 focus:border-primary-default"
           >
             <CrossButton
               onClick={() => removeSolutionFormItem(index)}
