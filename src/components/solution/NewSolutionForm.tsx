@@ -1,5 +1,6 @@
 import { inferProcedureOutput } from "@trpc/server";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
@@ -35,10 +36,11 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     valueKey: "id",
   });
 
-  const { handleSubmit, register, control } = useForm({
+  const { handleSubmit, register, control, watch } = useForm({
     defaultValues: {
       questionNumber: "",
       subject: subjectOptions[0],
+      difficulty: DIFFICULTY_RADIOS[0].label,
       topics: [] as Option[],
       solutionText: "",
     },
@@ -47,6 +49,13 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   const onSubmit = (data: any) => {
     console.log({ data });
   };
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) =>
+      console.log(value, name, type)
+    );
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -70,7 +79,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
         <FormGroup className="my-4">
           <Label text="Difficulty" />
-          <RadioGroup radios={DIFFICULTY_RADIOS} />
+          <RadioGroup radios={DIFFICULTY_RADIOS} {...register("difficulty")} />
         </FormGroup>
 
         <FormGroup className="my-4">

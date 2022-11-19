@@ -1,23 +1,15 @@
 const DIFFICULTY_RADIOS = [
   {
-    label: "1",
+    label: "Easy",
     value: 1,
   },
   {
-    label: "2",
+    label: "Medium",
     value: 2,
   },
   {
-    label: "3",
+    label: "Hard",
     value: 3,
-  },
-  {
-    label: "4",
-    value: 4,
-  },
-  {
-    label: "5",
-    value: 5,
   },
 ] as const;
 
