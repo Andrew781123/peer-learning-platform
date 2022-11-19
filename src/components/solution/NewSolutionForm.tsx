@@ -1,4 +1,5 @@
 import { inferProcedureOutput } from "@trpc/server";
+import dynamic from "next/dynamic";
 import { Controller, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
@@ -10,8 +11,7 @@ import Label from "../form/Label";
 import RadioGroup from "../form/RadioGroup";
 import Select, { Option } from "../form/Select";
 import reactQuillModules from "./react-quill-modules";
-const ReactQuill =
-  typeof window === "object" ? require("react-quill") : () => false;
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 type NewSolutionFormProps = {
   subjectTopics: inferProcedureOutput<
@@ -89,15 +89,13 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
         </FormGroup>
 
         <h2 className="mb-2">Write your solution here</h2>
-        {ReactQuill ? (
-          <Controller
-            name="solutionText"
-            control={control}
-            render={({ field }) => (
-              <ReactQuill {...field} theme="snow" modules={reactQuillModules} />
-            )}
-          />
-        ) : null}
+        <Controller
+          name="solutionText"
+          control={control}
+          render={({ field }) => (
+            <ReactQuill {...field} theme="snow" modules={reactQuillModules} />
+          )}
+        />
       </div>
       <button>Submit</button>
     </form>
