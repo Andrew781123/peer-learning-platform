@@ -27,7 +27,7 @@ type FormValues = {
 };
 
 const DEFAULT_SOLUTION = {
-  questionNumber: "",
+  questionNumber: "1",
   topics: [],
   solutionText: "",
 };
@@ -54,17 +54,25 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     valueKey: "id",
   });
 
-  const { handleSubmit, register, control, watch } = useForm<FormValues>({
-    defaultValues: {
-      subject: subjectOptions[0],
-      solutions: [DEFAULT_SOLUTION],
-    },
-  });
+  const { handleSubmit, register, control, watch, getValues } =
+    useForm<FormValues>({
+      defaultValues: {
+        subject: subjectOptions[0],
+        solutions: [DEFAULT_SOLUTION],
+      },
+    });
 
   const { fields, append, remove } = useFieldArray({
     name: "solutions",
     control,
   });
+
+  const addSolutionFormItem = () => {
+    append({
+      ...DEFAULT_SOLUTION,
+      questionNumber: "",
+    });
+  };
 
   const removeSolutionFormItem = (index: number) => {
     if (fields.length === 1) return;
@@ -151,7 +159,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             />
           </div>
         ))}
-        <Button primary onClick={() => append(DEFAULT_SOLUTION)}>
+        <Button primary onClick={addSolutionFormItem}>
           Add Solution
         </Button>
       </div>
