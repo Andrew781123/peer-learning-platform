@@ -1,7 +1,7 @@
 import { inferProcedureOutput } from "@trpc/server";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
 import useSelectOptions from "../../hooks/useSelectOptions";
@@ -38,12 +38,21 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const { handleSubmit, register, control, watch } = useForm({
     defaultValues: {
-      questionNumber: "",
       subject: subjectOptions[0],
-      difficulty: DIFFICULTY_RADIOS[0].label,
-      topics: [] as Option[],
-      solutionText: "",
+      solutions: [
+        {
+          questionNumber: "",
+          difficulty: DIFFICULTY_RADIOS[0].label,
+          topics: [] as Option[],
+          solutionText: "",
+        },
+      ],
     },
+  });
+
+  const { fields } = useFieldArray({
+    name: "solutions",
+    control,
   });
 
   const onSubmit = (data: any) => {
@@ -71,41 +80,50 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       </FormGroup>
 
       <h2 className="mb-1 text-lg">Solutions</h2>
-      <div className="bg-surface-default p-3">
-        <FormGroup className="mb-4">
-          <Label text="Question Number" />
-          <Input type="number" {...register("questionNumber")} />
-        </FormGroup>
+      {fields.map((solution, index) => (
+        <div key={solution.id} className="bg-surface-default p-3">
+          <FormGroup className="mb-4">
+            <Label text="Question Number" />
+            <Input
+              type="number"
+              {...register(`solutions.${index}.questionNumber`)}
+            />
+          </FormGroup>
 
-        <FormGroup className="my-4">
-          <Label text="Difficulty" />
-          <RadioGroup radios={DIFFICULTY_RADIOS} {...register("difficulty")} />
-        </FormGroup>
+          <FormGroup className="my-4">
+            <Label text="Difficulty" />
+            <RadioGroup
+              radios={DIFFICULTY_RADIOS}
+              {...register(`solutions.${index}.difficulty`)}
+            />
+          </FormGroup>
 
-        <FormGroup className="my-4">
-          <Label text="Topics" />
+          <FormGroup className="my-4">
+            <Label text="Topics" />
+            <Controller
+              name={`solutions.${index}.topics`}
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  multiple={true}
+                  options={subjectTopicOptions}
+                />
+              )}
+            />
+          </FormGroup>
+
+          <h2 className="mb-2">Write your solution here</h2>
           <Controller
-            name="topics"
+            name={`solutions.${index}.solutionText`}
             control={control}
             render={({ field }) => (
-              <Select
-                {...field}
-                multiple={true}
-                options={subjectTopicOptions}
-              />
+              <ReactQuill {...field} theme="snow" modules={reactQuillModules} />
             )}
           />
-        </FormGroup>
+        </div>
+      ))}
 
-        <h2 className="mb-2">Write your solution here</h2>
-        <Controller
-          name="solutionText"
-          control={control}
-          render={({ field }) => (
-            <ReactQuill {...field} theme="snow" modules={reactQuillModules} />
-          )}
-        />
-      </div>
       <button>Submit</button>
     </form>
   );
