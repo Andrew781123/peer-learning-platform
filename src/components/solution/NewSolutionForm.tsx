@@ -11,6 +11,7 @@ import Input from "../form/Input";
 import Label from "../form/Label";
 import RadioGroup from "../form/RadioGroup";
 import Select, { Option } from "../form/Select";
+import Button from "../ui/Button";
 import CrossButton from "../ui/CrossButton";
 import reactQuillModules from "./react-quill-modules";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -95,11 +96,11 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       </FormGroup>
 
       <h2 className="mb-1 text-lg">Solutions</h2>
-      <div className="flex flex-col gap-5 bg-surface-default p-6">
+      <div className="flex flex-col items-center gap-5 bg-surface-default p-6">
         {fields.map((solution, index) => (
           <div
             key={solution.id}
-            className="relative border border-onBackground p-3 focus:border-primary-default"
+            className="relative w-full border border-onBackground p-3 focus:border-primary-default"
           >
             <CrossButton
               onClick={() => removeSolutionFormItem(index)}
@@ -150,7 +151,13 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             />
           </div>
         ))}
-        <button onClick={() => append(DEFAULT_SOLUTION)}>Add</button>
+        <Button
+          primary
+          onClick={() => append(DEFAULT_SOLUTION)}
+          className="px-4"
+        >
+          Add Solution
+        </Button>
       </div>
 
       <button type="submit">Submit</button>
