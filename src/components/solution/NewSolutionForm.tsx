@@ -14,6 +14,22 @@ import Select, { Option } from "../form/Select";
 import reactQuillModules from "./react-quill-modules";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
+type FormValues = {
+  subject: Option;
+  solutions: {
+    questionNumber: string;
+    difficulty?: string;
+    topics: Option[];
+    solutionText: string;
+  }[];
+};
+
+const DEFAULT_SOLUTION = {
+  questionNumber: "",
+  topics: [],
+  solutionText: "",
+};
+
 type NewSolutionFormProps = {
   subjectTopics: inferProcedureOutput<
     AppRouter["subjectTopic"]["getAllBySubject"]
@@ -36,21 +52,14 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     valueKey: "id",
   });
 
-  const { handleSubmit, register, control, watch } = useForm({
+  const { handleSubmit, register, control, watch } = useForm<FormValues>({
     defaultValues: {
       subject: subjectOptions[0],
-      solutions: [
-        {
-          questionNumber: "",
-          difficulty: DIFFICULTY_RADIOS[0].label,
-          topics: [] as Option[],
-          solutionText: "",
-        },
-      ],
+      solutions: [DEFAULT_SOLUTION],
     },
   });
 
-  const { fields } = useFieldArray({
+  const { fields, append } = useFieldArray({
     name: "solutions",
     control,
   });
@@ -80,51 +89,61 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       </FormGroup>
 
       <h2 className="mb-1 text-lg">Solutions</h2>
-      {fields.map((solution, index) => (
-        <div key={solution.id} className="bg-surface-default p-3">
-          <FormGroup className="mb-4">
-            <Label text="Question Number" />
-            <Input
-              type="number"
-              {...register(`solutions.${index}.questionNumber`)}
-            />
-          </FormGroup>
+      <div className="flex flex-col gap-5 bg-surface-default p-6">
+        {fields.map((solution, index) => (
+          <div
+            key={solution.id}
+            className="border border-onBackground p-3 focus:border-primary-default"
+          >
+            <FormGroup className="mb-4">
+              <Label text="Question Number" />
+              <Input
+                type="number"
+                {...register(`solutions.${index}.questionNumber`)}
+              />
+            </FormGroup>
 
-          <FormGroup className="my-4">
-            <Label text="Difficulty" />
-            <RadioGroup
-              radios={DIFFICULTY_RADIOS}
-              {...register(`solutions.${index}.difficulty`)}
-            />
-          </FormGroup>
+            <FormGroup className="my-4">
+              <Label text="Difficulty" />
+              <RadioGroup
+                radios={DIFFICULTY_RADIOS}
+                {...register(`solutions.${index}.difficulty`)}
+              />
+            </FormGroup>
 
-          <FormGroup className="my-4">
-            <Label text="Topics" />
+            <FormGroup className="my-4">
+              <Label text="Topics" />
+              <Controller
+                name={`solutions.${index}.topics`}
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    multiple={true}
+                    options={subjectTopicOptions}
+                  />
+                )}
+              />
+            </FormGroup>
+
+            <h2 className="mb-2">Write your solution here</h2>
             <Controller
-              name={`solutions.${index}.topics`}
+              name={`solutions.${index}.solutionText`}
               control={control}
               render={({ field }) => (
-                <Select
+                <ReactQuill
                   {...field}
-                  multiple={true}
-                  options={subjectTopicOptions}
+                  theme="snow"
+                  modules={reactQuillModules}
                 />
               )}
             />
-          </FormGroup>
+          </div>
+        ))}
+      </div>
+      <button onClick={() => append(DEFAULT_SOLUTION)}>Add</button>
 
-          <h2 className="mb-2">Write your solution here</h2>
-          <Controller
-            name={`solutions.${index}.solutionText`}
-            control={control}
-            render={({ field }) => (
-              <ReactQuill {...field} theme="snow" modules={reactQuillModules} />
-            )}
-          />
-        </div>
-      ))}
-
-      <button>Submit</button>
+      <button type="submit">Submit</button>
     </form>
   );
 };
