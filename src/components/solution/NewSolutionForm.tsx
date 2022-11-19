@@ -151,16 +151,14 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             />
           </div>
         ))}
-        <Button
-          primary
-          onClick={() => append(DEFAULT_SOLUTION)}
-          className="px-4"
-        >
+        <Button primary onClick={() => append(DEFAULT_SOLUTION)}>
           Add Solution
         </Button>
       </div>
 
-      <button type="submit">Submit</button>
+      <Button primary type="submit" className="mt-2 ml-auto block">
+        Submit
+      </Button>
     </form>
   );
 };

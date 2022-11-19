@@ -12,7 +12,7 @@ const Button = (props: ButtonProps) => {
     primary
       ? "bg-primary-default hover:bg-primary-light"
       : "bg-none hover:bg-surface-light",
-    "rounded-full p-2 text-onPrimary w-fit transition-colors duration-300",
+    "rounded-full py-2 px-4 text-onPrimary w-fit transition-colors duration-300",
     className
   );
 
