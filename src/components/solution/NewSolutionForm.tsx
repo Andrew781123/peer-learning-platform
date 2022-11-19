@@ -11,6 +11,7 @@ import Input from "../form/Input";
 import Label from "../form/Label";
 import RadioGroup from "../form/RadioGroup";
 import Select, { Option } from "../form/Select";
+import CrossButton from "../ui/CrossButton";
 import reactQuillModules from "./react-quill-modules";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -59,10 +60,15 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     },
   });
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: "solutions",
     control,
   });
+
+  const removeSolutionFormItem = (index: number) => {
+    if (fields.length === 1) return;
+    remove(index);
+  };
 
   const onSubmit = (data: any) => {
     console.log({ data });
@@ -93,8 +99,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
         {fields.map((solution, index) => (
           <div
             key={solution.id}
-            className="border border-onBackground p-3 focus:border-primary-default"
+            className="relative border border-onBackground p-3 focus:border-primary-default"
           >
+            <CrossButton
+              onClick={() => removeSolutionFormItem(index)}
+              className="absolute top-3 right-3 font-medium"
+            />
             <FormGroup className="mb-4">
               <Label text="Question Number" />
               <Input
@@ -140,8 +150,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             />
           </div>
         ))}
+        <button onClick={() => append(DEFAULT_SOLUTION)}>Add</button>
       </div>
-      <button onClick={() => append(DEFAULT_SOLUTION)}>Add</button>
 
       <button type="submit">Submit</button>
     </form>

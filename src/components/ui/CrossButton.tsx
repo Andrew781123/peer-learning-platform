@@ -1,14 +1,17 @@
+import clsx from "clsx";
+
 type CrossButtonProps = {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  className?: string;
 };
 
 const CrossButton = (props: CrossButtonProps) => {
-  const { onClick } = props;
+  const { onClick, className } = props;
 
   return (
     <button
       onClick={(e) => onClick(e)}
-      className="cursor-pointer focus:text-onBackground"
+      className={clsx(className, "cursor-pointer focus:text-onBackground")}
     >
       &times;
     </button>
