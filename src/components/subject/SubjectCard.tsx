@@ -1,9 +1,8 @@
-import { inferProcedureOutput } from "@trpc/server";
+import { Subject } from "@prisma/client";
 import { useRouter } from "next/router";
-import { AppRouter } from "../../server/trpc/router/_app";
 
 type SubjectCardProps = {
-  subject: inferProcedureOutput<AppRouter["subject"]["getAll"]>[number];
+  subject: Subject;
 };
 
 const SubjectCard = (props: SubjectCardProps) => {

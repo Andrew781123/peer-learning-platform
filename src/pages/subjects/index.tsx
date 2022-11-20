@@ -5,34 +5,32 @@ import SubjectCard from "../../components/subject/SubjectCard";
 import PageHeader from "../../components/ui/PageHeader";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
-import { trpc } from "../../utils/trpc";
+import { GetAllSubjectsResponse } from "../../types/subject";
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<SubjectPageProps> = async () => {
   const ssg = createProxySSGHelpers({
     router: appRouter,
     ctx: await createContextInner({ session: null }),
     transformer: superjson,
   });
 
-  await ssg.subject.getAll.prefetch();
+  const getAllSubjectResponse = await ssg.subject.getAll.fetch();
 
   return {
     props: {
+      getAllSubjectResponse,
       trpcState: ssg.dehydrate(),
     },
     // No need to revalidate, we don't have any dynamic data
   };
 };
 
-type SubjectPageProps = {};
+type SubjectPageProps = {
+  getAllSubjectResponse: GetAllSubjectsResponse;
+};
 
-const SubjectPage: NextPage = (props: SubjectPageProps) => {
-  const {} = props;
-
-  const subjects = trpc.subject.getAll.useQuery(undefined, {
-    staleTime: Infinity,
-    cacheTime: Infinity,
-  });
+const SubjectPage: NextPage<SubjectPageProps> = (props) => {
+  const { getAllSubjectResponse } = props;
 
   return (
     <div>
@@ -41,7 +39,7 @@ const SubjectPage: NextPage = (props: SubjectPageProps) => {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {subjects.data?.map((subject) => (
+        {getAllSubjectResponse.map((subject) => (
           <SubjectCard key={subject.id} subject={subject} />
         ))}
       </div>
