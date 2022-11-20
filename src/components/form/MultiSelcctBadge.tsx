@@ -11,7 +11,7 @@ const MultiSelectBadge = (props: MultiSelectBadgeProps) => {
   return (
     <div
       key={optionLabel}
-      className=" flex items-center gap-2 rounded-lg bg-secondary-default p-1 text-onSecondary"
+      className=" flex items-center gap-2 rounded-lg  bg-onSurface px-2 py-1 text-onPrimary"
     >
       <span className="hover:cursor-default">{optionLabel}</span>
       {crossButton}

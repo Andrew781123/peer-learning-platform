@@ -64,7 +64,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
       onClick={toggleIsShown}
       onBlur={() => setIsShown(false)}
       tabIndex={0}
-      className="relative flex min-h-[1.5em] min-w-[15em] max-w-[50%] items-center gap-2 rounded-lg border  border-onSurface bg-surface-light p-2 text-onSurface focus:border-primary-dark focus:ring-primary-dark"
+      className="relative flex min-h-[3.1em] min-w-[15em] max-w-[50%] items-center gap-2 rounded-lg border  border-onSurface bg-surface-light p-2 text-onSurface focus:border-primary-dark focus:ring-primary-dark"
     >
       <div className="flex flex-grow flex-row flex-wrap items-center gap-1">
         {multiple ? (
@@ -107,13 +107,11 @@ const Select = forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
               setIsShown(false);
             }}
             className={clsx(
-              "cursor-pointer  py-1 px-2 hover:bg-secondary-default hover:text-onSecondary",
-              isOptionSelected(option)
-                ? "bg-secondary-dark text-onSecondary"
-                : ""
+              "hover:text-onSecondary,  flex cursor-pointer justify-between py-1 px-2 hover:bg-surface-default"
             )}
           >
-            {option.label}
+            <p>{option.label}</p>
+            {isOptionSelected(option) && <p>&#10003;</p>}
           </li>
         ))}
       </ul>
