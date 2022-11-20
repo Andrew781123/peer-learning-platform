@@ -26,7 +26,7 @@ type FormValues = {
   solutions: {
     questionNumber: string;
     difficultyRatingLabel?: string;
-    topics: Option[];
+    topics: Option<number>[];
     solutionText: string;
   }[];
 };
@@ -111,6 +111,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
         difficultyRatingId: difficultyRatingOptions.find(
           (option) => option.name === solution.difficultyRatingLabel
         )!.id,
+        topicIds: solution.topics.map((topic) => topic.value),
       })),
     });
   };

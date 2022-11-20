@@ -12,6 +12,7 @@ export const solutionRouter = router({
             questionNumber: z.number(),
             markdown: z.string(),
             difficultyRatingId: z.number(),
+            topicIds: z.array(z.number()),
           })
         ),
       })
@@ -26,6 +27,7 @@ export const solutionRouter = router({
           number: number;
           markdown: string;
           difficultyRatingId: number;
+          topicIds: number[];
         }
       >();
 
@@ -51,6 +53,7 @@ export const solutionRouter = router({
           number: solution.questionNumber,
           markdown: solution.markdown,
           difficultyRatingId: solution.difficultyRatingId,
+          topicIds: solution.topicIds,
         });
       }
 
@@ -64,6 +67,16 @@ export const solutionRouter = router({
           })),
       });
 
+      const addTopicsToQuestions = ctx.prisma.questionTopic.createMany({
+        data: Array.from(questionIdToSolutionMap.entries()).flatMap(
+          ([questionId, solution]) =>
+            solution.topicIds.map((topicId) => ({
+              questionId,
+              topicId,
+            }))
+        ),
+      });
+
       const createSolutions = ctx.prisma.questionSolution.createMany({
         data: Array.from(questionIdToSolutionMap.entries()).map(
           ([questionId, solution]) => ({
@@ -75,6 +88,10 @@ export const solutionRouter = router({
         ),
       });
 
-      return await ctx.prisma.$transaction([createQuestions, createSolutions]);
+      return await ctx.prisma.$transaction([
+        createQuestions,
+        addTopicsToQuestions,
+        createSolutions,
+      ]);
     }),
 });
