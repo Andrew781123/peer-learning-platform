@@ -27,6 +27,8 @@ export const getStaticProps: GetStaticProps<
     subjectId: "EIE3112",
   });
 
+  const difficultyRating = await ssg.difficultyRating.getAll.fetch();
+
   return {
     props: {
       subjectTopics,
