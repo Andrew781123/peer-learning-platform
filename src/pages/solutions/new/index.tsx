@@ -5,7 +5,8 @@ import NewSolutionForm from "../../../components/solution/NewSolutionForm";
 import PageHeader from "../../../components/ui/PageHeader";
 import { createContextInner } from "../../../server/trpc/context";
 import { appRouter } from "../../../server/trpc/router/_app";
-import { trpc } from "../../../utils/trpc";
+import { PastPaper } from "../../../types/past-papers";
+import { Subject, SubjectTopic } from "../../../types/subject";
 
 export const getStaticProps: GetStaticProps<
   NewSolutionPageProps
@@ -16,32 +17,35 @@ export const getStaticProps: GetStaticProps<
     transformer: superjson,
   });
 
-  await ssg.subjectTopic.getAllBySubject.prefetch({ subjectId: "EIE3112" });
+  const subjectTopics = await ssg.subjectTopic.getAllBySubject.fetch({
+    subjectId: "EIE3112",
+  });
 
-  await ssg.subject.getAll.prefetch();
+  const subjects = await ssg.subject.getAll.fetch();
 
-  await ssg.pastPaper.getAllBySubject.prefetch({ subjectId: "EIE3112" });
+  const pastPapers = await ssg.pastPaper.getAllBySubject.fetch({
+    subjectId: "EIE3112",
+  });
 
   return {
     props: {
+      subjectTopics,
+      subjects,
+      pastPapers,
       trpcState: ssg.dehydrate(),
     },
     // No need to revalidate, we don't have any dynamic data
   };
 };
 
-type NewSolutionPageProps = {};
+type NewSolutionPageProps = {
+  subjectTopics: SubjectTopic[];
+  subjects: Subject[];
+  pastPapers: PastPaper[];
+};
 
 const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
-  const {} = props;
-
-  const subjectTopic = trpc.subjectTopic.getAllBySubject.useQuery({
-    subjectId: "EIE3112",
-  });
-  const subject = trpc.subject.getAll.useQuery();
-  const pastPaper = trpc.pastPaper.getAllBySubject.useQuery({
-    subjectId: "EIE3112",
-  });
+  const { subjectTopics, subjects, pastPapers } = props;
 
   return (
     <div>
@@ -49,16 +53,11 @@ const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
         <PageHeader title="Submit Solution" />
       </div>
 
-      {subjectTopic.isLoading || subject.isLoading || pastPaper.isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <NewSolutionForm
-          // TODO - fix this
-          subjectTopics={subjectTopic.data ?? []}
-          subjects={subject.data!}
-          pastPapers={pastPaper.data!}
-        />
-      )}
+      <NewSolutionForm
+        subjectTopics={subjectTopics}
+        subjects={subjects}
+        pastPapers={pastPapers}
+      />
     </div>
   );
 };
