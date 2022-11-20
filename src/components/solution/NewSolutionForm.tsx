@@ -165,6 +165,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               <Label text="Question Number" />
               <Input
                 type="number"
+                onWheel={(e) => e.currentTarget.blur()}
                 {...register(`solutions.${index}.questionNumber`)}
               />
             </FormGroup>
