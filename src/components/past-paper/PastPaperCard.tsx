@@ -1,12 +1,9 @@
-import { inferProcedureOutput } from "@trpc/server";
+import { PastPaper } from "@prisma/client";
 import { useRouter } from "next/router";
 import { AiOutlineLink } from "react-icons/ai";
-import { AppRouter } from "../../server/trpc/router/_app";
 
 type PastPaperCardProps = {
-  pastPaper: inferProcedureOutput<
-    AppRouter["pastPaper"]["getAllBySubject"]
-  >[number];
+  pastPaper: PastPaper;
 };
 
 const PastPaperCard = (props: PastPaperCardProps) => {

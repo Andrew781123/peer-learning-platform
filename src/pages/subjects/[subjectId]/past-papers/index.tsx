@@ -13,7 +13,7 @@ import List from "../../../../components/ui/List";
 import PageHeader from "../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
-import { trpc } from "../../../../utils/trpc";
+import { GetAllPastPapersBySubjectResponse } from "../../../../types/past-paper";
 
 interface IParams extends ParsedUrlQuery {
   subjectId: string;
@@ -48,11 +48,12 @@ export const getStaticProps: GetStaticProps<
 
   if (params === undefined) return { notFound: true };
 
-  await ssg.pastPaper.getAllBySubject.prefetch({ subjectId: params.subjectId });
+  const getAllPastPaperBySubjectResponse =
+    await ssg.pastPaper.getAllBySubject.fetch({ subjectId: params.subjectId });
 
   return {
     props: {
-      subjectId: params.subjectId,
+      getAllPastPaperBySubjectResponse,
       trpcState: ssg.dehydrate(),
     },
     // No need to revalidate, we don't have any dynamic data
@@ -60,21 +61,11 @@ export const getStaticProps: GetStaticProps<
 };
 
 type PastPaperPageProps = {
-  subjectId: string;
+  getAllPastPaperBySubjectResponse: GetAllPastPapersBySubjectResponse;
 };
 
 const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
-  const { subjectId } = props;
-
-  const pastPapers = trpc.pastPaper.getAllBySubject.useQuery(
-    {
-      subjectId,
-    },
-    {
-      staleTime: Infinity,
-      cacheTime: Infinity,
-    }
-  );
+  const { getAllPastPaperBySubjectResponse } = props;
 
   return (
     <div>
@@ -83,7 +74,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
       </div>
 
       <List>
-        {pastPapers.data?.map((pastPaper) => (
+        {getAllPastPaperBySubjectResponse.map((pastPaper) => (
           <PastPaperCard key={pastPaper.id} pastPaper={pastPaper} />
         ))}
       </List>
