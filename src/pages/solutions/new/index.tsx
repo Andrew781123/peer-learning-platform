@@ -1,3 +1,9 @@
+import {
+  DifficultyRatingOption,
+  PastPaper,
+  Subject,
+  SubjectTopic,
+} from "@prisma/client";
 import { createProxySSGHelpers } from "@trpc/react/ssg";
 import { GetStaticProps, NextPage } from "next";
 import superjson from "superjson";
@@ -5,8 +11,6 @@ import NewSolutionForm from "../../../components/solution/NewSolutionForm";
 import PageHeader from "../../../components/ui/PageHeader";
 import { createContextInner } from "../../../server/trpc/context";
 import { appRouter } from "../../../server/trpc/router/_app";
-import { PastPaper } from "../../../types/past-papers";
-import { Subject, SubjectTopic } from "../../../types/subject";
 
 export const getStaticProps: GetStaticProps<
   NewSolutionPageProps
@@ -27,13 +31,15 @@ export const getStaticProps: GetStaticProps<
     subjectId: "EIE3112",
   });
 
-  const difficultyRating = await ssg.difficultyRating.getAll.fetch();
+  const difficultyRatingOptions =
+    await ssg.difficultyRatingOption.getAll.fetch();
 
   return {
     props: {
       subjectTopics,
       subjects,
       pastPapers,
+      difficultyRatingOptions,
       trpcState: ssg.dehydrate(),
     },
     // No need to revalidate, we don't have any dynamic data
@@ -44,10 +50,12 @@ type NewSolutionPageProps = {
   subjectTopics: SubjectTopic[];
   subjects: Subject[];
   pastPapers: PastPaper[];
+  difficultyRatingOptions: DifficultyRatingOption[];
 };
 
 const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
-  const { subjectTopics, subjects, pastPapers } = props;
+  const { subjectTopics, subjects, pastPapers, difficultyRatingOptions } =
+    props;
 
   return (
     <div>
@@ -59,6 +67,7 @@ const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
         subjectTopics={subjectTopics}
         subjects={subjects}
         pastPapers={pastPapers}
+        difficultyRatingOptions={difficultyRatingOptions}
       />
     </div>
   );

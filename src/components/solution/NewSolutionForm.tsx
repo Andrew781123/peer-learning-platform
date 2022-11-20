@@ -1,11 +1,14 @@
-import { inferProcedureOutput } from "@trpc/server";
+import {
+  DifficultyRatingOption,
+  PastPaper,
+  Subject,
+  SubjectTopic,
+} from "@prisma/client";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
-import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
 import useSelectOptions from "../../hooks/useSelectOptions";
-import { AppRouter } from "../../server/trpc/router/_app";
 import { trpc } from "../../utils/trpc";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
@@ -35,15 +38,15 @@ const DEFAULT_SOLUTION = {
 };
 
 type NewSolutionFormProps = {
-  subjectTopics: inferProcedureOutput<
-    AppRouter["subjectTopic"]["getAllBySubject"]
-  >;
-  subjects: inferProcedureOutput<AppRouter["subject"]["getAll"]>;
-  pastPapers: inferProcedureOutput<AppRouter["pastPaper"]["getAllBySubject"]>;
+  subjectTopics: SubjectTopic[];
+  subjects: Subject[];
+  pastPapers: PastPaper[];
+  difficultyRatingOptions: DifficultyRatingOption[];
 };
 
 const NewSolutionForm = (props: NewSolutionFormProps) => {
-  const { subjectTopics, subjects, pastPapers } = props;
+  const { subjectTopics, subjects, pastPapers, difficultyRatingOptions } =
+    props;
 
   const { options: subjectTopicOptions } = useSelectOptions({
     data: subjectTopics,
@@ -61,6 +64,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     data: pastPapers,
     labelKey: "academicYear",
     valueKey: "id",
+  });
+
+  const { options: difficultyRatingRadioOptions } = useSelectOptions({
+    data: difficultyRatingOptions,
+    labelKey: "name",
+    valueKey: "value",
   });
 
   const mutation = trpc.solution.createMany.useMutation();
@@ -154,7 +163,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             <FormGroup className="my-4">
               <Label text="Difficulty" />
               <RadioGroup
-                radios={DIFFICULTY_RADIOS}
+                radios={difficultyRatingRadioOptions}
                 {...register(`solutions.${index}.difficulty`)}
               />
             </FormGroup>
