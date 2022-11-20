@@ -154,10 +154,13 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             key={solution.id}
             className="relative w-full rounded-lg border border-onBackground p-3 focus:border-primary-default"
           >
-            <CrossButton
-              onClick={() => removeSolutionFormItem(index)}
-              className="absolute top-3 right-3 font-medium"
-            />
+            {fields.length > 1 ? (
+              <CrossButton
+                onClick={() => removeSolutionFormItem(index)}
+                className="absolute top-3 right-3 font-medium"
+              />
+            ) : null}
+
             <FormGroup className="mb-4">
               <Label text="Question Number" />
               <Input

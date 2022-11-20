@@ -20,7 +20,7 @@ const QuestionCard = (props: QuestionCardProps) => {
           {question.topics.map((topic) => (
             <p
               key={topic}
-              className="rounded-lg bg-primary-default p-1 text-xs text-onPrimary"
+              className="rounded-full bg-primary-default py-1 px-3 text-xs text-onPrimary"
             >
               {topic}
             </p>

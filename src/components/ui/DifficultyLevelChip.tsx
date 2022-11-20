@@ -24,7 +24,7 @@ const DifficultyLevelChip = (props: DifficultyChipProps) => {
 
   return (
     <div
-      className={`flex items-center justify-center rounded-full ${ChipUIMap[level].color} px-2 py-1 text-xs font-bold text-white`}
+      className={`flex items-center justify-center rounded-full ${ChipUIMap[level].color} px-3 py-1 text-xs font-bold text-white`}
     >
       {ChipUIMap[level].displayText}
     </div>
