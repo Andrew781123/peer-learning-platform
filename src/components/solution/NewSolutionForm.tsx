@@ -18,6 +18,7 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 type FormValues = {
   subject: Option;
+  pastPaper: Option;
   solutions: {
     questionNumber: string;
     difficulty?: string;
@@ -37,10 +38,11 @@ type NewSolutionFormProps = {
     AppRouter["subjectTopic"]["getAllBySubject"]
   >;
   subjects: inferProcedureOutput<AppRouter["subject"]["getAll"]>;
+  pastPapers: inferProcedureOutput<AppRouter["pastPaper"]["getAllBySubject"]>;
 };
 
 const NewSolutionForm = (props: NewSolutionFormProps) => {
-  const { subjectTopics, subjects } = props;
+  const { subjectTopics, subjects, pastPapers } = props;
 
   const { options: subjectTopicOptions } = useSelectOptions({
     data: subjectTopics,
@@ -54,10 +56,17 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     valueKey: "id",
   });
 
+  const { options: pastPaperOptions } = useSelectOptions({
+    data: pastPapers,
+    labelKey: "academicYear",
+    valueKey: "id",
+  });
+
   const { handleSubmit, register, control, watch, getValues } =
     useForm<FormValues>({
       defaultValues: {
         subject: subjectOptions[0],
+        pastPaper: pastPaperOptions[0],
         solutions: [DEFAULT_SOLUTION],
       },
     });
@@ -99,6 +108,17 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
           control={control}
           render={({ field }) => (
             <Select {...field} multiple={false} options={subjectOptions} />
+          )}
+        />
+      </FormGroup>
+
+      <FormGroup className="my-2">
+        <Label text="Past Paper" />
+        <Controller
+          name="pastPaper"
+          control={control}
+          render={({ field }) => (
+            <Select {...field} multiple={false} options={pastPaperOptions} />
           )}
         />
       </FormGroup>

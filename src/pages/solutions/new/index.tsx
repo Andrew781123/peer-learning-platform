@@ -20,6 +20,8 @@ export const getStaticProps: GetStaticProps<
 
   await ssg.subject.getAll.prefetch();
 
+  await ssg.pastPaper.getAllBySubject.prefetch({ subjectId: "EIE3112" });
+
   return {
     props: {
       trpcState: ssg.dehydrate(),
@@ -37,6 +39,9 @@ const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
     subjectId: "EIE3112",
   });
   const subject = trpc.subject.getAll.useQuery();
+  const pastPaper = trpc.pastPaper.getAllBySubject.useQuery({
+    subjectId: "EIE3112",
+  });
 
   return (
     <div>
@@ -44,13 +49,14 @@ const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
         <PageHeader title="Submit Solution" />
       </div>
 
-      {subjectTopic.isLoading || subject.isLoading ? (
+      {subjectTopic.isLoading || subject.isLoading || pastPaper.isLoading ? (
         <div>Loading...</div>
       ) : (
         <NewSolutionForm
           // TODO - fix this
           subjectTopics={subjectTopic.data ?? []}
           subjects={subject.data!}
+          pastPapers={pastPaper.data!}
         />
       )}
     </div>
