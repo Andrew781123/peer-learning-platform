@@ -206,7 +206,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             />
           </div>
         ))}
-        <Button primary type="button" onClick={addSolutionFormItem}>
+        <Button type="button" onClick={addSolutionFormItem}>
           Add Solution
         </Button>
       </div>

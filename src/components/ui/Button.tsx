@@ -10,9 +10,9 @@ const Button = (props: ButtonProps) => {
 
   const classes = clsx(
     primary
-      ? "bg-primary-default hover:bg-primary-light"
-      : "bg-none hover:bg-surface-light",
-    "rounded-full py-2 px-4 text-onPrimary w-fit transition-colors duration-300",
+      ? "bg-primary-default hover:bg-primary-light text-onPrimary text-lg"
+      : "bg-none hover:bg-surface-light text-onSurface border border-onSurface",
+    "rounded-full py-2 px-4 w-fit transition-colors duration-300",
     className
   );
 
