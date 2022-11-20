@@ -1,12 +1,9 @@
-import { inferProcedureOutput } from "@trpc/server";
 import { AiOutlineSolution } from "react-icons/ai";
-import { AppRouter } from "../../server/trpc/router/_app";
+import { GetAllQuestionsByPastPaperResponse } from "../../types/question";
 import DifficultyLevelChip from "../ui/DifficultyLevelChip";
 
 type QuestionCardProps = {
-  question: inferProcedureOutput<
-    AppRouter["question"]["getAllByPastPaper"]
-  >[number];
+  question: GetAllQuestionsByPastPaperResponse[number];
 };
 
 const QuestionCard = (props: QuestionCardProps) => {

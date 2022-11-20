@@ -13,7 +13,7 @@ import List from "../../../../../../components/ui/List";
 import PageHeader from "../../../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../../../server/trpc/context";
 import { appRouter } from "../../../../../../server/trpc/router/_app";
-import { trpc } from "../../../../../../utils/trpc";
+import { GetAllQuestionsByPastPaperResponse } from "../../../../../../types/question";
 
 interface IParams extends ParsedUrlQuery {
   pastPaperId: string;
@@ -54,9 +54,10 @@ export const getStaticProps: GetStaticProps<
 
   if (params === undefined) return { notFound: true };
 
-  await ssg.question.getAllByPastPaper.prefetch({
-    pastPaperId: +params.pastPaperId,
-  });
+  const getAllQuestionsByPastPaperResponse =
+    await ssg.question.getAllByPastPaper.fetch({
+      pastPaperId: +params.pastPaperId,
+    });
 
   const pastPaper = await ssg.pastPaper.getOne.fetch({
     id: +params.pastPaperId,
@@ -66,7 +67,7 @@ export const getStaticProps: GetStaticProps<
 
   return {
     props: {
-      pastPaperId: params.pastPaperId,
+      getAllQuestionsByPastPaperResponse,
       pastPaperLink: pastPaper.link,
       trpcState: ssg.dehydrate(),
     },
@@ -75,16 +76,12 @@ export const getStaticProps: GetStaticProps<
 };
 
 type QuestionPageProps = {
-  pastPaperId: string;
+  getAllQuestionsByPastPaperResponse: GetAllQuestionsByPastPaperResponse;
   pastPaperLink: string;
 };
 
 const QuestionPage: NextPage<QuestionPageProps> = (props) => {
-  const { pastPaperId, pastPaperLink } = props;
-
-  const questions = trpc.question.getAllByPastPaper.useQuery({
-    pastPaperId: +pastPaperId,
-  });
+  const { pastPaperLink, getAllQuestionsByPastPaperResponse } = props;
 
   return (
     <div>
@@ -104,7 +101,7 @@ const QuestionPage: NextPage<QuestionPageProps> = (props) => {
       </p>
 
       <List>
-        {questions.data?.map((question) => (
+        {getAllQuestionsByPastPaperResponse.map((question) => (
           <QuestionCard key={question.id} question={question} />
         ))}
       </List>
