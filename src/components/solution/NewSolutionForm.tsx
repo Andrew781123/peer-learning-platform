@@ -5,7 +5,7 @@ import {
   SubjectTopic,
 } from "@prisma/client";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import useSelectOptions from "../../hooks/useSelectOptions";
@@ -48,6 +48,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   const { subjectTopics, subjects, pastPapers, difficultyRatingOptions } =
     props;
 
+  const router = useRouter();
+
   const { options: subjectTopicOptions } = useSelectOptions({
     data: subjectTopics,
     labelKey: "name",
@@ -66,24 +68,28 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     valueKey: "id",
   });
 
-  console.log({ pastPaperOptions });
-
   const { options: difficultyRatingRadioOptions } = useSelectOptions({
     data: difficultyRatingOptions,
     labelKey: "name",
     valueKey: "value",
   });
 
-  const mutation = trpc.solution.createMany.useMutation();
+  const mutation = trpc.solution.createMany.useMutation({
+    onSuccess: () => {
+      router.push("/");
+    },
+    onSettled: () => {
+      reset();
+    },
+  });
 
-  const { handleSubmit, register, control, watch, getValues } =
-    useForm<FormValues>({
-      defaultValues: {
-        subject: subjectOptions[0],
-        pastPaper: pastPaperOptions[0],
-        solutions: [DEFAULT_SOLUTION],
-      },
-    });
+  const { handleSubmit, register, control, reset } = useForm<FormValues>({
+    defaultValues: {
+      subject: subjectOptions[0],
+      pastPaper: pastPaperOptions[0],
+      solutions: [DEFAULT_SOLUTION],
+    },
+  });
 
   const { fields, append, remove } = useFieldArray({
     name: "solutions",
@@ -116,12 +122,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     });
   };
 
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type)
-    );
-    return () => subscription.unsubscribe();
-  }, [watch]);
+  // useEffect(() => {
+  //   const subscription = watch((value, { name, type }) =>
+  //     console.log(value, name, type)
+  //   );
+  //   return () => subscription.unsubscribe();
+  // }, [watch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -212,7 +218,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
         </Button>
       </div>
 
-      <Button primary type="submit" className="mt-2 ml-auto block">
+      <Button
+        primary
+        type="submit"
+        disabled={mutation.isLoading}
+        className="mt-2 ml-auto block"
+      >
         Submit
       </Button>
     </form>

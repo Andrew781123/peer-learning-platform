@@ -83,8 +83,6 @@ model QuestionTopic {
   questionId String
   topic      SubjectTopic @relation(fields: [topicId], references: [id])
   topicId    Int
-
-  @@unique([questionId, topicId], name: "question_topic_unique")
 }
 
 model DifficultyRatingOption {

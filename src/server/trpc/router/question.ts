@@ -63,10 +63,19 @@ export const questionRouter = router({
 
       const response = questions.map((question) => ({
         ...question,
-        topics: question.topics
-          .filter((topic) => topic.topic._count.questions >= MIN_TAG_COUNT)
-          .sort((a, b) => b.topic._count.questions - a.topic._count.questions)
-          .map((topic) => topic.topic.name),
+        topics: Object.entries(
+          question.topics.reduce((acc, topic) => {
+            if (topic.topic.name in acc) return acc;
+            if (topic.topic._count.questions < MIN_TAG_COUNT) return acc;
+            return {
+              ...acc,
+              [topic.topic.name]: topic.topic._count.questions,
+            };
+          }, {} as { [key: string]: number })
+        )
+          .map(([name, count]) => ({ name, count }))
+          .sort((a, b) => b.count - a.count)
+          .map((topic) => topic.name),
         solutionCount: question._count.solutions,
         difficultyLevel: getDifficultyLevel(
           getAverageDifficultyRatingScore(question)
