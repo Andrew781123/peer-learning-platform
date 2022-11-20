@@ -17,7 +17,7 @@ model Subject {
 }
 
 model PastPaper {
-  id           Int        @id
+  id           Int        @id @default(autoincrement())
   subject      Subject    @relation(fields: [subjectId], references: [id])
   subjectId    String
   link         String     @db.VarChar(255)
@@ -26,7 +26,7 @@ model PastPaper {
 }
 
 model Question {
-  id          Int                @id
+  id          Int                @id @default(autoincrement())
   pastPaper   PastPaper          @relation(fields: [pastPaperId], references: [id])
   pastPaperId Int
   number      Int                @db.TinyInt
@@ -35,7 +35,7 @@ model Question {
 }
 
 model QuestionSolution {
-  id                 Int                     @id
+  id                 Int                     @id @default(autoincrement())
   question           Question                @relation(fields: [questionId], references: [id])
   questionId         Int
   user               User                    @relation(fields: [userId], references: [id])
@@ -48,7 +48,7 @@ model QuestionSolution {
 }
 
 model SolutionComment {
-  id         Int              @id
+  id         Int              @id @default(autoincrement())
   solution   QuestionSolution @relation(fields: [solutionId], references: [id])
   solutionId Int
   user       User             @relation(fields: [userId], references: [id])
@@ -57,7 +57,7 @@ model SolutionComment {
 }
 
 model SubjectTopic {
-  id        Int             @id
+  id        Int             @id @default(autoincrement())
   subject   Subject         @relation(fields: [subjectId], references: [id])
   subjectId String
   questions QuestionTopic[]
@@ -65,7 +65,7 @@ model SubjectTopic {
 }
 
 model QuestionTopic {
-  id         Int          @id
+  id         Int          @id @default(autoincrement())
   question   Question     @relation(fields: [questionId], references: [id])
   questionId Int
   topic      SubjectTopic @relation(fields: [topicId], references: [id])
@@ -75,7 +75,7 @@ model QuestionTopic {
 }
 
 model DifficultyRatingOption {
-  id                Int                @id
+  id                Int                @id @default(autoincrement())
   name              String             @db.VarChar(255)
   value             Int                @db.TinyInt
   questionSolutions QuestionSolution[]
