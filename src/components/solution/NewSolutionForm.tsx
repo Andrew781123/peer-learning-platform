@@ -6,6 +6,7 @@ import "react-quill/dist/quill.snow.css";
 import DIFFICULTY_RADIOS from "../../constants/difficultyRadios";
 import useSelectOptions from "../../hooks/useSelectOptions";
 import { AppRouter } from "../../server/trpc/router/_app";
+import { trpc } from "../../utils/trpc";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
 import Label from "../form/Label";
@@ -17,8 +18,8 @@ import reactQuillModules from "./react-quill-modules";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 type FormValues = {
-  subject: Option;
-  pastPaper: Option;
+  subject: Option<string>;
+  pastPaper: Option<number>;
   solutions: {
     questionNumber: string;
     difficulty?: string;
@@ -62,6 +63,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     valueKey: "id",
   });
 
+  const mutation = trpc.solution.createMany.useMutation();
+
   const { handleSubmit, register, control, watch, getValues } =
     useForm<FormValues>({
       defaultValues: {
@@ -88,8 +91,14 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     remove(index);
   };
 
-  const onSubmit = (data: any) => {
-    console.log({ data });
+  const onSubmit = (data: FormValues) => {
+    mutation.mutate({
+      pastPaperId: data.pastPaper.value,
+      solutions: data.solutions.map((solution) => ({
+        questionNumber: parseInt(solution.questionNumber),
+        markdown: solution.solutionText,
+      })),
+    });
   };
 
   useEffect(() => {

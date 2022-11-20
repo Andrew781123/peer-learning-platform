@@ -26,18 +26,20 @@ model PastPaper {
 }
 
 model Question {
-  id          Int                @id @default(autoincrement())
+  id          String             @id
   pastPaper   PastPaper          @relation(fields: [pastPaperId], references: [id])
   pastPaperId Int
   number      Int                @db.TinyInt
   solutions   QuestionSolution[]
   topics      QuestionTopic[]
+
+  @@unique([pastPaperId, number], name: "pastPaperId_number_unique")
 }
 
 model QuestionSolution {
   id                 Int                     @id @default(autoincrement())
   question           Question                @relation(fields: [questionId], references: [id])
-  questionId         Int
+  questionId         String
   user               User                    @relation(fields: [userId], references: [id])
   userId             Int
   markdown           String                  @db.Text
@@ -67,7 +69,7 @@ model SubjectTopic {
 model QuestionTopic {
   id         Int          @id @default(autoincrement())
   question   Question     @relation(fields: [questionId], references: [id])
-  questionId Int
+  questionId String
   topic      SubjectTopic @relation(fields: [topicId], references: [id])
   topicId    Int
 

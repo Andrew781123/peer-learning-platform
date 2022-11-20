@@ -3,9 +3,9 @@ import { forwardRef, useState } from "react";
 import CrossButton from "../ui/CrossButton";
 import MultiSelectBadge from "./MultiSelcctBadge";
 
-export interface Option {
+export interface Option<TValue extends string | number = string | number> {
   label: string;
-  value: string | number;
+  value: TValue;
 }
 
 type SingleSelectProps<TOption extends Option = Option> = {
