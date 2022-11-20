@@ -11,7 +11,7 @@ export const solutionRouter = router({
           z.object({
             questionNumber: z.number(),
             markdown: z.string(),
-            difficultyRatingId: z.number().optional(),
+            difficultyRatingId: z.number(),
           })
         ),
       })
@@ -25,7 +25,7 @@ export const solutionRouter = router({
           isNewQuestion: boolean;
           number: number;
           markdown: string;
-          difficultyRatingId?: number;
+          difficultyRatingId: number;
         }
       >();
 
@@ -70,6 +70,7 @@ export const solutionRouter = router({
             questionId,
             userId: 11,
             markdown: solution.markdown,
+            difficultyRatingId: solution.difficultyRatingId,
           })
         ),
       });

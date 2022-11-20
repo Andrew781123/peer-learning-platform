@@ -25,7 +25,7 @@ type FormValues = {
   pastPaper: Option<number>;
   solutions: {
     questionNumber: string;
-    difficulty?: string;
+    difficultyRatingLabel?: string;
     topics: Option[];
     solutionText: string;
   }[];
@@ -65,6 +65,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     labelKey: "academicYear",
     valueKey: "id",
   });
+
+  console.log({ pastPaperOptions });
 
   const { options: difficultyRatingRadioOptions } = useSelectOptions({
     data: difficultyRatingOptions,
@@ -106,6 +108,9 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       solutions: data.solutions.map((solution) => ({
         questionNumber: parseInt(solution.questionNumber),
         markdown: solution.solutionText,
+        difficultyRatingId: difficultyRatingOptions.find(
+          (option) => option.name === solution.difficultyRatingLabel
+        )!.id,
       })),
     });
   };
@@ -164,7 +169,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               <Label text="Difficulty" />
               <RadioGroup
                 radios={difficultyRatingRadioOptions}
-                {...register(`solutions.${index}.difficulty`)}
+                {...register(`solutions.${index}.difficultyRatingLabel`)}
               />
             </FormGroup>
 
@@ -197,7 +202,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             />
           </div>
         ))}
-        <Button primary onClick={addSolutionFormItem}>
+        <Button primary type="button" onClick={addSolutionFormItem}>
           Add Solution
         </Button>
       </div>

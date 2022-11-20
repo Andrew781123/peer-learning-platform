@@ -10,6 +10,7 @@ const CrossButton = (props: CrossButtonProps) => {
 
   return (
     <button
+      type="button"
       onClick={(e) => onClick(e)}
       className={clsx(className, "cursor-pointer focus:text-onBackground")}
     >
