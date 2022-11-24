@@ -30,10 +30,7 @@ const Navbar = () => {
       <ul className="ml-auto mr-2 flex gap-7">
         {status === "unauthenticated" ? (
           <>
-            <li
-              className="hover:cursor-pointer"
-              onClick={() => signIn("email")}
-            >
+            <li className="hover:cursor-pointer" onClick={() => signIn()}>
               Sign in
             </li>
           </>
