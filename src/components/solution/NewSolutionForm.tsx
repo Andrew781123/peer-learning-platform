@@ -50,6 +50,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const router = useRouter();
 
+  const trpcContext = trpc.useContext();
+
   const { options: subjectTopicOptions } = useSelectOptions({
     data: subjectTopics,
     labelKey: "name",
@@ -76,6 +78,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const mutation = trpc.solution.createMany.useMutation({
     onSuccess: () => {
+      trpcContext.question.getAllByPastPaper.invalidate();
       router.push("/");
     },
     onSettled: () => {
