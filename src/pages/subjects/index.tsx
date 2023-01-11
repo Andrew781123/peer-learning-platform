@@ -3,9 +3,10 @@ import { GetStaticProps, NextPage } from "next";
 import superjson from "superjson";
 import SubjectCard from "../../components/subject/SubjectCard";
 import PageHeader from "../../components/ui/PageHeader";
+import Spinner from "../../components/ui/Spinner";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
-import { GetAllSubjectsResponse } from "../../types/subject";
+import { trpc } from "../../utils/trpc";
 
 export const getStaticProps: GetStaticProps<SubjectPageProps> = async () => {
   const ssg = createProxySSGHelpers({
@@ -14,23 +15,26 @@ export const getStaticProps: GetStaticProps<SubjectPageProps> = async () => {
     transformer: superjson,
   });
 
-  const getAllSubjectResponse = await ssg.subject.getAll.fetch();
+  await ssg.subject.getAll.prefetch();
 
   return {
     props: {
-      getAllSubjectResponse,
       trpcState: ssg.dehydrate(),
     },
     // No need to revalidate, we don't have any dynamic data
   };
 };
 
-type SubjectPageProps = {
-  getAllSubjectResponse: GetAllSubjectsResponse;
-};
+type SubjectPageProps = {};
 
 const SubjectPage: NextPage<SubjectPageProps> = (props) => {
-  const { getAllSubjectResponse } = props;
+  // const { getAllSubjectResponse } = props;
+
+  const {
+    data: getAllSubjectResponse,
+    isSuccess,
+    isLoading,
+  } = trpc.subject.getAll.useQuery();
 
   return (
     <div>
@@ -38,11 +42,15 @@ const SubjectPage: NextPage<SubjectPageProps> = (props) => {
         <PageHeader title="Subjects" />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {getAllSubjectResponse.map((subject) => (
-          <SubjectCard key={subject.id} subject={subject} />
-        ))}
-      </div>
+      {true && <Spinner />}
+
+      {isSuccess && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {getAllSubjectResponse.map((subject) => (
+            <SubjectCard key={subject.id} subject={subject} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
