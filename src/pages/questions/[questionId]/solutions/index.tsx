@@ -8,6 +8,7 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
+import List from "../../../../components/ui/List";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
 import { trpc } from "../../../../utils/trpc";
@@ -25,7 +26,6 @@ export const getStaticPaths: GetStaticPaths<IParams> = async () => {
     params: { questionId: question.id },
   }));
 
-  console.log(paths);
   return {
     paths,
     fallback: false,
@@ -42,23 +42,45 @@ export const getStaticProps: GetStaticProps<
     transformer: superjson,
   });
 
-  await ssg.subject.getAll.prefetch();
+  const params = context.params;
+
+  if (params === undefined) return { notFound: true };
+
+  await ssg.solution.getAllByQuestion.prefetch({
+    questionId: params.questionId,
+  });
 
   return {
     props: {
+      questionId: params.questionId,
       trpcState: ssg.dehydrate(),
     },
     // No need to revalidate, we don't have any dynamic data
   };
 };
 
-type SolutionPageProps = {};
+type SolutionPageProps = {
+  questionId: string;
+};
 
 const SolutionPage: NextPage<SolutionPageProps> = (props) => {
-  const { data: getAllSubjectResponse, isSuccess } =
-    trpc.subject.getAll.useQuery();
+  const { questionId } = props;
 
-  return <div>Solution Page</div>;
+  const { data: getAllSubjectResponse, isSuccess } =
+    trpc.solution.getAllByQuestion.useQuery({
+      questionId,
+    });
+
+  console.log(getAllSubjectResponse);
+
+  return (
+    <List>
+      {isSuccess &&
+        getAllSubjectResponse.map((solution) => (
+          <div key={solution.id}>{solution.id}</div>
+        ))}
+    </List>
+  );
 };
 
 export default SolutionPage;

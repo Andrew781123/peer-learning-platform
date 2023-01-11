@@ -94,4 +94,15 @@ export const solutionRouter = router({
         createSolutions,
       ]);
     }),
+  getAllByQuestion: publicProcedure
+    .input(
+      z.object({
+        questionId: z.string(),
+      })
+    )
+    .query(({ input, ctx }) => {
+      return ctx.prisma.questionSolution.findMany({
+        where: { questionId: input.questionId },
+      });
+    }),
 });
