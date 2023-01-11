@@ -13,7 +13,7 @@ import List from "../../../../../../components/ui/List";
 import PageHeader from "../../../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../../../server/trpc/context";
 import { appRouter } from "../../../../../../server/trpc/router/_app";
-import { GetAllQuestionsByPastPaperResponse } from "../../../../../../types/question";
+import { trpc } from "../../../../../../utils/trpc";
 
 interface IParams extends ParsedUrlQuery {
   pastPaperId: string;
@@ -54,10 +54,9 @@ export const getStaticProps: GetStaticProps<
 
   if (params === undefined) return { notFound: true };
 
-  const getAllQuestionsByPastPaperResponse =
-    await ssg.question.getAllByPastPaper.fetch({
-      pastPaperId: +params.pastPaperId,
-    });
+  await ssg.question.getAllByPastPaper.prefetch({
+    pastPaperId: +params.pastPaperId,
+  });
 
   const pastPaper = await ssg.pastPaper.getOne.fetch({
     id: +params.pastPaperId,
@@ -67,7 +66,7 @@ export const getStaticProps: GetStaticProps<
 
   return {
     props: {
-      getAllQuestionsByPastPaperResponse,
+      pastPaperId: +params.pastPaperId,
       pastPaperLink: pastPaper.link,
       trpcState: ssg.dehydrate(),
     },
@@ -76,12 +75,17 @@ export const getStaticProps: GetStaticProps<
 };
 
 type QuestionPageProps = {
-  getAllQuestionsByPastPaperResponse: GetAllQuestionsByPastPaperResponse;
+  pastPaperId: number;
   pastPaperLink: string;
 };
 
 const QuestionPage: NextPage<QuestionPageProps> = (props) => {
-  const { pastPaperLink, getAllQuestionsByPastPaperResponse } = props;
+  const { pastPaperLink, pastPaperId } = props;
+
+  const { data: getAllQuestionsByPastPaperResponse, isSuccess } =
+    trpc.question.getAllByPastPaper.useQuery({
+      pastPaperId,
+    });
 
   return (
     <div>
@@ -100,10 +104,11 @@ const QuestionPage: NextPage<QuestionPageProps> = (props) => {
         </a>
       </p>
 
-      <List>
-        {getAllQuestionsByPastPaperResponse.map((question) => (
-          <QuestionCard key={question.id} question={question} />
-        ))}
+      <List emptyMessage="No submissions for this exam paper yet">
+        {isSuccess &&
+          getAllQuestionsByPastPaperResponse.map((question) => (
+            <QuestionCard key={question.id} question={question} />
+          ))}
       </List>
     </div>
   );
