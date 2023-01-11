@@ -13,7 +13,7 @@ import List from "../../../../components/ui/List";
 import PageHeader from "../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
-import { GetAllPastPapersBySubjectResponse } from "../../../../types/past-paper";
+import { trpc } from "../../../../utils/trpc";
 
 interface IParams extends ParsedUrlQuery {
   subjectId: string;
@@ -48,12 +48,11 @@ export const getStaticProps: GetStaticProps<
 
   if (params === undefined) return { notFound: true };
 
-  const getAllPastPaperBySubjectResponse =
-    await ssg.pastPaper.getAllBySubject.fetch({ subjectId: params.subjectId });
+  await ssg.pastPaper.getAllBySubject.prefetch({ subjectId: params.subjectId });
 
   return {
     props: {
-      getAllPastPaperBySubjectResponse,
+      subjectId: params.subjectId,
       trpcState: ssg.dehydrate(),
     },
     // No need to revalidate, we don't have any dynamic data
@@ -61,11 +60,14 @@ export const getStaticProps: GetStaticProps<
 };
 
 type PastPaperPageProps = {
-  getAllPastPaperBySubjectResponse: GetAllPastPapersBySubjectResponse;
+  subjectId: string;
 };
 
 const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
-  const { getAllPastPaperBySubjectResponse } = props;
+  const { subjectId } = props;
+
+  const { data: getAllPastPaperBySubjectResponse, isSuccess } =
+    trpc.pastPaper.getAllBySubject.useQuery({ subjectId });
 
   return (
     <div>
@@ -73,10 +75,11 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
         <PageHeader title="Past Papers" />
       </div>
 
-      <List>
-        {getAllPastPaperBySubjectResponse.map((pastPaper) => (
-          <PastPaperCard key={pastPaper.id} pastPaper={pastPaper} />
-        ))}
+      <List emptyMessage="No past exam papers for this subject">
+        {isSuccess &&
+          getAllPastPaperBySubjectResponse!.map((pastPaper) => (
+            <PastPaperCard key={pastPaper.id} pastPaper={pastPaper} />
+          ))}
       </List>
     </div>
   );
