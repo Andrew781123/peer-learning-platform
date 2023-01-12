@@ -32,7 +32,7 @@ const QuestionCard = (props: QuestionCardProps) => {
       </div>
 
       <div className="flex items-center gap-5">
-        <DifficultyLevelChip level={question.difficultyLevel} />
+        <DifficultyLevelChip score={question.averageDifficultyScore} />
         <div className="flex items-center gap-1">
           <AiOutlineSolution />
           <p>{question.solutionCount}</p>

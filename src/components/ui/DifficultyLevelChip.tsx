@@ -1,7 +1,8 @@
 import { DifficultyLevel } from "../../constants/difficultyRating";
+import getDifficultyLevel from "../../utils/getDifficultyRating";
 
 type DifficultyChipProps = {
-  level: DifficultyLevel;
+  score: number;
 };
 
 const ChipUIMap = {
@@ -20,7 +21,9 @@ const ChipUIMap = {
 } as const;
 
 const DifficultyLevelChip = (props: DifficultyChipProps) => {
-  const { level } = props;
+  const { score } = props;
+
+  const level = getDifficultyLevel(score);
 
   return (
     <div

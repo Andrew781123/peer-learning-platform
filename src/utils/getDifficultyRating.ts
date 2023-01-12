@@ -1,4 +1,4 @@
-import { DifficultyLevel } from "../../constants/difficultyRating";
+import { DifficultyLevel } from "../constants/difficultyRating";
 
 export default function getDifficultyLevel(score: number): DifficultyLevel {
   if (score < 3) return DifficultyLevel.EASY;

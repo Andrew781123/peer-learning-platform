@@ -1,5 +1,6 @@
 import cuid from "cuid";
 import { z } from "zod";
+import { getAllSolutionsByQuestion } from "../../../services/solution-service";
 import { publicProcedure, router } from "../trpc";
 
 export const solutionRouter = router({
@@ -100,9 +101,12 @@ export const solutionRouter = router({
         questionId: z.string(),
       })
     )
-    .query(({ input, ctx }) => {
-      return ctx.prisma.questionSolution.findMany({
-        where: { questionId: input.questionId },
-      });
+    .query(async ({ input, ctx }) => {
+      const response = await getAllSolutionsByQuestion(
+        ctx.prisma.questionSolution,
+        input.questionId
+      );
+
+      return response;
     }),
 });

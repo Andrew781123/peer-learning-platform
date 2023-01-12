@@ -1,6 +1,4 @@
 import { PrismaClient, Question } from "@prisma/client";
-import { DifficultyLevel } from "../constants/difficultyRating";
-import getDifficultyLevel from "../server/utils/getDifficultyRating";
 import { getAverageDifficultyRatingScore } from "../utils/question";
 
 type FormattedQuestion = {
@@ -9,7 +7,7 @@ type FormattedQuestion = {
     count: number;
   }[];
   solutionCount: number;
-  difficultyLevel: DifficultyLevel;
+  averageDifficultyScore: number;
 } & Omit<Question, "pastPaperId">;
 export const getAllQuestionsByPastPaper = async (
   repo: PrismaClient["question"],
@@ -148,7 +146,5 @@ const formatQuestion = (question: {
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count),
   solutionCount: question._count.solutions,
-  difficultyLevel: getDifficultyLevel(
-    getAverageDifficultyRatingScore(question.solutions)
-  ),
+  averageDifficultyScore: getAverageDifficultyRatingScore(question.solutions),
 });
