@@ -7,7 +7,7 @@ type SolutionCardProps = {
 const SolutionCard = (props: SolutionCardProps) => {
   const { solution } = props;
 
-  return <div className="flex flex-col gap-3"></div>;
+  return <div>{solution.id}</div>;
 };
 
 export default SolutionCard;

@@ -8,6 +8,7 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
+import SolutionCard from "../../../../components/solution/SolutionCard";
 import List from "../../../../components/ui/List";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
@@ -87,7 +88,7 @@ const SolutionPage: NextPage<SolutionPageProps> = (props) => {
       <List>
         {isSuccess &&
           getAllSubjectResponse.map((solution) => (
-            <div key={solution.id}>{solution.id}</div>
+            <SolutionCard key={solution.id} solution={solution} />
           ))}
       </List>
     </div>
