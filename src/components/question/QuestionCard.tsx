@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { AiOutlineSolution } from "react-icons/ai";
 import { GetAllQuestionsByPastPaperResponse } from "../../types/question";
+import TopicBadge from "../topic/TopicBadge";
 import DifficultyLevelChip from "../ui/DifficultyLevelChip";
 
 type QuestionCardProps = {
@@ -25,12 +26,7 @@ const QuestionCard = (props: QuestionCardProps) => {
         <p className="mb-1">Question {question.number}</p>
         <div className="flex  flex-wrap gap-2">
           {question.topics.map((topic) => (
-            <p
-              key={topic}
-              className="rounded-full bg-primary-default py-1 px-3 text-xs text-onPrimary"
-            >
-              {topic}
-            </p>
+            <TopicBadge key={topic} topic={topic} />
           ))}
         </div>
       </div>
