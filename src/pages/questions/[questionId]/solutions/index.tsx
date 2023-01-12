@@ -50,8 +50,17 @@ export const getStaticProps: GetStaticProps<
     questionId: params.questionId,
   });
 
+  const prisma = new PrismaClient();
+
+  const question = await prisma.question.findUnique({
+    where: { id: params.questionId },
+  });
+
+  if (!question) return { notFound: true };
+
   return {
     props: {
+      questionNumber: question.number,
       questionId: params.questionId,
       trpcState: ssg.dehydrate(),
     },
@@ -60,26 +69,28 @@ export const getStaticProps: GetStaticProps<
 };
 
 type SolutionPageProps = {
+  questionNumber: number;
   questionId: string;
 };
 
 const SolutionPage: NextPage<SolutionPageProps> = (props) => {
-  const { questionId } = props;
+  const { questionId, questionNumber } = props;
 
   const { data: getAllSubjectResponse, isSuccess } =
     trpc.solution.getAllByQuestion.useQuery({
       questionId,
     });
 
-  console.log(getAllSubjectResponse);
-
   return (
-    <List>
-      {isSuccess &&
-        getAllSubjectResponse.map((solution) => (
-          <div key={solution.id}>{solution.id}</div>
-        ))}
-    </List>
+    <div>
+      <h2>{`Question ${questionNumber} Submissions`}</h2>
+      <List>
+        {isSuccess &&
+          getAllSubjectResponse.map((solution) => (
+            <div key={solution.id}>{solution.id}</div>
+          ))}
+      </List>
+    </div>
   );
 };
 
