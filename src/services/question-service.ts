@@ -15,47 +15,104 @@ export const getAllQuestionsByPastPaper = async (
   repo: PrismaClient["question"],
   pastPaperId: number
 ): Promise<FormattedQuestion[]> => {
-  const questions = await repo.findMany({
-    where: {
-      pastPaperId: pastPaperId,
-    },
-    select: {
-      id: true,
-      number: true,
-      topics: {
-        select: {
-          topic: {
-            select: {
-              name: true,
-              _count: {
-                select: {
-                  questions: true,
+  try {
+    const questions = await repo.findMany({
+      where: {
+        pastPaperId: pastPaperId,
+      },
+      select: {
+        id: true,
+        number: true,
+        topics: {
+          select: {
+            topic: {
+              select: {
+                name: true,
+                _count: {
+                  select: {
+                    questions: true,
+                  },
                 },
               },
             },
           },
         },
-      },
-      solutions: {
-        select: {
-          difficultyRating: {
-            select: {
-              value: true,
+        solutions: {
+          select: {
+            difficultyRating: {
+              select: {
+                value: true,
+              },
             },
           },
         },
-      },
-      _count: {
-        select: {
-          solutions: true,
+        _count: {
+          select: {
+            solutions: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  const formattedQuestions = questions.map(formatQuestion);
+    const formattedQuestions = questions.map(formatQuestion);
 
-  return formattedQuestions;
+    return formattedQuestions;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const getOneQuestion = async (
+  repo: PrismaClient["question"],
+  questionId: string
+): Promise<FormattedQuestion | null> => {
+  try {
+    const question = await repo.findUnique({
+      where: {
+        id: questionId,
+      },
+      select: {
+        id: true,
+        number: true,
+        topics: {
+          select: {
+            topic: {
+              select: {
+                name: true,
+                _count: {
+                  select: {
+                    questions: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        solutions: {
+          select: {
+            difficultyRating: {
+              select: {
+                value: true,
+              },
+            },
+          },
+        },
+        _count: {
+          select: {
+            solutions: true,
+          },
+        },
+      },
+    });
+
+    if (!question) return null;
+
+    const formattedQuestion = formatQuestion(question!);
+
+    return formattedQuestion;
+  } catch (err) {
+    throw err;
+  }
 };
 
 const formatQuestion = (question: {
