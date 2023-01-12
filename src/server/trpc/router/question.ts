@@ -3,9 +3,8 @@ import {
   getAllQuestionsByPastPaper,
   getOneQuestion,
 } from "../../../services/question-service";
+import { getValidTopics } from "../../../utils/question";
 import { publicProcedure, router } from "../trpc";
-
-const MIN_TAG_COUNT = 0;
 
 export const questionRouter = router({
   getAllByPastPaper: publicProcedure
@@ -22,8 +21,7 @@ export const questionRouter = router({
 
       const response = questions.map((question) => ({
         ...question,
-        topics: question.topics
-          .filter((topic) => topic.count > MIN_TAG_COUNT)
+        topics: getValidTopics(question.topics)
           .sort((a, b) => b.count - a.count)
           .map((topic) => topic.name),
       }));
@@ -48,8 +46,7 @@ export const questionRouter = router({
 
         const response = {
           ...question,
-          topics: question.topics
-            .filter((topic) => topic.count > MIN_TAG_COUNT)
+          topics: getValidTopics(question.topics)
             .sort((a, b) => b.count - a.count)
             .map((topic) => topic.name),
         };
