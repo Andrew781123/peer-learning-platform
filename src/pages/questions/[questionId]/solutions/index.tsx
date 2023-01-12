@@ -51,35 +51,12 @@ export const getStaticProps: GetStaticProps<
     questionId: params.questionId,
   });
 
-  const prisma = new PrismaClient();
-
-  const question = await prisma.question.findUnique({
-    where: { id: params.questionId },
-    select: {
-      number: true,
-      topics: {
-        select: {
-          topic: {
-            select: {
-              name: true,
-              _count: {
-                select: {
-                  questions: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+  await ssg.question.getOne.prefetch({
+    questionId: params.questionId,
   });
-
-  if (!question) return { notFound: true };
-  console.log(question.topics);
 
   return {
     props: {
-      questionNumber: question.number,
       questionId: params.questionId,
       trpcState: ssg.dehydrate(),
     },
@@ -88,21 +65,28 @@ export const getStaticProps: GetStaticProps<
 };
 
 type SolutionPageProps = {
-  questionNumber: number;
   questionId: string;
 };
 
 const SolutionPage: NextPage<SolutionPageProps> = (props) => {
-  const { questionId, questionNumber } = props;
+  const { questionId } = props;
 
   const { data: getAllSubjectResponse, isSuccess } =
     trpc.solution.getAllByQuestion.useQuery({
       questionId,
     });
 
+  const { data: getOneQuestionResponse, isSuccess: isQuestionSuccess } =
+    trpc.question.getOne.useQuery({
+      questionId,
+    });
+
   return (
     <div>
-      <h2>{`Question ${questionNumber} Submissions`}</h2>
+      {isQuestionSuccess && (
+        <h2>{`Question ${getOneQuestionResponse.number} Submissions`}</h2>
+      )}
+
       <List>
         {isSuccess &&
           getAllSubjectResponse.map((solution) => (
