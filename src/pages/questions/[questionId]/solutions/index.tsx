@@ -55,9 +55,27 @@ export const getStaticProps: GetStaticProps<
 
   const question = await prisma.question.findUnique({
     where: { id: params.questionId },
+    select: {
+      number: true,
+      topics: {
+        select: {
+          topic: {
+            select: {
+              name: true,
+              _count: {
+                select: {
+                  questions: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   });
 
   if (!question) return { notFound: true };
+  console.log(question.topics);
 
   return {
     props: {
