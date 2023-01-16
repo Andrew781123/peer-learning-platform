@@ -94,13 +94,14 @@ const SolutionPage: NextPage<SolutionPageProps> = (props) => {
           </div>
         </div>
       )}
-
-      <List>
-        {isSuccess &&
-          getAllSubjectResponse.map((solution) => (
-            <SolutionCard key={solution.id} solution={solution} />
-          ))}
-      </List>
+      <div className="mt-2">
+        <List>
+          {isSuccess &&
+            getAllSubjectResponse.map((solution) => (
+              <SolutionCard key={solution.id} solution={solution} />
+            ))}
+        </List>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { VoteIconType } from "./types";
 import VoteIcon from "./VoteIcon";
 
 type VoteInfoProps = {
@@ -8,13 +7,10 @@ type VoteInfoProps = {
 const VoteInfo = (props: VoteInfoProps) => {
   const { voteCount } = props;
 
-  const voteIconType =
-    voteCount >= 0 ? VoteIconType.UP_VOTE : VoteIconType.DOWN_VOTE;
-
   return (
-    <div className="flex  items-center justify-between">
-      <p className="mr-3">{voteCount}</p>
-      <VoteIcon type={voteIconType} />
+    <div className="flex items-center">
+      <p className="mr-2">{voteCount}</p>
+      <VoteIcon type={voteCount >= 0 ? "upVote" : "downVote"} />
     </div>
   );
 };

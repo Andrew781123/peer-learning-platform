@@ -1,5 +1,5 @@
+import { IoIosArrowForward } from "react-icons/io";
 import { GetAllSolutionsResponse } from "../../types/solution";
-import DifficultyLevelChip from "../ui/DifficultyLevelChip";
 import VoteInfo from "../vote/VoteInfo";
 
 type SolutionCardProps = {
@@ -9,6 +9,8 @@ type SolutionCardProps = {
 const SolutionCard = (props: SolutionCardProps) => {
   const { solution } = props;
 
+  const title = `Solution #${solution.id.toString().slice(-4)}`;
+
   const onSolutionCardClick = () => {};
 
   return (
@@ -16,9 +18,13 @@ const SolutionCard = (props: SolutionCardProps) => {
       className="flex items-center  bg-surface-default p-3 hover:cursor-pointer hover:bg-surface-light"
       onClick={onSolutionCardClick}
     >
-      <div className="flex w-full justify-between ">
-        <VoteInfo voteCount={solution.votes} />
-        <DifficultyLevelChip score={solution.difficultyRating.value} />
+      <div className="flex w-full items-center justify-between">
+        <div>
+          <p>{title}</p>
+          <VoteInfo voteCount={solution.votes} />
+        </div>
+        <IoIosArrowForward />
+        {/* <DifficultyLevelChip score={solution.difficultyRating.value} /> */}
       </div>
     </div>
   );

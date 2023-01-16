@@ -1,13 +1,14 @@
-import { VoteIconType } from "./types";
+import DownVoteIcon from "./DownVoteIcon";
+import UpVoteIcon from "./UpVoteIcon";
 
 type VoteIconProps = {
-  type: typeof VoteIconType[keyof typeof VoteIconType];
+  type: "upVote" | "downVote";
 };
 
 const VoteIcon = (props: VoteIconProps) => {
   const { type } = props;
 
-  return <div>VoteIcon</div>;
+  return type === "upVote" ? <UpVoteIcon /> : <DownVoteIcon />;
 };
 
 export default VoteIcon;
