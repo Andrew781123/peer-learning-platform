@@ -9,7 +9,7 @@ type SolutionCardProps = {
 const SolutionCard = (props: SolutionCardProps) => {
   const { solution } = props;
 
-  const title = `Solution #${solution.id.toString().slice(-4)}`;
+  const title = `Solution #${solution.id.toString().slice(-7)}`;
 
   const onSolutionCardClick = () => {};
 

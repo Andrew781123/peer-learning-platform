@@ -82,7 +82,7 @@ export const solutionRouter = router({
         data: Array.from(questionIdToSolutionMap.entries()).map(
           ([questionId, solution]) => ({
             questionId,
-            userId: 11,
+            userId: 1,
             markdown: solution.markdown,
             difficultyRatingId: solution.difficultyRatingId,
           })
