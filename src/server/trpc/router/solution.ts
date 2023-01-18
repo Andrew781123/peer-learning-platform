@@ -1,6 +1,9 @@
 import cuid from "cuid";
 import { z } from "zod";
-import { getAllSolutionsByQuestion } from "../../../services/solution-service";
+import {
+  getAllSolutionsByQuestion,
+  getOneById,
+} from "../../../services/solution-service";
 import { publicProcedure, router } from "../trpc";
 
 export const solutionRouter = router({
@@ -106,6 +109,17 @@ export const solutionRouter = router({
         ctx.prisma.questionSolution,
         input.questionId
       );
+
+      return response;
+    }),
+  getOneById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const response = await getOneById(ctx.prisma.questionSolution, input.id);
 
       return response;
     }),

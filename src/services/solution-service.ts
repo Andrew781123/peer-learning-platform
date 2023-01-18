@@ -14,3 +14,17 @@ export const getAllSolutionsByQuestion = async (
 
   return solutions;
 };
+
+export const getOneById = async (
+  repo: PrismaClient["questionSolution"],
+  id: string
+) => {
+  const solution = await repo.findUnique({
+    where: { id },
+    include: {
+      difficultyRating: true,
+    },
+  });
+
+  return solution;
+};
