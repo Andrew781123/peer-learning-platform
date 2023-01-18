@@ -1,3 +1,5 @@
+import React from "react";
+
 type ListProps = {
   children?: React.ReactNode;
   emptyMessage?: string;
@@ -6,7 +8,8 @@ type ListProps = {
 const List = (props: ListProps) => {
   const { children, emptyMessage } = props;
 
-  if (!children) return <h2>{emptyMessage ?? "Empty"}</h2>;
+  if (React.Children.count(children) === 0)
+    return <h2>{emptyMessage ?? "Empty"}</h2>;
 
   return <div className="flex flex-col gap-3">{children}</div>;
 };
