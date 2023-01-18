@@ -136,13 +136,13 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormGroup className="my-2">
         <Label text="Subject" />
-        {/* <Controller
+        <Controller
           name="subject"
           control={control}
           render={({ field }) => (
             <Select {...field} multiple={false} options={subjectOptions} />
           )}
-        /> */}
+        />
       </FormGroup>
 
       <FormGroup className="my-2">
@@ -189,7 +189,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
             <FormGroup className="my-4">
               <Label text="Topics" />
-              {/* <Controller
+              <Controller
                 name={`solutions.${index}.topics`}
                 control={control}
                 render={({ field }) => (
@@ -199,16 +199,16 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                     options={subjectTopicOptions}
                   />
                 )}
-              /> */}
+              />
             </FormGroup>
 
             <h2 className="mb-2">Write your solution here</h2>
             <Controller
               name={`solutions.${index}.solutionText`}
               control={control}
-              render={({ field }) => (
+              render={({ field: { ref, ...rest } }) => (
                 <ReactQuill
-                  {...field}
+                  {...rest}
                   theme="snow"
                   modules={reactQuillModules}
                 />
