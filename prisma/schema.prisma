@@ -63,6 +63,7 @@ model SolutionVote {
   userId     String
   value      Int              @db.TinyInt
 
+  @@unique([solutionId, userId], name: "solutionId_userId_unique")
   @@index([solutionId], name: "solutionId")
   @@index([userId], name: "userId")
 }

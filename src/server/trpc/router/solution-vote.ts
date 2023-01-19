@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { vote } from "../../../services/solution-vote-service";
-import { publicProcedure, router } from "../trpc";
+import { getVoteOfUser, vote } from "../../../services/solution-vote-service";
+import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const solutionVoteRouter = router({
   vote: publicProcedure
@@ -12,6 +12,7 @@ export const solutionVoteRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       try {
+        console.log(234, ctx.session);
         if (!ctx.session?.user) throw new Error("User not logged in");
 
         const response = await vote(ctx.prisma.solutionVote, {
@@ -21,6 +22,25 @@ export const solutionVoteRouter = router({
         });
 
         return response;
+      } catch (err) {
+        throw err;
+      }
+    }),
+
+  getVoteOfUser: protectedProcedure
+    .input(
+      z.object({
+        solutionId: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      try {
+        const voteOfUser = await getVoteOfUser(ctx.prisma.solutionVote, {
+          userId: ctx.session.user.id,
+          solutionId: input.solutionId,
+        });
+
+        return voteOfUser;
       } catch (err) {
         throw err;
       }

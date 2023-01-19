@@ -22,11 +22,11 @@ export const getAllSolutionsByQuestion = async (
 
 export const getOneById = async (
   repo: PrismaClient["questionSolution"],
-  id: string
+  { solutionId }: { solutionId: string }
 ) => {
   try {
     const solution = await repo.findUnique({
-      where: { id },
+      where: { id: solutionId },
       include: {
         difficultyRating: true,
         votes: true,

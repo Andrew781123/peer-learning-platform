@@ -120,10 +120,9 @@ export const solutionRouter = router({
     )
     .query(async ({ input, ctx }) => {
       try {
-        const response = await getOneById(
-          ctx.prisma.questionSolution,
-          input.id
-        );
+        const response = await getOneById(ctx.prisma.questionSolution, {
+          solutionId: input.id,
+        });
 
         if (!response) {
           throw new Error("Solution not found");

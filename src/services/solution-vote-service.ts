@@ -19,3 +19,21 @@ export const vote = (
     throw err;
   }
 };
+
+export const getVoteOfUser = async (
+  repo: PrismaClient["solutionVote"],
+  { userId, solutionId }: { userId: string; solutionId: string }
+): Promise<SolutionVoteValue | 0> => {
+  try {
+    const votes = await repo.findFirst({
+      where: {
+        solutionId,
+        userId,
+      },
+    });
+
+    return (votes?.value as SolutionVoteValue) ?? 0;
+  } catch (err) {
+    throw err;
+  }
+};

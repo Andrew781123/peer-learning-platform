@@ -74,11 +74,18 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     id: solutionId,
   });
 
+  const voteOfUser = trpc.solutionVote.getVoteOfUser.useQuery({
+    solutionId,
+  });
+
   const voteMutation = trpc.solutionVote.vote.useMutation();
 
   const title = generateSolutionTitle(solutionId);
 
   const onVoteClick = (voteValue: SolutionVoteValue) => {
+    // TODO: Show error message
+    if (voteOfUser.data === 0) return;
+
     voteMutation.mutate({
       solutionId,
       voteValue,
@@ -94,13 +101,21 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
       <div className="w-full">
         <div className="mt-2 flex w-fit flex-col items-center">
           <button onClick={() => onVoteClick(1)}>
-            <VoteIcon type="upVote" size="medium" />
+            <VoteIcon
+              type="upVote"
+              size="medium"
+              voted={voteOfUser.data === 1}
+            />
           </button>
 
           <p className="cursor-default">{solution.data.votes}</p>
 
           <button onClick={() => onVoteClick(-1)}>
-            <VoteIcon type="downVote" size="medium" />
+            <VoteIcon
+              type="downVote"
+              size="medium"
+              voted={voteOfUser.data === -1}
+            />
           </button>
         </div>
       </div>
