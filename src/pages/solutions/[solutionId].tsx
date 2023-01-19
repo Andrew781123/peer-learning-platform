@@ -12,6 +12,7 @@ import DownVoteIcon from "../../components/vote/DownVoteIcon";
 import UpVoteIcon from "../../components/vote/UpVoteIcon";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
+import { SolutionVoteValue } from "../../types/solution-vote";
 import generateSolutionTitle from "../../utils/solution/generate-solution-title";
 import { trpc } from "../../utils/trpc";
 
@@ -74,11 +75,16 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     id: solutionId,
   });
 
+  const voteMutation = trpc.solutionVote.vote.useMutation();
+
   const title = generateSolutionTitle(solutionId);
 
-  const onUpVoteClick = async () => {};
-
-  const onDownVoteClick = async () => {};
+  const onVoteClick = (voteValue: SolutionVoteValue) => {
+    voteMutation.mutate({
+      solutionId,
+      voteValue,
+    });
+  };
 
   if (!solution.isSuccess) return null;
 
@@ -88,13 +94,13 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
       <div className="w-full bg-pink-300">
         <div className="mt-2 flex w-fit flex-col items-center bg-blue-400">
-          <button onClick={onUpVoteClick}>
+          <button onClick={() => onVoteClick(1)}>
             <UpVoteIcon size="medium" />
           </button>
 
           <p className="cursor-default">{solution.data.votes}</p>
 
-          <button onClick={onDownVoteClick}>
+          <button onClick={() => onVoteClick(-1)}>
             <DownVoteIcon size="medium" />
           </button>
         </div>
