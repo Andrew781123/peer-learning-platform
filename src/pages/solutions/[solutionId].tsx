@@ -10,6 +10,7 @@ import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
+import generateSolutionTitle from "../../utils/solution/generate-solution-title";
 import { trpc } from "../../utils/trpc";
 
 interface IParams extends ParsedUrlQuery {
@@ -67,11 +68,19 @@ type PastPaperPageProps = {
 const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
   const { solutionId } = props;
 
-  const { data: solution, isSuccess } = trpc.solution.getOneById.useQuery({
+  const solution = trpc.solution.getOneById.useQuery({
     id: solutionId,
   });
 
-  return <div>{solution?.id}</div>;
+  const title = generateSolutionTitle(solutionId);
+
+  return solution.isSuccess ? (
+    <div className="divide-y divide-gray-400">
+      <h1 className="mb-2">{title}</h1>
+
+      <div className="h-full w-full bg-red-600"></div>
+    </div>
+  ) : null;
 };
 
 export default PastPaperPage;

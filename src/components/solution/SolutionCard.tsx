@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { IoIosArrowForward } from "react-icons/io";
 import { GetAllSolutionsResponse } from "../../types/solution";
+import generateSolutionTitle from "../../utils/solution/generate-solution-title";
 import VoteInfo from "../vote/VoteInfo";
 
 type SolutionCardProps = {
@@ -12,7 +13,7 @@ const SolutionCard = (props: SolutionCardProps) => {
 
   const router = useRouter();
 
-  const title = `Solution #${solution.id.toString().slice(-7)}`;
+  const title = generateSolutionTitle(solution.id);
 
   const onSolutionCardClick = () => {
     router.push(`/solutions/${solution.id}`);
