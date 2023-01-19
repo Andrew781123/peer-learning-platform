@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { calculateVoteCount } from "../utils/solution/calculate-votes";
 
 type SolutionResponse = {};
 export const getAllSolutionsByQuestion = async (
@@ -9,22 +10,38 @@ export const getAllSolutionsByQuestion = async (
     where: { questionId: questionId },
     include: {
       difficultyRating: true,
+      votes: true,
     },
   });
 
-  return solutions;
+  return solutions.map((solution) => ({
+    ...solution,
+    votes: calculateVoteCount(solution.votes),
+  }));
 };
 
 export const getOneById = async (
   repo: PrismaClient["questionSolution"],
   id: string
 ) => {
-  const solution = await repo.findUnique({
-    where: { id },
-    include: {
-      difficultyRating: true,
-    },
-  });
+  try {
+    const solution = await repo.findUnique({
+      where: { id },
+      include: {
+        difficultyRating: true,
+        votes: true,
+      },
+    });
 
-  return solution;
+    if (!solution) throw new Error("Solution not found");
+
+    const votes = calculateVoteCount(solution.votes);
+
+    return {
+      ...solution,
+      votes,
+    };
+  } catch (err) {
+    throw err;
+  }
 };

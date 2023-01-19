@@ -47,12 +47,24 @@ model QuestionSolution {
   markdown           String                 @db.Text
   difficultyRating   DifficultyRatingOption @relation(fields: [difficultyRatingId], references: [id])
   difficultyRatingId Int
-  votes              Int                    @default(0) @db.Int
+  votes              SolutionVote[]
   comments           SolutionComment[]
 
   @@index([questionId], name: "questionId")
   @@index([userId], name: "userId")
   @@index([difficultyRatingId], name: "difficultyRatingId")
+}
+
+model SolutionVote {
+  id         Int              @id @default(autoincrement())
+  solution   QuestionSolution @relation(fields: [solutionId], references: [id])
+  solutionId String
+  user       User             @relation(fields: [userId], references: [id])
+  userId     Int
+  value      Int              @db.TinyInt
+
+  @@index([solutionId], name: "solutionId")
+  @@index([userId], name: "userId")
 }
 
 model SolutionComment {
@@ -135,6 +147,7 @@ model User {
   sessions         Session[]
   questionSolution QuestionSolution[]
   solutionComments SolutionComment[]
+  solutionVotes    SolutionVote[]
 }
 
 model VerificationToken {
