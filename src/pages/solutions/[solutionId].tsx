@@ -27,7 +27,7 @@ export const getStaticPaths: GetStaticPaths<IParams> = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
@@ -45,7 +45,11 @@ export const getStaticProps: GetStaticProps<
 
   if (params === undefined) return { notFound: true };
 
-  await ssg.solution.getOneById.prefetch({ id: params.solutionId });
+  const solution = await ssg.solution.getOneById.fetch({
+    id: params.solutionId,
+  });
+
+  if (!solution) return { notFound: true };
 
   return {
     props: {

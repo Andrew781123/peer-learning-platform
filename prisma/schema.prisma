@@ -64,6 +64,7 @@ model SolutionComment {
   markdown   String           @db.Text
 
   @@index([solutionId], name: "solutionId")
+  @@index([userId], name: "userId")
 }
 
 model SubjectTopic {
@@ -82,6 +83,9 @@ model QuestionTopic {
   questionId String
   topic      SubjectTopic @relation(fields: [topicId], references: [id])
   topicId    Int
+
+  @@index([questionId], name: "questionId")
+  @@index([topicId], name: "topicId")
 }
 
 model DifficultyRatingOption {
