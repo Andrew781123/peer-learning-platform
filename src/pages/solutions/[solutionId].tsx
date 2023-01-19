@@ -8,6 +8,8 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
+import DownVoteIcon from "../../components/vote/DownVoteIcon";
+import UpVoteIcon from "../../components/vote/UpVoteIcon";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
 import generateSolutionTitle from "../../utils/solution/generate-solution-title";
@@ -74,13 +76,27 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
   const title = generateSolutionTitle(solutionId);
 
-  return solution.isSuccess ? (
+  if (!solution.isSuccess) return null;
+
+  return (
     <div className="divide-y divide-gray-400">
       <h1 className="mb-2">{title}</h1>
 
-      <div className="h-full w-full bg-red-600"></div>
+      <div className="w-full bg-pink-300">
+        <div className="mt-2 flex w-fit flex-col items-center bg-blue-400">
+          <button className="text-lg">
+            <UpVoteIcon size="medium" />
+          </button>
+
+          <p className="cursor-default">{solution.data.votes}</p>
+
+          <button>
+            <DownVoteIcon size="medium" />
+          </button>
+        </div>
+      </div>
     </div>
-  ) : null;
+  );
 };
 
 export default PastPaperPage;

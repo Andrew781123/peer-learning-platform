@@ -119,8 +119,19 @@ export const solutionRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const response = await getOneById(ctx.prisma.questionSolution, input.id);
+      try {
+        const response = await getOneById(
+          ctx.prisma.questionSolution,
+          input.id
+        );
 
-      return response;
+        if (!response) {
+          throw new Error("Solution not found");
+        }
+
+        return response;
+      } catch (err) {
+        throw err;
+      }
     }),
 });

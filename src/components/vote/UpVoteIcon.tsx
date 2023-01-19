@@ -1,11 +1,19 @@
 import { GoTriangleUp } from "react-icons/go";
+import { IconSize } from "../types/icon-size";
+import Icon from "../ui/Icon";
 
-type UpVoteIconProps = {};
+type UpVoteIconProps = {
+  size?: IconSize;
+};
 
 const UpVoteIcon = (props: UpVoteIconProps) => {
-  const {} = props;
+  const { size = "small" } = props;
 
-  return <GoTriangleUp />;
+  return (
+    <Icon size={size}>
+      {(fontSize) => <GoTriangleUp fontSize={fontSize} />}
+    </Icon>
+  );
 };
 
 export default UpVoteIcon;
