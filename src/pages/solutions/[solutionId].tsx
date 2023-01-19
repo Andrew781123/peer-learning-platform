@@ -7,6 +7,8 @@ import {
   NextPage,
 } from "next";
 import { ParsedUrlQuery } from "querystring";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import superjson from "superjson";
 import VoteIcon from "../../components/vote/VoteIcon";
 import { createContextInner } from "../../server/trpc/context";
@@ -101,7 +103,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     <div className="divide-y divide-gray-400">
       <h1 className="mb-2">{title}</h1>
 
-      <div className="w-full">
+      <div className="flex w-full gap-4">
         <div className="mt-2 flex w-fit flex-col items-center">
           <button onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.upVoted)}>
             <VoteIcon
@@ -121,9 +123,20 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
             />
           </button>
         </div>
+
+        <div id="solution-markdown" className="mt-3">
+          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+            {solution.data.markdown}
+          </ReactMarkdown>
+        </div>
       </div>
     </div>
   );
 };
+
+// ReactDom.render(
+//   <ReactMarkdown>oiwejf</ReactMarkdown>,
+//   document.querySelector("#solution-markdown")
+// );
 
 export default PastPaperPage;
