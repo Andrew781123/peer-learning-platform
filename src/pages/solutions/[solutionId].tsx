@@ -8,8 +8,7 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
-import DownVoteIcon from "../../components/vote/DownVoteIcon";
-import UpVoteIcon from "../../components/vote/UpVoteIcon";
+import VoteIcon from "../../components/vote/VoteIcon";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
 import { SolutionVoteValue } from "../../types/solution-vote";
@@ -92,16 +91,16 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     <div className="divide-y divide-gray-400">
       <h1 className="mb-2">{title}</h1>
 
-      <div className="w-full bg-pink-300">
-        <div className="mt-2 flex w-fit flex-col items-center bg-blue-400">
+      <div className="w-full">
+        <div className="mt-2 flex w-fit flex-col items-center">
           <button onClick={() => onVoteClick(1)}>
-            <UpVoteIcon size="medium" />
+            <VoteIcon type="upVote" size="medium" />
           </button>
 
           <p className="cursor-default">{solution.data.votes}</p>
 
           <button onClick={() => onVoteClick(-1)}>
-            <DownVoteIcon size="medium" />
+            <VoteIcon type="downVote" size="medium" />
           </button>
         </div>
       </div>

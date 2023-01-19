@@ -4,14 +4,15 @@ import Icon from "../ui/Icon";
 
 type DownVoteIconProps = {
   size?: IconSize;
+  color?: string;
 };
 
 const DownVoteIcon = (props: DownVoteIconProps) => {
-  const { size = "small" } = props;
+  const { size = "small", color = "white" } = props;
 
   return (
     <Icon size={size}>
-      {(fontSize) => <GoTriangleDown fontSize={fontSize} />}
+      {(fontSize) => <GoTriangleDown fontSize={fontSize} color={color} />}
     </Icon>
   );
 };
