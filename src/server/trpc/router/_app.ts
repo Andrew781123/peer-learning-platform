@@ -5,9 +5,9 @@ import { difficultyRatingOptionRouter } from "./difficulty-rating-option";
 import { pastPaperRouter } from "./past-paper";
 import { questionRouter } from "./question";
 import { solutionRouter } from "./solution";
-import { solutionVoteRouter } from "./solutionVote";
+import { solutionVoteRouter } from "./solution-vote";
 import { subjectRouter } from "./subject";
-import { subjectTopicRouter } from "./subjectTopic";
+import { subjectTopicRouter } from "./subject-topic";
 
 export const appRouter = router({
   auth: authRouter,

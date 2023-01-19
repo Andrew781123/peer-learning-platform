@@ -43,7 +43,7 @@ model QuestionSolution {
   question           Question               @relation(fields: [questionId], references: [id])
   questionId         String
   user               User                   @relation(fields: [userId], references: [id])
-  userId             Int
+  userId             String
   markdown           String                 @db.Text
   difficultyRating   DifficultyRatingOption @relation(fields: [difficultyRatingId], references: [id])
   difficultyRatingId Int
@@ -60,7 +60,7 @@ model SolutionVote {
   solution   QuestionSolution @relation(fields: [solutionId], references: [id])
   solutionId String
   user       User             @relation(fields: [userId], references: [id])
-  userId     Int
+  userId     String
   value      Int              @db.TinyInt
 
   @@index([solutionId], name: "solutionId")
@@ -72,7 +72,7 @@ model SolutionComment {
   solution   QuestionSolution @relation(fields: [solutionId], references: [id])
   solutionId String
   user       User             @relation(fields: [userId], references: [id])
-  userId     Int
+  userId     String
   markdown   String           @db.Text
 
   @@index([solutionId], name: "solutionId")
@@ -109,7 +109,7 @@ model DifficultyRatingOption {
 
 model Account {
   id                String  @id @default(cuid())
-  userId            Int
+  userId            String
   type              String
   provider          String
   providerAccountId String
@@ -130,7 +130,7 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       Int
+  userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -138,7 +138,7 @@ model Session {
 }
 
 model User {
-  id               Int                @id @default(autoincrement())
+  id               String             @id @default(cuid())
   name             String             @default("Student")
   email            String?            @unique
   emailVerified    DateTime?

@@ -5,7 +5,7 @@ export const vote = (
   repo: PrismaClient["solutionVote"],
   newVoteData: {
     value: SolutionVoteValue;
-    userId: number;
+    userId: string;
     solutionId: string;
   }
 ) => {

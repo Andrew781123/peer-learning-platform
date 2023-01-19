@@ -12,11 +12,11 @@ export const solutionVoteRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        const userId = 1;
+        if (!ctx.session?.user) throw new Error("User not logged in");
 
         const response = await vote(ctx.prisma.solutionVote, {
           value: input.voteValue,
-          userId,
+          userId: ctx.session.user.id,
           solutionId: input.solutionId,
         });
 
