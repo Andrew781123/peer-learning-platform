@@ -7,8 +7,6 @@ import {
   NextPage,
 } from "next";
 import { ParsedUrlQuery } from "querystring";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import superjson from "superjson";
 import VoteIcon from "../../components/vote/VoteIcon";
 import { createContextInner } from "../../server/trpc/context";
@@ -124,19 +122,17 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
           </button>
         </div>
 
-        <div id="solution-markdown" className="mt-3">
-          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-            {solution.data.markdown}
-          </ReactMarkdown>
-        </div>
+        <div
+          className="unreset mt-3"
+          dangerouslySetInnerHTML={{ __html: solution.data.markdown }}
+        ></div>
       </div>
+
+      <ol>
+        <li>jjojioj</li>
+      </ol>
     </div>
   );
 };
-
-// ReactDom.render(
-//   <ReactMarkdown>oiwejf</ReactMarkdown>,
-//   document.querySelector("#solution-markdown")
-// );
 
 export default PastPaperPage;

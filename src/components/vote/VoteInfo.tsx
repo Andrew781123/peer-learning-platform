@@ -10,7 +10,7 @@ const VoteInfo = (props: VoteInfoProps) => {
   return (
     <div className="flex items-center">
       <p className="mr-2">{voteCount}</p>
-      <VoteIcon type={voteCount >= 0 ? "upVote" : "downVote"} />
+      <VoteIcon type={voteCount >= 0 ? "upVote" : "downVote"} voted />
     </div>
   );
 };
