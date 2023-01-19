@@ -134,15 +134,4 @@ export const solutionRouter = router({
         throw err;
       }
     }),
-
-  vote: publicProcedure
-    .input(
-      z.object({
-        solutionId: z.string(),
-        voteValue: z.union([z.literal(1), z.literal(-1)]),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const { solutionId, voteValue } = input;
-    }),
 });
