@@ -100,21 +100,21 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
       <div className="w-full">
         <div className="mt-2 flex w-fit flex-col items-center">
-          <button onClick={() => onVoteClick(1)}>
+          <button onClick={() => onVoteClick("up-voted")}>
             <VoteIcon
               type="upVote"
               size="medium"
-              voted={voteOfUser.data === 1}
+              voted={voteOfUser.data === "up-voted"}
             />
           </button>
 
           <p className="cursor-default">{solution.data.votes}</p>
 
-          <button onClick={() => onVoteClick(-1)}>
+          <button onClick={() => onVoteClick("down-voted")}>
             <VoteIcon
               type="downVote"
               size="medium"
-              voted={voteOfUser.data === -1}
+              voted={voteOfUser.data === "down-voted"}
             />
           </button>
         </div>

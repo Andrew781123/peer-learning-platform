@@ -7,12 +7,15 @@ export const solutionVoteRouter = router({
     .input(
       z.object({
         solutionId: z.string(),
-        voteValue: z.union([z.literal(1), z.literal(-1)]),
+        voteValue: z.union([
+          z.literal("up-voted"),
+          z.literal("down-voted"),
+          z.literal("not-voted"),
+        ]),
       })
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        console.log(234, ctx.session);
         if (!ctx.session?.user) throw new Error("User not logged in");
 
         const response = await vote(ctx.prisma.solutionVote, {
