@@ -76,6 +76,10 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
   const title = generateSolutionTitle(solutionId);
 
+  const onUpVoteClick = async () => {};
+
+  const onDownVoteClick = async () => {};
+
   if (!solution.isSuccess) return null;
 
   return (
@@ -84,13 +88,13 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
       <div className="w-full bg-pink-300">
         <div className="mt-2 flex w-fit flex-col items-center bg-blue-400">
-          <button className="text-lg">
+          <button onClick={onUpVoteClick}>
             <UpVoteIcon size="medium" />
           </button>
 
           <p className="cursor-default">{solution.data.votes}</p>
 
-          <button>
+          <button onClick={onDownVoteClick}>
             <DownVoteIcon size="medium" />
           </button>
         </div>
