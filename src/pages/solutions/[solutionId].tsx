@@ -11,7 +11,10 @@ import superjson from "superjson";
 import VoteIcon from "../../components/vote/VoteIcon";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
-import { SolutionVoteValue } from "../../types/solution-vote";
+import {
+  SolutionVoteValue,
+  SOLUTION_VOTE_VALUE,
+} from "../../types/solution-vote";
 import generateSolutionTitle from "../../utils/solution/generate-solution-title";
 import { trpc } from "../../utils/trpc";
 
@@ -84,7 +87,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
   const onVoteClick = (voteValue: SolutionVoteValue) => {
     // TODO: Show error message
-    if (voteOfUser.data === 0) return;
+    if (voteOfUser.data !== SOLUTION_VOTE_VALUE.notVoted) return;
 
     voteMutation.mutate({
       solutionId,
@@ -100,21 +103,21 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
       <div className="w-full">
         <div className="mt-2 flex w-fit flex-col items-center">
-          <button onClick={() => onVoteClick("up-voted")}>
+          <button onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.upVoted)}>
             <VoteIcon
               type="upVote"
               size="medium"
-              voted={voteOfUser.data === "up-voted"}
+              voted={voteOfUser.data === SOLUTION_VOTE_VALUE.upVoted}
             />
           </button>
 
           <p className="cursor-default">{solution.data.votes}</p>
 
-          <button onClick={() => onVoteClick("down-voted")}>
+          <button onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.downVoted)}>
             <VoteIcon
               type="downVote"
               size="medium"
-              voted={voteOfUser.data === "down-voted"}
+              voted={voteOfUser.data === SOLUTION_VOTE_VALUE.downVoted}
             />
           </button>
         </div>

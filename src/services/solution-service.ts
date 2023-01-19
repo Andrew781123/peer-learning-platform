@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { calculateVoteCount } from "../utils/solution/calculate-votes";
 
-type SolutionResponse = {};
 export const getAllSolutionsByQuestion = async (
   repo: PrismaClient["questionSolution"],
   questionId: string
@@ -33,7 +33,11 @@ export const getOneById = async (
       },
     });
 
-    if (!solution) throw new Error("Solution not found");
+    if (!solution)
+      throw new TRPCError({
+        message: "Solution not found",
+        code: "NOT_FOUND",
+      });
 
     const votes = calculateVoteCount(solution.votes);
 

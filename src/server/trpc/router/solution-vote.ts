@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { getVoteOfUser, vote } from "../../../services/solution-vote-service";
+import { SOLUTION_VOTE_VALUE } from "../../../types/solution-vote";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 
 export const solutionVoteRouter = router({
@@ -8,9 +9,9 @@ export const solutionVoteRouter = router({
       z.object({
         solutionId: z.string(),
         voteValue: z.union([
-          z.literal("up-voted"),
-          z.literal("down-voted"),
-          z.literal("not-voted"),
+          z.literal(SOLUTION_VOTE_VALUE.downVoted),
+          z.literal(SOLUTION_VOTE_VALUE.upVoted),
+          z.literal(SOLUTION_VOTE_VALUE.notVoted),
         ]),
       })
     )

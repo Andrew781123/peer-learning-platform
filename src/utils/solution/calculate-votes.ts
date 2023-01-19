@@ -1,18 +1,11 @@
-import {
-  SolutionVoteValue,
-  SOLUTION_VOTE_VALUE_TO_COUNT_MAP,
-} from "../../types/solution-vote";
-
 export const calculateVoteCount = (
   votes: {
-    value: string;
+    value: number;
     [key: string]: any;
   }[]
 ) => {
   const voteCount = votes.reduce(
-    (voteCount, { value }) =>
-      (voteCount +=
-        SOLUTION_VOTE_VALUE_TO_COUNT_MAP[value as SolutionVoteValue]),
+    (voteCount, { value }) => (voteCount += value),
     0
   );
 

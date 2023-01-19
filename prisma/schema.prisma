@@ -61,7 +61,7 @@ model SolutionVote {
   solutionId String
   user       User             @relation(fields: [userId], references: [id])
   userId     String
-  value      String           @db.VarChar(255)
+  value      Int              @db.TinyInt
 
   @@unique([solutionId, userId], name: "solutionId_userId_unique")
   @@index([solutionId], name: "solutionId")
