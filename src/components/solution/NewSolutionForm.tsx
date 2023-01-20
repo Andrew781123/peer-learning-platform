@@ -78,12 +78,14 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const mutation = trpc.solution.createMany.useMutation({
     onSuccess: () => {
+      console.log("success mutation");
       trpcContext.question.getAllByPastPaper.invalidate();
       router.push("/");
     },
     onSettled: () => {
       reset();
     },
+    onError: () => console.log("error mutation"),
   });
 
   const { handleSubmit, register, control, reset } = useForm<FormValues>({

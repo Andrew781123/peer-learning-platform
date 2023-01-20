@@ -37,9 +37,13 @@ export const getAllQuestionsByPastPaper = async (
         },
         solutions: {
           select: {
-            difficultyRating: {
+            solution: {
               select: {
-                value: true,
+                difficultyRating: {
+                  select: {
+                    value: true,
+                  },
+                },
               },
             },
           },
@@ -88,9 +92,13 @@ export const getOneQuestion = async (
         },
         solutions: {
           select: {
-            difficultyRating: {
+            solution: {
               select: {
-                value: true,
+                difficultyRating: {
+                  select: {
+                    value: true,
+                  },
+                },
               },
             },
           },
@@ -117,8 +125,10 @@ const formatQuestion = (question: {
   number: number;
   id: string;
   solutions: {
-    difficultyRating: {
-      value: number;
+    solution: {
+      difficultyRating: {
+        value: number;
+      };
     };
   }[];
   topics: {

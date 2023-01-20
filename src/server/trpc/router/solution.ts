@@ -25,7 +25,7 @@ export const solutionRouter = router({
       const { pastPaperId, solutions } = input;
 
       const questionIdToSolutionMap = new Map<
-        string,
+        [string, string],
         {
           isNewQuestion: boolean;
           number: number;
@@ -46,13 +46,15 @@ export const solutionRouter = router({
           (question) => question.number === solution.questionNumber
         );
 
+        const solutionId = cuid();
+
         const questionId = isNewQuestion
           ? cuid()
           : existingQuestions.find(
               (question) => question.number === solution.questionNumber
             )!.id;
 
-        questionIdToSolutionMap.set(questionId, {
+        questionIdToSolutionMap.set([questionId, solutionId], {
           isNewQuestion,
           number: solution.questionNumber,
           markdown: solution.markdown,
@@ -64,7 +66,7 @@ export const solutionRouter = router({
       const createQuestions = ctx.prisma.question.createMany({
         data: Array.from(questionIdToSolutionMap.entries())
           .filter(([_, solution]) => solution.isNewQuestion)
-          .map(([questionId, solution]) => ({
+          .map(([[questionId, _], solution]) => ({
             id: questionId,
             number: solution.number,
             pastPaperId,
@@ -73,7 +75,7 @@ export const solutionRouter = router({
 
       const addTopicsToQuestions = ctx.prisma.questionTopic.createMany({
         data: Array.from(questionIdToSolutionMap.entries()).flatMap(
-          ([questionId, solution]) =>
+          ([[questionId, _], solution]) =>
             solution.topicIds.map((topicId) => ({
               questionId,
               topicId,
@@ -81,13 +83,21 @@ export const solutionRouter = router({
         ),
       });
 
-      const createSolutions = ctx.prisma.questionSolution.createMany({
+      const createSolutions = ctx.prisma.solution.createMany({
         data: Array.from(questionIdToSolutionMap.entries()).map(
-          ([questionId, solution]) => ({
-            questionId,
-            userId: "1",
+          ([_, solution]) => ({
+            userId: "cld303y730000vgcvlua2spnk",
             markdown: solution.markdown,
             difficultyRatingId: solution.difficultyRatingId,
+          })
+        ),
+      });
+
+      const createQuestionSolution = ctx.prisma.questionSolution.createMany({
+        data: Array.from(questionIdToSolutionMap.entries()).map(
+          ([[questionId, solutionId], _]) => ({
+            questionId,
+            solutionId,
           })
         ),
       });
@@ -96,6 +106,7 @@ export const solutionRouter = router({
         createQuestions,
         addTopicsToQuestions,
         createSolutions,
+        createQuestionSolution,
       ]);
     }),
   getAllByQuestion: publicProcedure
@@ -120,7 +131,7 @@ export const solutionRouter = router({
     )
     .query(async ({ input, ctx }) => {
       try {
-        const response = await getOneById(ctx.prisma.questionSolution, {
+        const response = await getOneById(ctx.prisma.solution, {
           solutionId: input.id,
         });
 

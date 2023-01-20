@@ -13,10 +13,10 @@ const SolutionCard = (props: SolutionCardProps) => {
 
   const router = useRouter();
 
-  const title = generateSolutionTitle(solution.id);
+  const title = generateSolutionTitle(solution.solutionId);
 
   const onSolutionCardClick = () => {
-    router.push(`/solutions/${solution.id}`);
+    router.push(`/solutions/${solution.solutionId}`);
   };
 
   return (

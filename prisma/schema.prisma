@@ -39,20 +39,14 @@ model Question {
 }
 
 model QuestionSolution {
-  question                 Question                @relation(fields: [questionId], references: [id])
-  questionId               String
-  solution                 Solution                @relation(fields: [solutionId], references: [id])
-  solutionId               String
-  DifficultyRatingOption   DifficultyRatingOption? @relation(fields: [difficultyRatingOptionId], references: [id])
-  difficultyRatingOptionId Int?
-  User                     User?                   @relation(fields: [userId], references: [id])
-  userId                   String?
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId String
+  solution   Solution @relation(fields: [solutionId], references: [id])
+  solutionId String
 
   @@unique([questionId, solutionId], name: "questionId_solutionId_unique")
   @@index([questionId], name: "questionId")
   @@index([solutionId], name: "solutionId")
-  @@index([difficultyRatingOptionId], name: "difficultyRatingOptionId")
-  @@index([userId], name: "userId")
 }
 
 model Solution {
@@ -61,13 +55,13 @@ model Solution {
   user               User                   @relation(fields: [userId], references: [id])
   userId             String
   markdown           String                 @db.Text
-  difficultyRating   DifficultyRatingOption @relation(fields: [difficultyRatingId], references: [id])
-  difficultyRatingId Int
   votes              SolutionVote[]
   comments           SolutionComment[]
+  difficultyRating   DifficultyRatingOption @relation(fields: [difficultyRatingId], references: [id])
+  difficultyRatingId Int
 
   @@index([userId], name: "userId")
-  @@index([difficultyRatingId], name: "difficultyRatingId")
+  @@index([difficultyRatingId], name: "difficultyRatingnId")
 }
 
 model SolutionVote {
@@ -117,11 +111,10 @@ model QuestionTopic {
 }
 
 model DifficultyRatingOption {
-  id                Int                @id @default(autoincrement())
-  name              String             @db.VarChar(255)
-  value             Int                @db.TinyInt
-  questionSolutions QuestionSolution[]
-  Solution          Solution[]
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(255)
+  value     Int        @db.TinyInt
+  solutions Solution[]
 }
 
 model Account {
@@ -155,17 +148,16 @@ model Session {
 }
 
 model User {
-  id               String             @id @default(cuid())
-  name             String             @default("Student")
-  email            String?            @unique
+  id               String            @id @default(cuid())
+  name             String            @default("Student")
+  email            String?           @unique
   emailVerified    DateTime?
   image            String?
   accounts         Account[]
   sessions         Session[]
-  questionSolution QuestionSolution[]
   solutionComments SolutionComment[]
   solutionVotes    SolutionVote[]
-  Solution         Solution[]
+  solutions        Solution[]
 }
 
 model VerificationToken {

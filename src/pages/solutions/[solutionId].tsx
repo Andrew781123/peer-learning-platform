@@ -25,10 +25,10 @@ interface IParams extends ParsedUrlQuery {
 export const getStaticPaths: GetStaticPaths<IParams> = async () => {
   const prisma = new PrismaClient();
 
-  const subjects = await prisma.questionSolution.findMany();
+  const solutions = await prisma.solution.findMany();
 
-  const paths = subjects.map((subject) => ({
-    params: { solutionId: subject.id },
+  const paths = solutions.map((solution) => ({
+    params: { solutionId: solution.id },
   }));
 
   return {

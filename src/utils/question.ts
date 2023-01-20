@@ -1,11 +1,12 @@
 import { MIN_TAG_COUNT } from "../constants/question";
 
 export const getAverageDifficultyRatingScore = (
-  solutions: { difficultyRating: { value: number } }[]
+  solutions: { solution: { difficultyRating: { value: number } } }[]
 ): number => {
   return (
     solutions.reduce(
-      (sum, solution) => (sum += solution.difficultyRating?.value ?? 0),
+      (sum, solution) =>
+        (sum += solution.solution.difficultyRating?.value ?? 0),
       0
     ) / (solutions.length || 1)
   );

@@ -72,7 +72,7 @@ type SolutionPageProps = {
 const SolutionPage: NextPage<SolutionPageProps> = (props) => {
   const { questionId } = props;
 
-  const { data: getAllSubjectResponse, isSuccess } =
+  const { data: getAllSolutionsResponse, isSuccess } =
     trpc.solution.getAllByQuestion.useQuery({
       questionId,
     });
@@ -97,8 +97,8 @@ const SolutionPage: NextPage<SolutionPageProps> = (props) => {
       <div className="mt-2">
         <List>
           {isSuccess &&
-            getAllSubjectResponse.map((solution) => (
-              <SolutionCard key={solution.id} solution={solution} />
+            getAllSolutionsResponse.map((solution) => (
+              <SolutionCard key={solution.solutionId} solution={solution} />
             ))}
         </List>
       </div>
