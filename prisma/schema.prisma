@@ -27,31 +27,31 @@ model PastPaper {
 }
 
 model Question {
-  id          String             @id
-  pastPaper   PastPaper          @relation(fields: [pastPaperId], references: [id])
+  id          String          @id
+  pastPaper   PastPaper       @relation(fields: [pastPaperId], references: [id])
   pastPaperId Int
-  number      Int                @db.TinyInt
-  solutions   QuestionSolution[]
+  number      Int             @db.TinyInt
+  solutions   Solution[]
   topics      QuestionTopic[]
 
   @@unique([pastPaperId, number], name: "pastPaperId_number_unique")
   @@index([pastPaperId], name: "pastPaperId")
 }
 
-model QuestionSolution {
-  question   Question @relation(fields: [questionId], references: [id])
-  questionId String
-  solution   Solution @relation(fields: [solutionId], references: [id])
-  solutionId String
+// model QuestionSolution {
+//   question   Question @relation(fields: [questionId], references: [id])
+//   questionId String
+//   solution   Solution @relation(fields: [solutionId], references: [id])
+//   solutionId String
 
-  @@unique([questionId, solutionId], name: "questionId_solutionId_unique")
-  @@index([questionId], name: "questionId")
-  @@index([solutionId], name: "solutionId")
-}
+//   @@unique([questionId, solutionId], name: "questionId_solutionId_unique")
+//   @@index([questionId], name: "questionId")
+//   @@index([solutionId], name: "solutionId")
+// }
 
 model Solution {
   id                 String                 @id @default(cuid())
-  questions          QuestionSolution[]
+  questions          Question[]
   user               User                   @relation(fields: [userId], references: [id])
   userId             String
   markdown           String                 @db.Text
