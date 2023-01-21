@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import cuid from "cuid";
 import { z } from "zod";
 import {
@@ -143,7 +144,10 @@ export const solutionRouter = router({
 
         return response;
       } catch (err) {
-        throw err;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal Server Error",
+        });
       }
     }),
 });

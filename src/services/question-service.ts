@@ -1,4 +1,5 @@
 import { PrismaClient, Question } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { getAverageDifficultyRatingScore } from "../utils/question";
 
 type FormattedQuestion = {
@@ -61,7 +62,10 @@ export const getAllQuestionsByPastPaper = async (
 
     return formattedQuestions;
   } catch (err) {
-    throw err;
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Internal Server Error",
+    });
   }
 };
 
@@ -118,7 +122,10 @@ export const getOneQuestion = async (
 
     return formattedQuestion;
   } catch (err) {
-    throw err;
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Internal Server Error",
+    });
   }
 };
 

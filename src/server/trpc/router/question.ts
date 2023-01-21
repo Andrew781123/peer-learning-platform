@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
   getAllQuestionsByPastPaper,
@@ -14,19 +15,26 @@ export const questionRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const questions = await getAllQuestionsByPastPaper(
-        ctx.prisma.question,
-        input.pastPaperId
-      );
+      try {
+        const questions = await getAllQuestionsByPastPaper(
+          ctx.prisma.question,
+          input.pastPaperId
+        );
 
-      const response = questions.map((question) => ({
-        ...question,
-        topics: getValidTopics(question.topics)
-          .sort((a, b) => b.count - a.count)
-          .map((topic) => topic.name),
-      }));
+        const response = questions.map((question) => ({
+          ...question,
+          topics: getValidTopics(question.topics)
+            .sort((a, b) => b.count - a.count)
+            .map((topic) => topic.name),
+        }));
 
-      return response;
+        return response;
+      } catch (err) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal Server Error",
+        });
+      }
     }),
 
   getOne: publicProcedure
@@ -53,7 +61,10 @@ export const questionRouter = router({
 
         return response;
       } catch (err) {
-        throw err;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal Server Error",
+        });
       }
     }),
 });

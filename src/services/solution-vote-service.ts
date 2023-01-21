@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { SolutionVoteValue } from "../types/solution-vote";
 
 export const vote = (
@@ -16,7 +17,10 @@ export const vote = (
 
     return vote;
   } catch (err) {
-    throw err;
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Internal Server Error",
+    });
   }
 };
 
@@ -34,6 +38,9 @@ export const getVoteOfUser = async (
 
     return (votes?.value as SolutionVoteValue) ?? 0;
   } catch (err) {
-    throw err;
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Internal Server Error",
+    });
   }
 };

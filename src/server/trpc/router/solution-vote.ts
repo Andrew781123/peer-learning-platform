@@ -1,7 +1,8 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { getVoteOfUser, vote } from "../../../services/solution-vote-service";
 import { SOLUTION_VOTE_VALUE } from "../../../types/solution-vote";
-import { protectedProcedure, publicProcedure, router } from "../trpc";
+import { publicProcedure, router } from "../trpc";
 
 export const solutionVoteRouter = router({
   vote: publicProcedure
@@ -27,11 +28,14 @@ export const solutionVoteRouter = router({
 
         return response;
       } catch (err) {
-        throw err;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal Server Error",
+        });
       }
     }),
 
-  getVoteOfUser: protectedProcedure
+  getVoteOfUser: publicProcedure
     .input(
       z.object({
         solutionId: z.string(),
@@ -39,6 +43,8 @@ export const solutionVoteRouter = router({
     )
     .query(async ({ input, ctx }) => {
       try {
+        if (!ctx.session?.user) return SOLUTION_VOTE_VALUE.notVoted;
+
         const voteOfUser = await getVoteOfUser(ctx.prisma.solutionVote, {
           userId: ctx.session.user.id,
           solutionId: input.solutionId,
@@ -46,7 +52,10 @@ export const solutionVoteRouter = router({
 
         return voteOfUser;
       } catch (err) {
-        throw err;
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal Server Error",
+        });
       }
     }),
 });
