@@ -9,6 +9,7 @@ export const solutionVoteRouter = router({
     .input(
       z.object({
         solutionId: z.string(),
+        questionId: z.string(),
         voteValue: z.union([
           z.literal(SOLUTION_VOTE_VALUE.downVoted),
           z.literal(SOLUTION_VOTE_VALUE.upVoted),
@@ -20,10 +21,11 @@ export const solutionVoteRouter = router({
       try {
         if (!ctx.session?.user) throw new Error("User not logged in");
 
-        const response = await vote(ctx.prisma.solutionVote, {
+        const response = await vote(ctx.prisma.solutionQuestionVote, {
           value: input.voteValue,
           userId: ctx.session.user.id,
           solutionId: input.solutionId,
+          questionId: input.questionId,
         });
 
         return response;
@@ -36,7 +38,7 @@ export const solutionVoteRouter = router({
       }
     }),
 
-  getVoteOfUser: publicProcedure
+  getVoteInfo: publicProcedure
     .input(
       z.object({
         solutionId: z.string(),
@@ -46,10 +48,13 @@ export const solutionVoteRouter = router({
       try {
         if (!ctx.session?.user) return SOLUTION_VOTE_VALUE.notVoted;
 
-        const voteOfUser = await getVoteOfUser(ctx.prisma.solutionVote, {
-          userId: ctx.session.user.id,
-          solutionId: input.solutionId,
-        });
+        const voteOfUser = await getVoteOfUser(
+          ctx.prisma.solutionQuestionVote,
+          {
+            userId: ctx.session.user.id,
+            solutionId: input.solutionId,
+          }
+        );
 
         return voteOfUser;
       } catch (err) {

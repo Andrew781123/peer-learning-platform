@@ -27,10 +27,11 @@ model PastPaper {
 }
 
 model Question {
-  id          String             @id @default(cuid())
-  pastPaper   PastPaper          @relation(fields: [pastPaperId], references: [id])
+  id          String                 @id @default(cuid())
+  pastPaper   PastPaper              @relation(fields: [pastPaperId], references: [id])
   pastPaperId Int
-  number      Int                @db.TinyInt
+  number      Int                    @db.TinyInt
+  votes       SolutionQuestionVote[]
   solutions   QuestionSolution[]
   topics      QuestionTopic[]
 
@@ -55,8 +56,8 @@ model Solution {
   userId             String
   markdown           String                 @db.Text
   questions          QuestionSolution[]
-  votes              SolutionVote[]
   comments           SolutionComment[]
+  votes              SolutionQuestionVote[]
   difficultyRating   DifficultyRatingOption @relation(fields: [difficultyRatingId], references: [id])
   difficultyRatingId Int
 
@@ -64,15 +65,18 @@ model Solution {
   @@index([difficultyRatingId], name: "difficultyRatingnId")
 }
 
-model SolutionVote {
+model SolutionQuestionVote {
   id         Int      @id @default(autoincrement())
   solution   Solution @relation(fields: [solutionId], references: [id])
   solutionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId String
   user       User     @relation(fields: [userId], references: [id])
   userId     String
   value      Int      @db.TinyInt
 
-  @@unique([solutionId, userId], name: "solutionId_userId_unique")
+  @@unique([questionId, solutionId, userId], name: "solutionId_questionId_userId_unique")
+  @@index([questionId], name: "questionId")
   @@index([solutionId], name: "solutionId")
   @@index([userId], name: "userId")
 }
@@ -148,15 +152,15 @@ model Session {
 }
 
 model User {
-  id               String            @id @default(cuid())
-  name             String            @default("Student")
-  email            String?           @unique
+  id               String                 @id @default(cuid())
+  name             String                 @default("Student")
+  email            String?                @unique
   emailVerified    DateTime?
   image            String?
   accounts         Account[]
   sessions         Session[]
   solutionComments SolutionComment[]
-  solutionVotes    SolutionVote[]
+  questionVotes    SolutionQuestionVote[]
   solutions        Solution[]
 }
 

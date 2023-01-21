@@ -16,7 +16,7 @@ const SolutionCard = (props: SolutionCardProps) => {
   const title = generateSolutionTitle(solution.id);
 
   const onSolutionCardClick = () => {
-    router.push(`/solutions/${solution.id}`);
+    router.push(`${router.asPath}/${solution.id}`);
   };
 
   return (

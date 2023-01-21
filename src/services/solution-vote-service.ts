@@ -3,11 +3,12 @@ import { TRPCError } from "@trpc/server";
 import { SolutionVoteValue } from "../types/solution-vote";
 
 export const vote = (
-  repo: PrismaClient["solutionVote"],
+  repo: PrismaClient["solutionQuestionVote"],
   newVoteData: {
     value: SolutionVoteValue;
     userId: string;
     solutionId: string;
+    questionId: string;
   }
 ) => {
   try {
@@ -26,7 +27,7 @@ export const vote = (
 };
 
 export const getVoteOfUser = async (
-  repo: PrismaClient["solutionVote"],
+  repo: PrismaClient["solutionQuestionVote"],
   { userId, solutionId }: { userId: string; solutionId: string }
 ): Promise<SolutionVoteValue> => {
   try {

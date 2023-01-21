@@ -8,27 +8,28 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
-import VoteIcon from "../../components/vote/VoteIcon";
-import { createContextInner } from "../../server/trpc/context";
-import { appRouter } from "../../server/trpc/router/_app";
+import VoteIcon from "../../../../components/vote/VoteIcon";
+import { createContextInner } from "../../../../server/trpc/context";
+import { appRouter } from "../../../../server/trpc/router/_app";
 import {
   SolutionVoteValue,
   SOLUTION_VOTE_VALUE,
-} from "../../types/solution-vote";
-import generateSolutionTitle from "../../utils/solution/generate-solution-title";
-import { trpc } from "../../utils/trpc";
+} from "../../../../types/solution-vote";
+import generateSolutionTitle from "../../../../utils/solution/generate-solution-title";
+import { trpc } from "../../../../utils/trpc";
 
 interface IParams extends ParsedUrlQuery {
   solutionId: string;
+  questionId: string;
 }
 
 export const getStaticPaths: GetStaticPaths<IParams> = async () => {
   const prisma = new PrismaClient();
 
-  const solutions = await prisma.solution.findMany();
+  const questionSolutions = await prisma.questionSolution.findMany();
 
-  const paths = solutions.map((solution) => ({
-    params: { solutionId: solution.id },
+  const paths = questionSolutions.map(({ questionId, solutionId }) => ({
+    params: { solutionId, questionId },
   }));
 
   return {
@@ -60,6 +61,7 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       solutionId: params.solutionId,
+      questionId: params.questionId,
       trpcState: ssg.dehydrate(),
     },
     // No need to revalidate, we don't have any dynamic data
@@ -68,10 +70,11 @@ export const getStaticProps: GetStaticProps<
 
 type PastPaperPageProps = {
   solutionId: string;
+  questionId: string;
 };
 
 const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
-  const { solutionId } = props;
+  const { solutionId, questionId } = props;
 
   const trpcUtils = trpc.useContext();
 
@@ -79,31 +82,29 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     id: solutionId,
   });
 
-  const voteOfUser = trpc.solutionVote.getVoteOfUser.useQuery({
+  const voteOfUser = trpc.solutionVote.getVoteInfo.useQuery({
     solutionId,
   });
 
   const voteMutation = trpc.solutionVote.vote.useMutation({
     onMutate: async ({ voteValue }) => {
-      await trpcUtils.solutionVote.getVoteOfUser.cancel();
+      await trpcUtils.solutionVote.getVoteInfo.cancel();
 
-      const previousVoteOfUser = trpcUtils.solutionVote.getVoteOfUser.getData();
+      const previousVoteOfUser = trpcUtils.solutionVote.getVoteInfo.getData();
 
-      trpcUtils.solutionVote.getVoteOfUser.setData(voteValue);
+      trpcUtils.solutionVote.getVoteInfo.setData(voteValue);
 
       return { previousVoteOfUser };
     },
 
     onError: (err, _, context) => {
       if (context?.previousVoteOfUser) {
-        trpcUtils.solutionVote.getVoteOfUser.setData(
-          context.previousVoteOfUser
-        );
+        trpcUtils.solutionVote.getVoteInfo.setData(context.previousVoteOfUser);
       }
     },
 
     onSettled: () => {
-      trpcUtils.solutionVote.getVoteOfUser.refetch();
+      trpcUtils.solutionVote.getVoteInfo.refetch();
     },
   });
 
@@ -115,6 +116,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
     voteMutation.mutate({
       solutionId,
+      questionId,
       voteValue,
     });
   };
