@@ -99,7 +99,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
   return (
     <div className="divide-y divide-gray-400">
-      <h1 className="mb-2">{title}</h1>
+      <h1 className="mb-2 text-xl font-bold">{title}</h1>
 
       <div className="flex w-full gap-4">
         <div className="mt-2 flex w-fit flex-col items-center">

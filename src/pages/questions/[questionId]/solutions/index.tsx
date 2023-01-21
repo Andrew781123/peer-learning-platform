@@ -98,7 +98,7 @@ const SolutionPage: NextPage<SolutionPageProps> = (props) => {
         <List>
           {isSuccess &&
             getAllSolutionsResponse.map((solution) => (
-              <SolutionCard key={solution.solutionId} solution={solution} />
+              <SolutionCard key={solution.id} solution={solution} />
             ))}
         </List>
       </div>

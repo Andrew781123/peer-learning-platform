@@ -13,10 +13,10 @@ const SolutionCard = (props: SolutionCardProps) => {
 
   const router = useRouter();
 
-  const title = generateSolutionTitle(solution.solutionId);
+  const title = generateSolutionTitle(solution.id);
 
   const onSolutionCardClick = () => {
-    router.push(`/solutions/${solution.solutionId}`);
+    router.push(`/solutions/${solution.id}`);
   };
 
   return (
@@ -26,7 +26,7 @@ const SolutionCard = (props: SolutionCardProps) => {
     >
       <div className="flex w-full items-center justify-between">
         <div>
-          <p>{title}</p>
+          <h1 className="text-lg font-bold">{title}</h1>
           <VoteInfo voteCount={solution.votes} />
         </div>
         <IoIosArrowForward />
