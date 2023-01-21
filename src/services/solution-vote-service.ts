@@ -17,6 +17,7 @@ export const vote = (
 
     return vote;
   } catch (err) {
+    console.error(`Error vote service: ${err}`);
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: "Internal Server Error",
@@ -27,7 +28,7 @@ export const vote = (
 export const getVoteOfUser = async (
   repo: PrismaClient["solutionVote"],
   { userId, solutionId }: { userId: string; solutionId: string }
-): Promise<SolutionVoteValue | 0> => {
+): Promise<SolutionVoteValue> => {
   try {
     const votes = await repo.findFirst({
       where: {

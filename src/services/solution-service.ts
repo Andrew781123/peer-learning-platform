@@ -54,6 +54,7 @@ export const getOneById = async (
       votes,
     };
   } catch (err) {
+    console.error(err);
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: "Internal Server Error",

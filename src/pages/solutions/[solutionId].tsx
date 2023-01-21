@@ -73,6 +73,8 @@ type PastPaperPageProps = {
 const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
   const { solutionId } = props;
 
+  const trpcUtils = trpc.useContext();
+
   const solution = trpc.solution.getOneById.useQuery({
     id: solutionId,
   });
@@ -81,7 +83,29 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     solutionId,
   });
 
-  const voteMutation = trpc.solutionVote.vote.useMutation();
+  const voteMutation = trpc.solutionVote.vote.useMutation({
+    onMutate: async ({ voteValue }) => {
+      await trpcUtils.solutionVote.getVoteOfUser.cancel();
+
+      const previousVoteOfUser = trpcUtils.solutionVote.getVoteOfUser.getData();
+
+      trpcUtils.solutionVote.getVoteOfUser.setData(voteValue);
+
+      return { previousVoteOfUser };
+    },
+
+    onError: (err, _, context) => {
+      if (context?.previousVoteOfUser) {
+        trpcUtils.solutionVote.getVoteOfUser.setData(
+          context.previousVoteOfUser
+        );
+      }
+    },
+
+    onSettled: () => {
+      trpcUtils.solutionVote.getVoteOfUser.refetch();
+    },
+  });
 
   const title = generateSolutionTitle(solutionId);
 
