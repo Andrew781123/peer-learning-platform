@@ -82,7 +82,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     id: solutionId,
   });
 
-  const voteOfUser = trpc.solutionVote.getVoteInfo.useQuery({
+  const voteInfo = trpc.solutionVote.getVoteInfo.useQuery({
     solutionId,
   });
 
@@ -90,16 +90,19 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     onMutate: async ({ voteValue }) => {
       await trpcUtils.solutionVote.getVoteInfo.cancel();
 
-      const previousVoteOfUser = trpcUtils.solutionVote.getVoteInfo.getData();
+      const previousVoteInfo = trpcUtils.solutionVote.getVoteInfo.getData();
 
-      trpcUtils.solutionVote.getVoteInfo.setData(voteValue);
+      trpcUtils.solutionVote.getVoteInfo.setData({
+        voteOfUser: voteValue,
+        votes: previousVoteInfo?.votes ?? 0 + voteValue,
+      });
 
-      return { previousVoteOfUser };
+      return { previousVoteInfo };
     },
 
     onError: (err, _, context) => {
-      if (context?.previousVoteOfUser) {
-        trpcUtils.solutionVote.getVoteInfo.setData(context.previousVoteOfUser);
+      if (context?.previousVoteInfo) {
+        trpcUtils.solutionVote.getVoteInfo.setData(context.previousVoteInfo);
       }
     },
 
@@ -111,8 +114,10 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
   const title = generateSolutionTitle(solutionId);
 
   const onVoteClick = (voteValue: SolutionVoteValue) => {
+    const isUserVoted =
+      voteInfo.data?.voteOfUser !== SOLUTION_VOTE_VALUE.notVoted;
     // TODO: Show error message
-    if (voteOfUser.data !== SOLUTION_VOTE_VALUE.notVoted) return;
+    if (isUserVoted) return;
 
     voteMutation.mutate({
       solutionId,
@@ -133,17 +138,19 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
             <VoteIcon
               type="upVote"
               size="medium"
-              voted={voteOfUser.data === SOLUTION_VOTE_VALUE.upVoted}
+              voted={voteInfo.data?.voteOfUser === SOLUTION_VOTE_VALUE.upVoted}
             />
           </button>
 
-          <p className="cursor-default">{solution.data.votes}</p>
+          <p className="cursor-default">{voteInfo.data?.votes ?? 0}</p>
 
           <button onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.downVoted)}>
             <VoteIcon
               type="downVote"
               size="medium"
-              voted={voteOfUser.data === SOLUTION_VOTE_VALUE.downVoted}
+              voted={
+                voteInfo.data?.voteOfUser === SOLUTION_VOTE_VALUE.downVoted
+              }
             />
           </button>
         </div>

@@ -1,5 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { getOneById as getOneSolutionById } from "../../../services/solution-service";
 import { getVoteOfUser, vote } from "../../../services/solution-vote-service";
 import { SOLUTION_VOTE_VALUE } from "../../../types/solution-vote";
 import { publicProcedure, router } from "../trpc";
@@ -46,7 +47,15 @@ export const solutionVoteRouter = router({
     )
     .query(async ({ input, ctx }) => {
       try {
-        if (!ctx.session?.user) return SOLUTION_VOTE_VALUE.notVoted;
+        const solution = await getOneSolutionById(ctx.prisma.solution, {
+          solutionId: input.solutionId,
+        });
+
+        if (!ctx.session?.user)
+          return {
+            voteOfUser: SOLUTION_VOTE_VALUE.notVoted,
+            votes: solution.votes,
+          };
 
         const voteOfUser = await getVoteOfUser(
           ctx.prisma.solutionQuestionVote,
@@ -56,7 +65,10 @@ export const solutionVoteRouter = router({
           }
         );
 
-        return voteOfUser;
+        return {
+          voteOfUser,
+          votes: solution.votes,
+        };
       } catch (err) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
