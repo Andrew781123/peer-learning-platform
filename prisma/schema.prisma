@@ -44,7 +44,7 @@ model QuestionSolution {
   solution   Solution @relation(fields: [solutionId], references: [id])
   solutionId String
 
-  @@unique([questionId, solutionId], name: "questionId_solutionId_unique")
+  @@id([questionId, solutionId])
   @@index([questionId], name: "questionId")
   @@index([solutionId], name: "solutionId")
 }
