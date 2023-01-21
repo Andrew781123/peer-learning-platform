@@ -8,6 +8,7 @@ import { solutionRouter } from "./solution";
 import { solutionVoteRouter } from "./solution-vote";
 import { subjectRouter } from "./subject";
 import { subjectTopicRouter } from "./subject-topic";
+import { testRouter } from "./test";
 
 export const appRouter = router({
   auth: authRouter,
@@ -18,6 +19,7 @@ export const appRouter = router({
   solution: solutionRouter,
   solutionVote: solutionVoteRouter,
   difficultyRatingOption: difficultyRatingOptionRouter,
+  test: testRouter,
 });
 
 // export type definition of API
