@@ -3,24 +3,28 @@ import { TRPCError } from "@trpc/server";
 import { calculateVoteCount } from "../utils/solution/calculate-votes";
 
 export const getAllSolutionsByQuestion = async (
-  repo: PrismaClient["questionSolution"],
+  repo: PrismaClient["solution"],
   questionId: string
 ) => {
   const solutions = await repo.findMany({
-    where: { questionId: questionId },
-    include: {
-      solution: {
-        include: {
-          difficultyRating: true,
-          votes: true,
+    where: {
+      questions: {
+        some: {
+          question: {
+            id: questionId,
+          },
         },
       },
+    },
+    include: {
+      difficultyRating: true,
+      votes: true,
     },
   });
 
   return solutions.map((solution) => ({
     ...solution,
-    votes: calculateVoteCount(solution.solution.votes),
+    votes: calculateVoteCount(solution.votes),
   }));
 };
 

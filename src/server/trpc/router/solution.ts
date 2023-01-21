@@ -85,7 +85,9 @@ export const solutionRouter = router({
 
       const createSolutions = ctx.prisma.solution.createMany({
         data: Array.from(questionIdToSolutionMap.entries()).map(
-          ([_, solution]) => ({
+          ([[_, solutionId], solution]) => ({
+            id: solutionId,
+            // TODO - replace with auth
             userId: "cld303y730000vgcvlua2spnk",
             markdown: solution.markdown,
             difficultyRatingId: solution.difficultyRatingId,
@@ -117,7 +119,7 @@ export const solutionRouter = router({
     )
     .query(async ({ input, ctx }) => {
       const response = await getAllSolutionsByQuestion(
-        ctx.prisma.questionSolution,
+        ctx.prisma.solution,
         input.questionId
       );
 

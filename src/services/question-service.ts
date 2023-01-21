@@ -9,6 +9,7 @@ type FormattedQuestion = {
   solutionCount: number;
   averageDifficultyScore: number;
 } & Omit<Question, "pastPaperId">;
+
 export const getAllQuestionsByPastPaper = async (
   repo: PrismaClient["question"],
   pastPaperId: number
