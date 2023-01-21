@@ -42,6 +42,8 @@ export const getStaticProps: GetStaticProps<
   PastPaperPageProps,
   IParams
 > = async (context: GetStaticPropsContext<IParams>) => {
+  const prisma = new PrismaClient();
+
   const ssg = createProxySSGHelpers({
     router: appRouter,
     ctx: await createContextInner({ session: null }),
@@ -58,10 +60,17 @@ export const getStaticProps: GetStaticProps<
 
   if (!solution) return { notFound: true };
 
+  const question = await prisma.question.findUnique({
+    where: { id: params.questionId },
+  });
+
+  if (!question) return { notFound: true };
+
   return {
     props: {
       solutionId: params.solutionId,
       questionId: params.questionId,
+      questionNumber: question.number,
       trpcState: ssg.dehydrate(),
     },
     // No need to revalidate, we don't have any dynamic data
@@ -71,10 +80,11 @@ export const getStaticProps: GetStaticProps<
 type PastPaperPageProps = {
   solutionId: string;
   questionId: string;
+  questionNumber: number;
 };
 
 const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
-  const { solutionId, questionId } = props;
+  const { solutionId, questionId, questionNumber } = props;
 
   const trpcUtils = trpc.useContext();
 
@@ -130,7 +140,9 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
   return (
     <div className="divide-y divide-gray-400">
-      <h1 className="mb-2 text-xl font-bold">{title}</h1>
+      <h1 className="mb-2 text-xl font-bold">
+        {`Solution of Question ${questionNumber} from ${title}`}
+      </h1>
 
       <div className="flex w-full gap-4">
         <div className="mt-2 flex w-fit flex-col items-center">
@@ -142,7 +154,9 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
             />
           </button>
 
-          <p className="cursor-default">{voteInfo.data?.votes ?? 0}</p>
+          <p className="cursor-default">
+            {voteInfo.data?.votes ?? solution.data.votes}
+          </p>
 
           <button onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.downVoted)}>
             <VoteIcon
@@ -161,9 +175,9 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
         ></div>
       </div>
 
-      <ol>
+      {/* <ol>
         <li>jjojioj</li>
-      </ol>
+      </ol> */}
     </div>
   );
 };

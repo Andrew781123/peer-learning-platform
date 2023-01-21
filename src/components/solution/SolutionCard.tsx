@@ -26,7 +26,7 @@ const SolutionCard = (props: SolutionCardProps) => {
     >
       <div className="flex w-full items-center justify-between">
         <div>
-          <h1 className="text-lg font-bold">{title}</h1>
+          <h1 className="text-lg font-bold">From {title}</h1>
           <VoteInfo voteCount={solution.votes} />
         </div>
         <IoIosArrowForward />
