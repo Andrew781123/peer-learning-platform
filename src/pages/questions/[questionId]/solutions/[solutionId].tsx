@@ -99,10 +99,13 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
   const voteMutation = trpc.solutionVote.vote.useMutation({
     onMutate: async ({ voteValue }) => {
+      console.log("cancelling refetches");
       await trpcUtils.solutionVote.getVoteInfo.cancel();
 
+      console.log("getting previous vote info");
       const previousVoteInfo = trpcUtils.solutionVote.getVoteInfo.getData();
 
+      console.log("setting new vote info");
       trpcUtils.solutionVote.getVoteInfo.setData({
         voteOfUser: voteValue,
         votes: previousVoteInfo?.votes ?? solution.data!.votes + voteValue,
