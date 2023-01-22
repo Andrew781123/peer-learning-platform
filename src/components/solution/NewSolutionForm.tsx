@@ -5,6 +5,7 @@ import {
   Subject,
   SubjectTopic,
 } from "@prisma/client";
+import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -193,7 +194,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
         {fields.map((solution, index) => (
           <div
             key={solution.id}
-            className="relative w-full rounded-lg border border-onBackground p-3 focus:border-primary-default"
+            className={clsx(
+              formState.errors.solutions?.[index]
+                ? "border-red-500"
+                : "border-onBackground",
+              "relative w-full rounded-lg border  p-3 focus:border-primary-default"
+            )}
           >
             {fields.length > 1 ? (
               <CrossButton
@@ -257,7 +263,11 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               />
             </FormGroup>
 
-            <FormGroup className="mb-2" labelPosition="top">
+            <FormGroup
+              className="mb-2"
+              labelPosition="top"
+              error={!!formState.errors.solutions?.[index]?.solutionText}
+            >
               <Label text="Write your solution here" />
               <Controller
                 name={`solutions.${index}.solutionText`}
@@ -270,6 +280,10 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                   />
                 )}
               />
+
+              <p className="text-sm text-red-500">
+                {formState.errors.solutions?.[index]?.topicIds?.message}
+              </p>
             </FormGroup>
           </div>
         ))}
