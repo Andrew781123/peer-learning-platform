@@ -6,6 +6,7 @@ import {
   GetStaticPropsContext,
   NextPage,
 } from "next";
+import { useSession } from "next-auth/react";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
 import VoteIcon from "../../../../components/vote/VoteIcon";
@@ -89,6 +90,8 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
   const trpcUtils = trpc.useContext();
 
+  const { status: authStatus } = useSession();
+
   const solution = trpc.solution.getOneById.useQuery({
     id: solutionId,
   });
@@ -130,10 +133,17 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
   const title = generateSolutionTitle(solutionId);
 
   const onVoteClick = (voteValue: SolutionVoteValue) => {
+    if (authStatus !== "authenticated") {
+      alert("You must be logged in to vote");
+    }
+
     const isUserVoted =
       voteInfo.data?.voteOfUser !== SOLUTION_VOTE_VALUE.notVoted;
     // TODO: Show error message
-    if (isUserVoted) return;
+    if (isUserVoted) {
+      alert("You have already voted");
+      return;
+    }
 
     voteMutation.mutate({
       solutionId,
