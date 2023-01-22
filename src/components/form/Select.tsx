@@ -27,6 +27,7 @@ type SelectProps<
   TValue extends string | number = string
 > = {
   options: TOption[];
+  error?: boolean;
 } & (MultipleSelectProps<TValue> | SingleSelectProps<TValue>);
 
 const Select = <TValue extends string | number>(
@@ -34,7 +35,7 @@ const Select = <TValue extends string | number>(
     myRef: LegacyRef<HTMLDivElement>;
   }
 ) => {
-  const { multiple, options, defaultValue, value, onChange, myRef } = props;
+  const { multiple, options, error, value, onChange, myRef } = props;
 
   const [isShown, setIsShown] = useState(false);
 
@@ -72,7 +73,10 @@ const Select = <TValue extends string | number>(
       onClick={toggleIsShown}
       onBlur={() => setIsShown(false)}
       tabIndex={0}
-      className="relative flex min-h-[3.1em] min-w-[15em] max-w-[50%] items-center gap-2 rounded-lg border  border-onSurface bg-surface-light p-2 text-onSurface focus:border-primary-dark focus:ring-primary-dark"
+      className={clsx(
+        error ? "border-red-500" : "border-onSurface",
+        "relative flex min-h-[3.1em] min-w-[15em] max-w-[50%] items-center gap-2 rounded-lg border   bg-surface-light p-2 text-onSurface focus:border-primary-dark focus:ring-primary-dark"
+      )}
     >
       <div className="flex flex-grow flex-row flex-wrap items-center gap-1">
         {multiple ? (

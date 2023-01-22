@@ -40,9 +40,9 @@ const solutionSchema = z.object({
   pastPaperId: z.number(),
   solutions: z.array(
     z.object({
-      questionNumber: z.string(),
-      difficultyRatingLabel: z.string(),
-      topicIds: z.array(z.number()),
+      questionNumber: z.string().min(1),
+      difficultyRatingLabel: z.string().min(1),
+      topicIds: z.array(z.number()).min(1),
       solutionText: z.string(),
     })
   ),
@@ -110,6 +110,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   });
 
   useEffect(() => {
+    console.log(123123, !!formState.errors.solutions?.[1]?.questionNumber);
     console.log(formState.errors);
   }, [formState]);
 
@@ -120,7 +121,6 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const addSolutionFormItem = () => {
     append({
-      ...DEFAULT_SOLUTION,
       questionNumber: "",
       topicIds: [],
       difficultyRatingLabel: "",
@@ -202,7 +202,10 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               />
             ) : null}
 
-            <FormGroup className="mb-4">
+            <FormGroup
+              className="mb-4"
+              error={!!formState.errors.solutions?.[index]?.questionNumber}
+            >
               <Label text="Question Number" />
               <Input
                 type="number"
@@ -211,7 +214,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               />
             </FormGroup>
 
-            <FormGroup className="my-4">
+            <FormGroup
+              className="my-4"
+              error={
+                !!formState.errors.solutions?.[index]?.difficultyRatingLabel
+              }
+            >
               <Label text="Difficulty" />
               <RadioGroup
                 radios={difficultyRatingRadioOptions}
@@ -219,7 +227,10 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               />
             </FormGroup>
 
-            <FormGroup className="my-4">
+            <FormGroup
+              className="my-4"
+              error={!!formState.errors.solutions?.[index]?.topicIds}
+            >
               <Label text="Topics" />
               <Controller
                 name={`solutions.${index}.topicIds`}
@@ -230,23 +241,26 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                     myRef={ref}
                     multiple={true}
                     options={subjectTopicOptions}
+                    error={!!formState.errors.solutions?.[index]?.topicIds}
                   />
                 )}
               />
             </FormGroup>
 
-            <h2 className="mb-2">Write your solution here</h2>
-            <Controller
-              name={`solutions.${index}.solutionText`}
-              control={control}
-              render={({ field: { ref, ...rest } }) => (
-                <ReactQuill
-                  {...rest}
-                  theme="snow"
-                  modules={reactQuillModules}
-                />
-              )}
-            />
+            <FormGroup className="mb-2" labelPosition="top">
+              <Label text="Write your solution here" />
+              <Controller
+                name={`solutions.${index}.solutionText`}
+                control={control}
+                render={({ field: { ref, ...rest } }) => (
+                  <ReactQuill
+                    {...rest}
+                    theme="snow"
+                    modules={reactQuillModules}
+                  />
+                )}
+              />
+            </FormGroup>
           </div>
         ))}
         <Button type="button" onClick={addSolutionFormItem}>

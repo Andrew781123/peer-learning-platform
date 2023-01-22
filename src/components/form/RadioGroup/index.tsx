@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { DetailedHTMLProps, forwardRef, InputHTMLAttributes } from "react";
 
 type Radio = {
@@ -7,11 +8,12 @@ type Radio = {
 
 type RadioGroupProps = {
   radios: readonly Radio[];
+  error?: boolean;
 } & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
 
 const RadioGroup = forwardRef<HTMLInputElement, RadioGroupProps>(
   (props, ref) => {
-    const { radios, ...otherProps } = props;
+    const { radios, error, ...otherProps } = props;
 
     return (
       <div className="flex flex-wrap">
@@ -23,11 +25,19 @@ const RadioGroup = forwardRef<HTMLInputElement, RadioGroupProps>(
               id={radio.label}
               type="radio"
               value={radio.label}
-              className="focus:primary-dark h-4 w-4 border-gray-300 bg-gray-100 text-primary-default focus:ring-2 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-dark"
+              className={clsx(
+                error
+                  ? "border-red-500 text-red-500"
+                  : "border-gray-300 text-primary-default",
+                "h-4 w-4 bg-gray-100"
+              )}
             />
             <label
               htmlFor={radio.label}
-              className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              className={clsx(
+                error ? "text-red-500" : "text-white",
+                "ml-1 text-sm font-medium"
+              )}
             >
               {radio.label}
             </label>
