@@ -30,7 +30,7 @@ export const getStaticPaths: GetStaticPaths<IParams> = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
