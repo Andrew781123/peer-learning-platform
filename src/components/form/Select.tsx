@@ -70,7 +70,7 @@ const Select = <TValue extends string | number>(
   };
 
   return (
-    <div>
+    <>
       <div
         ref={myRef}
         onClick={toggleIsShown}
@@ -78,7 +78,7 @@ const Select = <TValue extends string | number>(
         tabIndex={0}
         className={clsx(
           error ? "border-red-500" : "border-onSurface",
-          "relative flex min-h-[3.1em] min-w-[15em] max-w-[50%] items-center gap-2 rounded-lg border   bg-surface-light p-2 text-onSurface focus:border-primary-dark focus:ring-primary-dark"
+          "relative flex min-h-[3.1em] min-w-[15em] max-w-[70%] items-center gap-2 rounded-lg border   bg-surface-light p-2 text-onSurface focus:border-primary-dark focus:ring-primary-dark"
         )}
       >
         <div className="flex flex-grow flex-row flex-wrap items-center gap-1">
@@ -137,7 +137,7 @@ const Select = <TValue extends string | number>(
       </div>
 
       <ErrorText error={error}>{errorText}</ErrorText>
-    </div>
+    </>
   );
 };
 

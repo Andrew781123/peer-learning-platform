@@ -39,7 +39,7 @@ const DEFAULT_SOLUTION = {
 
 const solutionSchema = z.object({
   subjectId: z.string(),
-  pastPaperId: z.number(),
+  pastPaperId: z.number().int(),
   solutions: z.array(
     z.object({
       questionNumber: z
