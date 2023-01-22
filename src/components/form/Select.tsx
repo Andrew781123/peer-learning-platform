@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { LegacyRef, useState } from "react";
 import CrossButton from "../ui/CrossButton";
+import ErrorText from "./ErrorText";
 import MultiSelectBadge from "./MultiSelcctBadge";
 
 export interface Option<TValue extends string | number = string | number> {
@@ -28,6 +29,7 @@ type SelectProps<
 > = {
   options: TOption[];
   error?: boolean;
+  errorText?: string;
 } & (MultipleSelectProps<TValue> | SingleSelectProps<TValue>);
 
 const Select = <TValue extends string | number>(
@@ -35,7 +37,7 @@ const Select = <TValue extends string | number>(
     myRef: LegacyRef<HTMLDivElement>;
   }
 ) => {
-  const { multiple, options, error, value, onChange, myRef } = props;
+  const { multiple, options, error, errorText, value, onChange, myRef } = props;
 
   const [isShown, setIsShown] = useState(false);
 
@@ -68,65 +70,73 @@ const Select = <TValue extends string | number>(
   };
 
   return (
-    <div
-      ref={myRef}
-      onClick={toggleIsShown}
-      onBlur={() => setIsShown(false)}
-      tabIndex={0}
-      className={clsx(
-        error ? "border-red-500" : "border-onSurface",
-        "relative flex min-h-[3.1em] min-w-[15em] max-w-[50%] items-center gap-2 rounded-lg border   bg-surface-light p-2 text-onSurface focus:border-primary-dark focus:ring-primary-dark"
-      )}
-    >
-      <div className="flex flex-grow flex-row flex-wrap items-center gap-1">
-        {multiple ? (
-          value.map((v) => (
-            <MultiSelectBadge
-              key={options.find((option) => option.value === v)!.label}
-              optionLabel={options.find((option) => option.value === v)!.label}
-              crossButton={
-                <CrossButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    selectOption(v);
-                  }}
-                />
-              }
-            />
-          ))
-        ) : (
-          <span>{options.find((option) => option.value === value)!.label}</span>
-        )}
-      </div>
-      <CrossButton onClick={clearOptions} />
-      {/* divider */}
-      <div className="w-[.05em] self-stretch bg-onSurface"></div>
-      {/* down */}
-      <div className="translate-y-[.25em] cursor-pointer border-[.25em] border-solid border-transparent border-t-onSurface"></div>
-
-      <ul
+    <div>
+      <div
+        ref={myRef}
+        onClick={toggleIsShown}
+        onBlur={() => setIsShown(false)}
+        tabIndex={0}
         className={clsx(
-          "absolute top-[calc(100%+0.25em)] left-0 z-50 max-h-60 w-full overflow-y-auto rounded-lg border border-onSurface bg-surface-light",
-          isShown ? "block" : "hidden"
+          error ? "border-red-500" : "border-onSurface",
+          "relative flex min-h-[3.1em] min-w-[15em] max-w-[50%] items-center gap-2 rounded-lg border   bg-surface-light p-2 text-onSurface focus:border-primary-dark focus:ring-primary-dark"
         )}
       >
-        {options.map((option) => (
-          <li
-            key={option.value}
-            onClick={(e) => {
-              e.stopPropagation();
-              selectOption(option.value);
-              setIsShown(false);
-            }}
-            className={clsx(
-              "hover:text-onSecondary,  flex cursor-pointer justify-between py-1 px-2 hover:bg-surface-default"
-            )}
-          >
-            <p>{option.label}</p>
-            {isOptionSelected(option) && <p>&#10003;</p>}
-          </li>
-        ))}
-      </ul>
+        <div className="flex flex-grow flex-row flex-wrap items-center gap-1">
+          {multiple ? (
+            value.map((v) => (
+              <MultiSelectBadge
+                key={options.find((option) => option.value === v)!.label}
+                optionLabel={
+                  options.find((option) => option.value === v)!.label
+                }
+                crossButton={
+                  <CrossButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      selectOption(v);
+                    }}
+                  />
+                }
+              />
+            ))
+          ) : (
+            <span>
+              {options.find((option) => option.value === value)!.label}
+            </span>
+          )}
+        </div>
+        <CrossButton onClick={clearOptions} />
+        {/* divider */}
+        <div className="w-[.05em] self-stretch bg-onSurface"></div>
+        {/* down */}
+        <div className="translate-y-[.25em] cursor-pointer border-[.25em] border-solid border-transparent border-t-onSurface"></div>
+
+        <ul
+          className={clsx(
+            "absolute top-[calc(100%+0.25em)] left-0 z-50 max-h-60 w-full overflow-y-auto rounded-lg border border-onSurface bg-surface-light",
+            isShown ? "block" : "hidden"
+          )}
+        >
+          {options.map((option) => (
+            <li
+              key={option.value}
+              onClick={(e) => {
+                e.stopPropagation();
+                selectOption(option.value);
+                setIsShown(false);
+              }}
+              className={clsx(
+                "hover:text-onSecondary,  flex cursor-pointer justify-between py-1 px-2 hover:bg-surface-default"
+              )}
+            >
+              <p>{option.label}</p>
+              {isOptionSelected(option) && <p>&#10003;</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <ErrorText error={error}>{errorText}</ErrorText>
     </div>
   );
 };

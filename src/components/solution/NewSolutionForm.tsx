@@ -235,7 +235,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             </FormGroup>
 
             <FormGroup
-              className="my-4"
+              className="my-7"
               error={!!formState.errors.solutions?.[index]?.topicIds}
             >
               <Label text="Topics" />
@@ -249,6 +249,9 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                     multiple={true}
                     options={subjectTopicOptions}
                     error={!!formState.errors.solutions?.[index]?.topicIds}
+                    errorText={
+                      formState.errors.solutions?.[index]?.topicIds?.message
+                    }
                   />
                 )}
               />
