@@ -146,8 +146,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
           from <span className="text-gray-300">{title}</span>
         </p>
         <p className="text-gray-400">
-          posted{" "}
-          <span className="text-gray-300">{solution.data.createdAt}</span>
+          posted <span className="text-gray-300">{}</span>
         </p>
       </h1>
 
