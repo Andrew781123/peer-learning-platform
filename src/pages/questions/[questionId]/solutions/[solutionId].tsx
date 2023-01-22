@@ -11,6 +11,7 @@ import superjson from "superjson";
 import VoteIcon from "../../../../components/vote/VoteIcon";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
+import { getTimeFromX } from "../../../../server/utils/dates";
 import {
   SolutionVoteValue,
   SOLUTION_VOTE_VALUE,
@@ -146,7 +147,10 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
           from <span className="text-gray-300">{title}</span>
         </p>
         <p className="text-gray-400">
-          posted <span className="text-gray-300">{}</span>
+          posted{" "}
+          <span className="text-gray-300">
+            {getTimeFromX({ toDate: new Date(solution.data.createdAt) })}
+          </span>
         </p>
       </h1>
 
