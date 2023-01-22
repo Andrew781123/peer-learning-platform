@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { DetailedHTMLProps, forwardRef, InputHTMLAttributes } from "react";
+import ErrorText from "./ErrorText";
 
 type InputProps = {
   error?: boolean;
@@ -19,14 +20,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         )}
         {...rest}
       />
-      <p
-        className={clsx(
-          error ? "text-red-500" : "text-gray-200",
-          "absolute text-sm"
-        )}
-      >
-        {errorText}
-      </p>
+      <ErrorText error={error}>{errorText}</ErrorText>
     </div>
   );
 });

@@ -203,7 +203,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             ) : null}
 
             <FormGroup
-              className="mb-6"
+              className="mb-7"
               error={!!formState.errors.solutions?.[index]?.questionNumber}
             >
               <Label text="Question Number" />
@@ -218,7 +218,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             </FormGroup>
 
             <FormGroup
-              className="my-4"
+              className="my-7"
               error={
                 !!formState.errors.solutions?.[index]?.difficultyRatingLabel
               }
@@ -226,6 +226,10 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               <Label text="Difficulty" />
               <RadioGroup
                 radios={difficultyRatingRadioOptions}
+                errorText={
+                  formState.errors.solutions?.[index]?.difficultyRatingLabel
+                    ?.message
+                }
                 {...register(`solutions.${index}.difficultyRatingLabel`)}
               />
             </FormGroup>
