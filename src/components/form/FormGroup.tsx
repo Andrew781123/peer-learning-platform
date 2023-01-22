@@ -18,16 +18,18 @@ const FormGroup = (props: FormGroupProps) => {
   );
 
   return (
-    <div className={classes}>
-      {React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          return React.cloneElement(child as React.ReactElement<any>, {
-            error: error ? 1 : 0,
-          });
-        }
+    <div>
+      <div className={classes}>
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            return React.cloneElement(child as React.ReactElement<any>, {
+              error: error ? 1 : 0,
+            });
+          }
 
-        return child;
-      })}
+          return child;
+        })}
+      </div>
     </div>
   );
 };

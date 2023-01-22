@@ -203,13 +203,16 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             ) : null}
 
             <FormGroup
-              className="mb-4"
+              className="mb-6"
               error={!!formState.errors.solutions?.[index]?.questionNumber}
             >
               <Label text="Question Number" />
               <Input
                 type="number"
                 onWheel={(e) => e.currentTarget.blur()}
+                errorText={
+                  formState.errors.solutions?.[index]?.questionNumber?.message
+                }
                 {...register(`solutions.${index}.questionNumber`)}
               />
             </FormGroup>
