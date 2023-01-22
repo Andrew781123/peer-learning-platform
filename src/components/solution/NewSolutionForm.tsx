@@ -34,6 +34,7 @@ const DEFAULT_SOLUTION = {
   questionNumber: "1",
   topicIds: [],
   solutionText: "",
+  difficultyRatingLabel: "",
 };
 
 const solutionSchema = z.object({
@@ -41,10 +42,21 @@ const solutionSchema = z.object({
   pastPaperId: z.number(),
   solutions: z.array(
     z.object({
-      questionNumber: z.string().min(1),
-      difficultyRatingLabel: z.string().min(1),
-      topicIds: z.array(z.number()).min(1),
-      solutionText: z.string(),
+      questionNumber: z
+        .string({
+          required_error: "Please enter the question number for this question",
+        })
+        .min(1, "Please enter the question number for this question")
+        .regex(/^[1-9]\d*$/, "Please enter a valid question number"),
+      difficultyRatingLabel: z
+        .string({
+          required_error: "Please select a difficulty level",
+        })
+        .min(1, "Please select a difficulty level"),
+      topicIds: z
+        .array(z.number())
+        .min(1, "Please select at least one topic for this question"),
+      solutionText: z.string().min(1, "Please fill in the solution"),
     })
   ),
 });
@@ -147,13 +159,6 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       })),
     });
   };
-
-  // useEffect(() => {
-  //   const subscription = watch((value, { name, type }) =>
-  //     console.log(value, name, type)
-  //   );
-  //   return () => subscription.unsubscribe();
-  // }, [watch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -282,7 +287,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               />
 
               <p className="text-sm text-red-500">
-                {formState.errors.solutions?.[index]?.topicIds?.message}
+                {formState.errors.solutions?.[index]?.solutionText?.message}
               </p>
             </FormGroup>
           </div>
