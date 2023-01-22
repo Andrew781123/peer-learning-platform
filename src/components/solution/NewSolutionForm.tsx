@@ -8,34 +8,48 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
+import { z } from "zod";
 import useSelectOptions from "../../hooks/useSelectOptions";
 import { trpc } from "../../utils/trpc";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
 import Label from "../form/Label";
 import RadioGroup from "../form/RadioGroup";
-import Select, { Option } from "../form/Select";
+import Select from "../form/Select";
 import Button from "../ui/Button";
 import CrossButton from "../ui/CrossButton";
 import reactQuillModules from "./react-quill-modules";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 type FormValues = {
-  subject: Option<string>;
-  pastPaper: Option<number>;
+  subjectId: string;
+  pastPaperId: number;
   solutions: {
     questionNumber: string;
     difficultyRatingLabel?: string;
-    topics: Option<number>[];
+    topicIds: number[];
     solutionText: string;
   }[];
 };
 
 const DEFAULT_SOLUTION = {
   questionNumber: "1",
-  topics: [],
+  topicIds: [],
   solutionText: "",
 };
+
+const solutionSchema = z.object({
+  subjectId: z.string().optional(),
+  pastPaperId: z.number().optional(),
+  solutions: z.array(
+    z.object({
+      questionNumber: z.string(),
+      difficultyRatingLabel: z.string().optional(),
+      topicIds: z.array(z.number()),
+      solutionText: z.string(),
+    })
+  ),
+});
 
 type NewSolutionFormProps = {
   subjectTopics: SubjectTopic[];
@@ -78,7 +92,6 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const mutation = trpc.solution.createMany.useMutation({
     onSuccess: () => {
-      console.log("success mutation");
       trpcContext.question.getAllByPastPaper.invalidate();
       router.push("/");
     },
@@ -90,8 +103,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const { handleSubmit, register, control, reset } = useForm<FormValues>({
     defaultValues: {
-      subject: subjectOptions[0],
-      pastPaper: pastPaperOptions[0],
+      subjectId: subjectOptions[0]!.value,
+      pastPaperId: pastPaperOptions[0]!.value,
       solutions: [DEFAULT_SOLUTION],
     },
   });
@@ -105,6 +118,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     append({
       ...DEFAULT_SOLUTION,
       questionNumber: "",
+      topicIds: [],
     });
   };
 
@@ -115,14 +129,14 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const onSubmit = (data: FormValues) => {
     mutation.mutate({
-      pastPaperId: data.pastPaper.value,
+      pastPaperId: data.pastPaperId,
       solutions: data.solutions.map((solution) => ({
         questionNumber: parseInt(solution.questionNumber),
         markdown: solution.solutionText,
         difficultyRatingId: difficultyRatingOptions.find(
           (option) => option.name === solution.difficultyRatingLabel
         )!.id,
-        topicIds: solution.topics.map((topic) => topic.value),
+        topicIds: solution.topicIds,
       })),
     });
   };
@@ -139,10 +153,15 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       <FormGroup className="my-2">
         <Label text="Subject" />
         <Controller
-          name="subject"
+          name="subjectId"
           control={control}
-          render={({ field }) => (
-            <Select {...field} multiple={false} options={subjectOptions} />
+          render={({ field: { ref, ...restFields } }) => (
+            <Select
+              {...restFields}
+              myRef={ref}
+              multiple={false}
+              options={subjectOptions}
+            />
           )}
         />
       </FormGroup>
@@ -150,10 +169,15 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       <FormGroup className="my-2">
         <Label text="Past Paper" />
         <Controller
-          name="pastPaper"
+          name="pastPaperId"
           control={control}
-          render={({ field }) => (
-            <Select {...field} multiple={false} options={pastPaperOptions} />
+          render={({ field: { ref, ...restFields } }) => (
+            <Select
+              {...restFields}
+              myRef={ref}
+              multiple={false}
+              options={pastPaperOptions}
+            />
           )}
         />
       </FormGroup>
@@ -192,11 +216,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             <FormGroup className="my-4">
               <Label text="Topics" />
               <Controller
-                name={`solutions.${index}.topics`}
+                name={`solutions.${index}.topicIds`}
                 control={control}
-                render={({ field }) => (
+                render={({ field: { ref, ...restFields } }) => (
                   <Select
-                    {...field}
+                    {...restFields}
+                    myRef={ref}
                     multiple={true}
                     options={subjectTopicOptions}
                   />

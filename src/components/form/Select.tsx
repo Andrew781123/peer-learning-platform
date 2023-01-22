@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { forwardRef, useState } from "react";
+import { LegacyRef, useState } from "react";
 import CrossButton from "../ui/CrossButton";
 import MultiSelectBadge from "./MultiSelcctBadge";
 
@@ -8,26 +8,33 @@ export interface Option<TValue extends string | number = string | number> {
   value: TValue;
 }
 
-type SingleSelectProps<TOption extends Option = Option> = {
+type SingleSelectProps<TValue extends string | number> = {
   multiple: false;
-  defaultValue?: TOption;
-  value?: TOption;
-  onChange: (value: TOption | undefined) => void;
+  defaultValue?: TValue;
+  value?: TValue;
+  onChange: (option: TValue | undefined) => void;
 };
 
-type MultipleSelectProps<TOption extends Option = Option> = {
+type MultipleSelectProps<TValue extends string | number> = {
   multiple: true;
-  defaultValue?: TOption[];
-  value: TOption[];
-  onChange: (value: TOption[]) => void;
+  defaultValue?: TValue[];
+  value: TValue[];
+  onChange: (option: TValue[]) => void;
 };
 
-type SelectProps<TOption extends Option = Option> = {
+type SelectProps<
+  TOption extends Option = Option,
+  TValue extends string | number = string
+> = {
   options: TOption[];
-} & (MultipleSelectProps<TOption> | SingleSelectProps<TOption>);
+} & (MultipleSelectProps<TValue> | SingleSelectProps<TValue>);
 
-const Select = forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
-  const { multiple, options, defaultValue, value, onChange } = props;
+const Select = <TValue extends string | number>(
+  props: SelectProps<Option<TValue>, TValue> & {
+    myRef: LegacyRef<HTMLDivElement>;
+  }
+) => {
+  const { multiple, options, defaultValue, value, onChange, myRef } = props;
 
   const [isShown, setIsShown] = useState(false);
 
@@ -40,27 +47,28 @@ const Select = forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
     multiple ? onChange([]) : onChange(undefined);
   };
 
-  const selectOption = (option: Option): void => {
-    if (!multiple) return onChange(option);
+  const selectOption = (selectedValue: TValue): void => {
+    if (!multiple) return onChange(selectedValue);
 
-    if (value.some((v) => v.value === option.value)) {
-      const newSelectedOptions = value.filter((v) => v.value !== option.value);
+    const isOptionAlreadySelected = value.some((v) => v === selectedValue);
+    if (isOptionAlreadySelected) {
+      const newSelectedOptions = value.filter((v) => v !== selectedValue);
 
       return onChange(newSelectedOptions);
     }
 
-    onChange([...value, option]);
+    onChange([...value, selectedValue]);
   };
 
-  const isOptionSelected = (option: Option): boolean => {
+  const isOptionSelected = (option: Option<TValue>): boolean => {
     return multiple
-      ? value.some((v) => v.value === option.value)
-      : value?.value === option.value;
+      ? value.some((v) => v === option.value)
+      : value === option.value;
   };
 
   return (
     <div
-      ref={ref}
+      ref={myRef}
       onClick={toggleIsShown}
       onBlur={() => setIsShown(false)}
       tabIndex={0}
@@ -70,8 +78,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
         {multiple ? (
           value.map((v) => (
             <MultiSelectBadge
-              key={v.label}
-              optionLabel={v.label}
+              key={options.find((option) => option.value === v)!.label}
+              optionLabel={options.find((option) => option.value === v)!.label}
               crossButton={
                 <CrossButton
                   onClick={(e) => {
@@ -83,7 +91,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
             />
           ))
         ) : (
-          <span>{value?.label}</span>
+          <span>{options.find((option) => option.value === value)!.label}</span>
         )}
       </div>
       <CrossButton onClick={clearOptions} />
@@ -103,7 +111,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
             key={option.value}
             onClick={(e) => {
               e.stopPropagation();
-              selectOption(option);
+              selectOption(option.value);
               setIsShown(false);
             }}
             className={clsx(
@@ -117,6 +125,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>((props, ref) => {
       </ul>
     </div>
   );
-});
+};
 
 export default Select;
