@@ -104,7 +104,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
       trpcUtils.solutionVote.getVoteInfo.setData({
         voteOfUser: voteValue,
-        votes: previousVoteInfo?.votes ?? 0 + voteValue,
+        votes: previousVoteInfo?.votes ?? solution.data!.votes + voteValue,
       });
 
       return { previousVoteInfo };
@@ -140,8 +140,15 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
   return (
     <div className="divide-y divide-gray-400">
-      <h1 className="mb-2 text-xl font-bold">
-        {`Solution of Question ${questionNumber} from ${title}`}
+      <h1 className="mb-2">
+        <p className="text-xl font-bold">{`Solution of Question ${questionNumber}`}</p>
+        <p className="text-gray-400">
+          from <span className="text-gray-300">{title}</span>
+        </p>
+        <p className="text-gray-400">
+          posted{" "}
+          <span className="text-gray-300">{solution.data.createdAt}</span>
+        </p>
       </h1>
 
       <div className="flex w-full gap-4">

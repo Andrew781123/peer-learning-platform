@@ -60,6 +60,8 @@ model Solution {
   votes              SolutionQuestionVote[]
   difficultyRating   DifficultyRatingOption @relation(fields: [difficultyRatingId], references: [id])
   difficultyRatingId Int
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @default(now()) @updatedAt
 
   @@index([userId], name: "userId")
   @@index([difficultyRatingId], name: "difficultyRatingnId")
@@ -74,6 +76,8 @@ model SolutionQuestionVote {
   user       User     @relation(fields: [userId], references: [id])
   userId     String
   value      Int      @db.TinyInt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@unique([questionId, solutionId, userId], name: "solutionId_questionId_userId_unique")
   @@index([questionId], name: "questionId")
@@ -88,6 +92,8 @@ model SolutionComment {
   user       User     @relation(fields: [userId], references: [id])
   userId     String
   markdown   String   @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@index([solutionId], name: "solutionId")
   @@index([userId], name: "userId")

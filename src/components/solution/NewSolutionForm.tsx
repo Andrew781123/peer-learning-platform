@@ -85,7 +85,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     onSettled: () => {
       reset();
     },
-    onError: () => console.log("error mutation"),
+    // onError: () => console.log("error mutation"),
   });
 
   const { handleSubmit, register, control, reset } = useForm<FormValues>({
