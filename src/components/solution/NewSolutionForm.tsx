@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   DifficultyRatingOption,
   PastPaper,
@@ -6,7 +7,13 @@ import {
 } from "@prisma/client";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { useEffect } from "react";
+import {
+  Controller,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import { z } from "zod";
 import useSelectOptions from "../../hooks/useSelectOptions";
@@ -19,18 +26,8 @@ import Select from "../form/Select";
 import Button from "../ui/Button";
 import CrossButton from "../ui/CrossButton";
 import reactQuillModules from "./react-quill-modules";
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-type FormValues = {
-  subjectId: string;
-  pastPaperId: number;
-  solutions: {
-    questionNumber: string;
-    difficultyRatingLabel?: string;
-    topicIds: number[];
-    solutionText: string;
-  }[];
-};
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const DEFAULT_SOLUTION = {
   questionNumber: "1",
@@ -39,12 +36,12 @@ const DEFAULT_SOLUTION = {
 };
 
 const solutionSchema = z.object({
-  subjectId: z.string().optional(),
-  pastPaperId: z.number().optional(),
+  subjectId: z.string(),
+  pastPaperId: z.number(),
   solutions: z.array(
     z.object({
       questionNumber: z.string(),
-      difficultyRatingLabel: z.string().optional(),
+      difficultyRatingLabel: z.string(),
       topicIds: z.array(z.number()),
       solutionText: z.string(),
     })
@@ -101,13 +98,20 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     // onError: () => console.log("error mutation"),
   });
 
-  const { handleSubmit, register, control, reset } = useForm<FormValues>({
+  const { handleSubmit, register, control, reset, formState } = useForm<
+    z.infer<typeof solutionSchema>
+  >({
     defaultValues: {
       subjectId: subjectOptions[0]!.value,
       pastPaperId: pastPaperOptions[0]!.value,
       solutions: [DEFAULT_SOLUTION],
     },
+    resolver: zodResolver(solutionSchema),
   });
+
+  useEffect(() => {
+    console.log(formState.errors);
+  }, [formState]);
 
   const { fields, append, remove } = useFieldArray({
     name: "solutions",
@@ -119,6 +123,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       ...DEFAULT_SOLUTION,
       questionNumber: "",
       topicIds: [],
+      difficultyRatingLabel: "",
+      solutionText: "",
     });
   };
 
@@ -127,7 +133,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     remove(index);
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit: SubmitHandler<z.infer<typeof solutionSchema>> = (data) => {
     mutation.mutate({
       pastPaperId: data.pastPaperId,
       solutions: data.solutions.map((solution) => ({
