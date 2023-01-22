@@ -161,7 +161,10 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
       <div className="flex w-full gap-4">
         <div className="mt-2 flex w-fit flex-col items-center">
-          <button onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.upVoted)}>
+          <button
+            onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.upVoted)}
+            disabled={!voteInfo.data}
+          >
             <VoteIcon
               type="upVote"
               size="medium"
@@ -173,7 +176,10 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
             {voteInfo.data?.votes ?? solution.data.votes}
           </p>
 
-          <button onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.downVoted)}>
+          <button
+            onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.downVoted)}
+            disabled={!voteInfo.data}
+          >
             <VoteIcon
               type="downVote"
               size="medium"
