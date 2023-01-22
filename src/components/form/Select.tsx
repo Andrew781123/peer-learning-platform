@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { LegacyRef, useState } from "react";
 import CrossButton from "../ui/CrossButton";
-import ErrorText from "./ErrorText";
 import MultiSelectBadge from "./MultiSelcctBadge";
 
 export interface Option<TValue extends string | number = string | number> {
@@ -134,9 +133,17 @@ const Select = <TValue extends string | number>(
             </li>
           ))}
         </ul>
-      </div>
 
-      <ErrorText error={error}>{errorText}</ErrorText>
+        <p
+          className={clsx(
+            error ? "text-red-500" : "text-gray-200",
+            "absolute bottom-[-1.5em] left-0 text-sm"
+          )}
+        >
+          {errorText}
+        </p>
+        {/* <ErrorText error={error}>{errorText}</ErrorText> */}
+      </div>
     </>
   );
 };

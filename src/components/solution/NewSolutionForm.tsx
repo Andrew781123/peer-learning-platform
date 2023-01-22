@@ -53,9 +53,7 @@ const solutionSchema = z.object({
           required_error: "Please select a difficulty level",
         })
         .min(1, "Please select a difficulty level"),
-      topicIds: z
-        .array(z.number())
-        .min(1, "Please select at least one topic for this question"),
+      topicIds: z.array(z.number()).min(1, "Please select at least one topic"),
       solutionText: z.string().min(1, "Please fill in the solution"),
     })
   ),
