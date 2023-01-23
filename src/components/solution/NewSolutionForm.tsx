@@ -181,13 +181,6 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   const { fields, append, remove } = useFieldArray({
     name: "solutions",
     control,
-    rules: {
-      maxLength: 1,
-      // validate: (value) => {
-      //   console.log({ value });
-      //   return "not correct";
-      // },
-    },
   });
 
   const addSolutionFormItem = () => {
