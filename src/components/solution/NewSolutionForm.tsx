@@ -8,7 +8,6 @@ import {
 import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import {
   Controller,
   SubmitHandler,
@@ -22,6 +21,7 @@ import { trpc } from "../../utils/trpc";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
 import Label from "../form/Label";
+import MarkdownEditor from "../form/MarkdownEditor/MarkdownEditor";
 import RadioGroup from "../form/RadioGroup";
 import Select from "../form/Select";
 import Button from "../ui/Button";
@@ -173,10 +173,10 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       resolver: zodResolver(solutionSchema),
     });
 
-  useEffect(() => {
-    console.log(formState.errors);
-    console.log(formState.errors.solutions?.root);
-  }, [formState]);
+  // useEffect(() => {
+  //   console.log(formState.errors);
+  //   console.log(formState.errors.solutions?.root);
+  // }, [formState]);
 
   const { fields, append, remove } = useFieldArray({
     name: "solutions",
@@ -342,6 +342,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                 {formState.errors.solutions?.[index]?.solutionText?.message}
               </p>
             </FormGroup>
+            <MarkdownEditor />
           </div>
         ))}
         <Button type="button" onClick={addSolutionFormItem}>

@@ -6,7 +6,7 @@ type IconProps = {
 };
 
 const ICON_SIZE_TO_FONT_SIZE_MAP: Record<IconSize, string> = {
-  small: "1.5rem",
+  small: "1.3rem",
   medium: "2.2rem",
   large: "3rem",
 };
