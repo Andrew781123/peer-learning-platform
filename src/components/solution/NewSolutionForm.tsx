@@ -40,23 +40,77 @@ const DEFAULT_SOLUTION = {
 const solutionSchema = z.object({
   subjectId: z.string(),
   pastPaperId: z.number().int(),
-  solutions: z.array(
-    z.object({
-      questionNumber: z
-        .string({
-          required_error: "Please enter the question number for this question",
-        })
-        .min(1, "Please enter the question number for this question")
-        .regex(/^[1-9]\d*$/, "Please enter a valid question number"),
-      difficultyRatingLabel: z
-        .string({
-          required_error: "Please select a difficulty level",
-        })
-        .min(1, "Please select a difficulty level"),
-      topicIds: z.array(z.number()).min(1, "Please select at least one topic"),
-      solutionText: z.string().min(1, "Please fill in the solution"),
-    })
-  ),
+  solutions: z
+    .array(
+      z.object({
+        questionNumber: z
+          .string({
+            required_error:
+              "Please enter the question number for this question",
+          })
+          .min(1, "Please enter the question number for this question")
+          .regex(/^[1-9]\d*$/, "Please enter a valid question number"),
+        difficultyRatingLabel: z
+          .string({
+            required_error: "Please select a difficulty level",
+          })
+          .min(1, "Please select a difficulty level"),
+        topicIds: z
+          .array(z.number())
+          .min(1, "Please select at least one topic"),
+        solutionText: z.string().min(1, "Please fill in the solution"),
+      })
+    )
+    .refine(
+      (solutions) => {
+        const questionNumbers = solutions.map(
+          (solution) => solution.questionNumber
+        );
+
+        const uniqueQuestionNumbers = new Set(questionNumbers);
+
+        return (
+          questionNumbers.length === uniqueQuestionNumbers.size &&
+          questionNumbers.every((questionNumber) =>
+            uniqueQuestionNumbers.has(questionNumber)
+          )
+        );
+      },
+      (solutions) => {
+        const questionNumberToCountMap = solutions.reduce(
+          (map, { questionNumber }, index) => {
+            return {
+              ...map,
+              [questionNumber]: [...(map[questionNumber] ?? []), index],
+            };
+          },
+          {} as Record<string, number[]>
+        );
+
+        const duplicateQuestionNumbers = Object.entries(
+          questionNumberToCountMap
+        )
+          .filter(([_, indexes]) => indexes.length > 1)
+          .map(
+            ([questionNumber, indexes]) =>
+              [questionNumber, indexes] as [string, number[]]
+          );
+
+        const firstDuplicatedQuestionNumberInfo = duplicateQuestionNumbers[0];
+
+        if (!firstDuplicatedQuestionNumberInfo) return {};
+
+        const [firstDuplicatedQuestionNumber, indexes] =
+          firstDuplicatedQuestionNumberInfo;
+        firstDuplicatedQuestionNumber;
+
+        // TODO - return array of paths to show errors for each duplicated question number
+        return {
+          message: `You have already answered question number ${firstDuplicatedQuestionNumber} above`,
+          path: [indexes[indexes.length - 1]!, "questionNumber"],
+        };
+      }
+    ),
 });
 
 type NewSolutionFormProps = {
@@ -109,25 +163,31 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     // onError: () => console.log("error mutation"),
   });
 
-  const { handleSubmit, register, control, reset, formState } = useForm<
-    z.infer<typeof solutionSchema>
-  >({
-    defaultValues: {
-      subjectId: subjectOptions[0]!.value,
-      pastPaperId: pastPaperOptions[0]!.value,
-      solutions: [DEFAULT_SOLUTION],
-    },
-    resolver: zodResolver(solutionSchema),
-  });
+  const { handleSubmit, register, control, reset, formState, getValues } =
+    useForm<z.infer<typeof solutionSchema>>({
+      defaultValues: {
+        subjectId: subjectOptions[0]!.value,
+        pastPaperId: pastPaperOptions[0]!.value,
+        solutions: [DEFAULT_SOLUTION],
+      },
+      resolver: zodResolver(solutionSchema),
+    });
 
   useEffect(() => {
-    console.log(123123, !!formState.errors.solutions?.[1]?.questionNumber);
     console.log(formState.errors);
+    console.log(formState.errors.solutions?.root);
   }, [formState]);
 
   const { fields, append, remove } = useFieldArray({
     name: "solutions",
     control,
+    rules: {
+      maxLength: 1,
+      // validate: (value) => {
+      //   console.log({ value });
+      //   return "not correct";
+      // },
+    },
   });
 
   const addSolutionFormItem = () => {
@@ -219,6 +279,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               <Input
                 type="number"
                 onWheel={(e) => e.currentTarget.blur()}
+                placeholder="e.g. 1"
                 errorText={
                   formState.errors.solutions?.[index]?.questionNumber?.message
                 }
