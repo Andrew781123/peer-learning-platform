@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useRef } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import Icon from "../../ui/Icon";
 
@@ -9,6 +10,12 @@ type MarkdownEditorProps = {
 const MarkdownEditor = (props: MarkdownEditorProps) => {
   const { error } = props;
 
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
+  const onAddImageClick = () => {
+    imageInputRef.current?.click();
+  };
+
   return (
     <div
       className={clsx(
@@ -17,15 +24,22 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
       )}
     >
       <div className="flex w-full justify-start p-3">
-        <button>
+        <button onClick={onAddImageClick}>
           <Icon size="small">
             {(fontSize) => <BiImageAdd fontSize={fontSize} />}
           </Icon>
         </button>
+        <input
+          ref={imageInputRef}
+          type="file"
+          accept="image/png, image/jpeg"
+          className="hidden"
+        />
       </div>
+
       <div
         contentEditable
-        className="flex-grow rounded-b-lg border-t border-gray-300 bg-surface-light p-3"
+        className="flex-grow rounded-b-lg border-t border-gray-300 bg-surface-light p-3 focus:outline-none"
       ></div>
     </div>
   );
