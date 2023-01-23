@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import Icon from "../../ui/Icon";
 
@@ -12,8 +12,24 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
 
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const onAddImageClick = () => {
+  const [markdown, setMarkdown] = useState("");
+
+  const handleMarkdownChange = (e: React.FormEvent<HTMLDivElement>) => {
+    setMarkdown(e.currentTarget.innerText);
+  };
+
+  const handleAddImageClick = () => {
     imageInputRef.current?.click();
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    console.log(file, typeof file);
   };
 
   return (
@@ -24,13 +40,14 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
       )}
     >
       <div className="flex w-full justify-start p-3">
-        <button onClick={onAddImageClick}>
+        <button type="button" onClick={handleAddImageClick}>
           <Icon size="small">
             {(fontSize) => <BiImageAdd fontSize={fontSize} />}
           </Icon>
         </button>
         <input
           ref={imageInputRef}
+          onChange={handleImageSelect}
           type="file"
           accept="image/png, image/jpeg"
           className="hidden"
@@ -39,8 +56,12 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
 
       <div
         contentEditable
+        suppressContentEditableWarning
+        onChange={handleMarkdownChange}
         className="flex-grow rounded-b-lg border-t border-gray-300 bg-surface-light p-3 focus:outline-none"
-      ></div>
+      >
+        {markdown}
+      </div>
     </div>
   );
 };
