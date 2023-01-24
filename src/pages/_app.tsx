@@ -5,7 +5,6 @@ import { SessionProvider } from "next-auth/react";
 import type { AppType } from "next/app";
 import Layout from "../components/ui/Layout";
 import "../styles/globals.scss";
-import "../styles/react-quill.css";
 import { trpc } from "../utils/trpc";
 
 const MyApp: AppType<{ session: Session | null }> = ({

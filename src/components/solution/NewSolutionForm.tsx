@@ -8,6 +8,7 @@ import {
 import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import {
   Controller,
   SubmitHandler,
@@ -167,7 +168,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     // onError: () => console.log("error mutation"),
   });
 
-  const { handleSubmit, register, control, reset, formState, getValues } =
+  const { handleSubmit, register, control, reset, formState, watch, setValue } =
     useForm<z.infer<typeof solutionSchema>>({
       defaultValues: {
         subjectId: subjectOptions[0]!.value,
@@ -177,10 +178,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       resolver: zodResolver(solutionSchema),
     });
 
-  // useEffect(() => {
-  //   console.log(formState.errors);
-  //   console.log(formState.errors.solutions?.root);
-  // }, [formState]);
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) =>
+      console.log(value, name, type)
+    );
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const { fields, append, remove } = useFieldArray({
     name: "solutions",
@@ -202,6 +205,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof solutionSchema>> = (data) => {
+    console.log(data.solutions[0]?.solutionText);
     mutation.mutate({
       pastPaperId: data.pastPaperId,
       solutions: data.solutions.map((solution) => ({
@@ -333,8 +337,16 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               <Controller
                 name={`solutions.${index}.solutionText`}
                 control={control}
-                render={({ field: { ref, ...rest } }) => (
-                  <MarkdownEditor editorRef={ref} {...rest} />
+                render={({ field: { ref, onChange, ...rest } }) => (
+                  <MarkdownEditor
+                    editorRef={ref}
+                    onChange={(text) =>
+                      setValue(`solutions.${index}.solutionText`, text, {
+                        shouldValidate: true,
+                      })
+                    }
+                    {...rest}
+                  />
                 )}
               />
 

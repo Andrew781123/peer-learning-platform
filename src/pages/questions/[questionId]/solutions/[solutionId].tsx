@@ -9,6 +9,7 @@ import {
 import { useSession } from "next-auth/react";
 import { ParsedUrlQuery } from "querystring";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import superjson from "superjson";
 import VoteIcon from "../../../../components/vote/VoteIcon";
 import { createContextInner } from "../../../../server/trpc/context";
@@ -202,7 +203,12 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
         </div>
 
         <div className="mt-2">
-          <ReactMarkdown>{solution.data.markdown}</ReactMarkdown>
+          <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
+            className="prose text-white"
+          >
+            {solution.data.markdown.replace(/\n/, "  \n")}
+          </ReactMarkdown>
         </div>
       </div>
     </div>

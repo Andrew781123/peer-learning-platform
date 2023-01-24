@@ -24,6 +24,7 @@ export const solutionRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       const { pastPaperId, solutions } = input;
+      console.log("server", solutions[0]?.markdown);
 
       const questionIdToSolutionMap = new Map<
         [string, string],
