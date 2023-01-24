@@ -53,7 +53,11 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
       )}
     >
       <div className="flex w-full justify-start p-3">
-        <button type="button" onClick={handleAddImageClick}>
+        <button
+          type="button"
+          onClick={handleAddImageClick}
+          disabled={imageMutation.isLoading}
+        >
           <Icon size="small">
             {(fontSize) => <BiImageAdd fontSize={fontSize} />}
           </Icon>
@@ -72,8 +76,16 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
         suppressContentEditableWarning
         ref={editorRef}
         onChange={handleMarkdownChange}
-        className="flex-grow rounded-b-lg border-t border-gray-300 bg-surface-light p-3 focus:outline-none"
+        className="relative  flex-grow rounded-b-lg border-t border-gray-300 bg-surface-light p-3 focus:outline-none"
       >
+        {imageMutation.isLoading && (
+          <div
+            className="absolute top-0 left-0 flex h-full w-full items-center justify-center bg-gray-100 opacity-40"
+            contentEditable={false}
+          >
+            <p className="text-black">Uploading image...</p>
+          </div>
+        )}
         {value}
       </div>
     </div>
