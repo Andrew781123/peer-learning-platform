@@ -27,8 +27,8 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
 
   const imageMutation = useMutation({
     mutationFn: (base64Image: string) => uploadImage(base64Image),
-    onSuccess: (imageHash: string) => {
-      setMarkdown((prevMarkdown) => `${prevMarkdown}![image](${imageHash})`);
+    onSuccess: (imageLink: string) => {
+      setMarkdown((prevMarkdown) => `${prevMarkdown}\n![image](${imageLink})`);
     },
   });
 

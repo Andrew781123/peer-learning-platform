@@ -30,6 +30,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.41.5",
     "react-icons": "^4.7.1",
+    "react-markdown": "^8.0.5",
     "react-quill": "^2.0.0",
     "sass": "^1.57.1",
     "superjson": "1.12.1",

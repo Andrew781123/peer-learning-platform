@@ -25,11 +25,11 @@ export const getImage = async (imageHash: string) => {
 };
 
 export const uploadImage = async (base64Image: string) => {
-  const response = await imgurAxiosInstance.post<{ id: string }>("image", {
+  const response = await imgurAxiosInstance.post<{ link: string }>("image", {
     image: base64Image.split(",")[1],
     type: "base64",
     name: "test.jpg",
   });
 
-  return response.data.id;
+  return response.data.link;
 };

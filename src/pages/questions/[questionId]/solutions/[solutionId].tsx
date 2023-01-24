@@ -8,6 +8,7 @@ import {
 } from "next";
 import { useSession } from "next-auth/react";
 import { ParsedUrlQuery } from "querystring";
+import ReactMarkdown from "react-markdown";
 import superjson from "superjson";
 import VoteIcon from "../../../../components/vote/VoteIcon";
 import { createContextInner } from "../../../../server/trpc/context";
@@ -200,6 +201,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
           </button>
         </div>
 
+        <ReactMarkdown>{solution.data.markdown}</ReactMarkdown>
         {/* <div
           className="unreset mt-3"
           dangerouslySetInnerHTML={{ __html: solution.data.markdown }}
