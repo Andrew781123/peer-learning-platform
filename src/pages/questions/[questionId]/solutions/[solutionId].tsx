@@ -201,15 +201,9 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
           </button>
         </div>
 
-        <ReactMarkdown>{solution.data.markdown}</ReactMarkdown>
-        {/* <div
-          className="unreset mt-3"
-          dangerouslySetInnerHTML={{ __html: solution.data.markdown }}
-        ></div> */}
-        <iframe
-          className="mt-2 w-full rounded bg-gray-300"
-          srcDoc={solution.data.markdown}
-        ></iframe>
+        <div className="mt-2">
+          <ReactMarkdown>{solution.data.markdown}</ReactMarkdown>
+        </div>
       </div>
     </div>
   );

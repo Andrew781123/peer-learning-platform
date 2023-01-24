@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { uploadImage } from "../../../services/imgur";
 import { convertToBase64 } from "../../../utils/image";
@@ -8,17 +8,18 @@ import Icon from "../../ui/Icon";
 
 type MarkdownEditorProps = {
   error?: boolean;
+  value: string;
+  onChange: (markdown: string) => void;
+  editorRef?: React.LegacyRef<HTMLDivElement>;
 };
 
 const MarkdownEditor = (props: MarkdownEditorProps) => {
-  const { error } = props;
+  const { error, editorRef, value, onChange } = props;
 
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const [markdown, setMarkdown] = useState("");
-
   const handleMarkdownChange = (e: React.FormEvent<HTMLDivElement>) => {
-    setMarkdown(e.currentTarget.innerText);
+    onChange(e.currentTarget.innerText);
   };
 
   const handleAddImageClick = () => {
@@ -28,7 +29,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
   const imageMutation = useMutation({
     mutationFn: (base64Image: string) => uploadImage(base64Image),
     onSuccess: (imageLink: string) => {
-      setMarkdown((prevMarkdown) => `${prevMarkdown}\n![image](${imageLink})`);
+      onChange(`${value}\n![image](${imageLink})`);
     },
   });
 
@@ -69,10 +70,11 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
       <div
         contentEditable
         suppressContentEditableWarning
+        ref={editorRef}
         onChange={handleMarkdownChange}
         className="flex-grow rounded-b-lg border-t border-gray-300 bg-surface-light p-3 focus:outline-none"
       >
-        {markdown}
+        {value}
       </div>
     </div>
   );

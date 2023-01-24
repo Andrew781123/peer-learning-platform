@@ -5,7 +5,6 @@ import {
   Subject,
   SubjectTopic,
 } from "@prisma/client";
-import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -18,7 +17,6 @@ import {
 import "react-quill/dist/quill.snow.css";
 import { z } from "zod";
 import useSelectOptions from "../../hooks/useSelectOptions";
-import { uploadImage } from "../../services/imgur";
 import { trpc } from "../../utils/trpc";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
@@ -28,7 +26,6 @@ import RadioGroup from "../form/RadioGroup";
 import Select from "../form/Select";
 import Button from "../ui/Button";
 import CrossButton from "../ui/CrossButton";
-import reactQuillModules from "./react-quill-modules";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -130,9 +127,6 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   //   queryKey: ["image"],
   //   queryFn: () => getImage("o0ckX8G"),
   // });
-  const imageMutation = useMutation({
-    mutationFn: (imageFile: File) => uploadImage(imageFile),
-  });
 
   const router = useRouter();
 
@@ -340,11 +334,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                 name={`solutions.${index}.solutionText`}
                 control={control}
                 render={({ field: { ref, ...rest } }) => (
-                  <ReactQuill
-                    {...rest}
-                    theme="snow"
-                    modules={reactQuillModules}
-                  />
+                  <MarkdownEditor editorRef={ref} {...rest} />
                 )}
               />
 
@@ -352,7 +342,6 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                 {formState.errors.solutions?.[index]?.solutionText?.message}
               </p>
             </FormGroup>
-            <MarkdownEditor />
           </div>
         ))}
         <Button type="button" onClick={addSolutionFormItem}>
