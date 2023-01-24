@@ -1,6 +1,9 @@
+import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import React, { useRef, useState } from "react";
 import { BiImageAdd } from "react-icons/bi";
+import { uploadImage } from "../../../services/imgur";
+import { convertToBase64 } from "../../../utils/image";
 import Icon from "../../ui/Icon";
 
 type MarkdownEditorProps = {
@@ -22,14 +25,23 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
     imageInputRef.current?.click();
   };
 
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const imageMutation = useMutation({
+    mutationFn: (base64Image: string) => uploadImage(base64Image),
+    onSuccess: (imageHash: string) => {
+      setMarkdown((prevMarkdown) => `${prevMarkdown}![image](${imageHash})`);
+    },
+  });
+
+  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (!file) {
       return;
     }
 
-    console.log(file, typeof file);
+    const base64Image = await convertToBase64(file);
+
+    imageMutation.mutate(base64Image);
   };
 
   return (

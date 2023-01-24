@@ -5,6 +5,7 @@ import {
   Subject,
   SubjectTopic,
 } from "@prisma/client";
+import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -17,6 +18,7 @@ import {
 import "react-quill/dist/quill.snow.css";
 import { z } from "zod";
 import useSelectOptions from "../../hooks/useSelectOptions";
+import { uploadImage } from "../../services/imgur";
 import { trpc } from "../../utils/trpc";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
@@ -123,6 +125,14 @@ type NewSolutionFormProps = {
 const NewSolutionForm = (props: NewSolutionFormProps) => {
   const { subjectTopics, subjects, pastPapers, difficultyRatingOptions } =
     props;
+
+  // const { data, isSuccess } = useQuery({
+  //   queryKey: ["image"],
+  //   queryFn: () => getImage("o0ckX8G"),
+  // });
+  const imageMutation = useMutation({
+    mutationFn: (imageFile: File) => uploadImage(imageFile),
+  });
 
   const router = useRouter();
 
