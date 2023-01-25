@@ -8,7 +8,7 @@ import {
 import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Controller,
   SubmitHandler,
@@ -133,6 +133,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const trpcContext = trpc.useContext();
 
+  const [isPreview, setIsPreview] = useState(false);
+
   const { options: subjectTopicOptions } = useSelectOptions({
     data: subjectTopics,
     labelKey: "name",
@@ -216,6 +218,10 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
         topicIds: solution.topicIds,
       })),
     });
+  };
+
+  const togglePreview = () => {
+    setIsPreview((isPreview) => !isPreview);
   };
 
   return (
@@ -332,12 +338,25 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               labelPosition="top"
               error={!!formState.errors.solutions?.[index]?.solutionText}
             >
-              <Label text="Write your solution here" />
+              <Label
+                text={
+                  <div className="flex justify-between">
+                    <p>Write your solution here</p>
+                    <button type="button" onClick={togglePreview}>
+                      {isPreview ? "Edit" : "Preview"}
+                    </button>
+                  </div>
+                }
+              />
               <Controller
                 name={`solutions.${index}.solutionText`}
                 control={control}
                 render={({ field: { ref, ...rest } }) => (
-                  <MarkdownEditor editorRef={ref} {...rest} />
+                  <MarkdownEditor
+                    editorRef={ref}
+                    isPreview={isPreview}
+                    {...rest}
+                  />
                 )}
               />
 

@@ -12,5 +12,10 @@
     -webkit-appearance: none;
     margin: 0;
   }
+
+  .w-md-editor-content,
+  .w-md-editor-toolbar {
+    @apply bg-surface-light;
+  }
 }
 // @import "./unreset.scss";

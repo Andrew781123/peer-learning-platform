@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 type LabelProps = {
-  text: string;
+  text: string | React.ReactNode;
   error?: boolean;
 };
 
