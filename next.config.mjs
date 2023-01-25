@@ -1,5 +1,4 @@
 // @ts-check
-import { env } from "./src/env/server.mjs";
 
 /**
  * Don't be scared of the generics here.
@@ -10,8 +9,10 @@ import { env } from "./src/env/server.mjs";
  * @constraint {{import('next').NextConfig}}
  */
 function defineNextConfig(config) {
-  return config;
+  return removeImports()(config);
 }
+
+import removeImports from "next-remove-imports";
 
 export default defineNextConfig({
   reactStrictMode: true,
