@@ -8,6 +8,7 @@ import {
 import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import {
   Controller,
   SubmitHandler,
@@ -177,12 +178,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       resolver: zodResolver(solutionSchema),
     });
 
-  // useEffect(() => {
-  //   const subscription = watch((value, { name, type }) =>
-  //     console.log(value, name, type)
-  //   );
-  //   return () => subscription.unsubscribe();
-  // }, [watch]);
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) =>
+      console.log(value, name, type)
+    );
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const { fields, append, remove } = useFieldArray({
     name: "solutions",

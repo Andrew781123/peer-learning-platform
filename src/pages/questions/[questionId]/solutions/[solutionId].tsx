@@ -205,7 +205,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
         <div className="mt-2">
           <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
-            className="prose text-white"
+            className="prose dark:prose-invert"
           >
             {solution.data.markdown.replace(/\n/, "  \n")}
           </ReactMarkdown>

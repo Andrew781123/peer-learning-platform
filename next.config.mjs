@@ -1,4 +1,5 @@
 // @ts-check
+import removeImports from "next-remove-imports";
 
 /**
  * Don't be scared of the generics here.
@@ -11,8 +12,6 @@
 function defineNextConfig(config) {
   return removeImports()(config);
 }
-
-import removeImports from "next-remove-imports";
 
 export default defineNextConfig({
   reactStrictMode: true,
