@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { uploadImage } from "../../../services/imgur";
 import { convertToBase64 } from "../../../utils/image";
+import { insertImageToMarkdown } from "../../../utils/solution/markdown";
 import Icon from "../../ui/Icon";
 
 type MarkdownEditorProps = {
@@ -31,8 +32,14 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
   const imageMutation = useMutation({
     mutationFn: (base64Image: string) => uploadImage(base64Image),
     onSuccess: (imageLink: string) => {
-      onChange(`${value}\n![image](${imageLink})`);
+      onChange(
+        insertImageToMarkdown({
+          currentMarkdown: value,
+          imageLink,
+        })
+      );
     },
+    onError: () => alert("Can't upload image, try again later"),
   });
 
   const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,10 +58,10 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
     <div
       className={clsx(
         error ? "border-red-500" : "border-gray-300",
-        "flex min-h-[10em] w-full flex-col rounded-lg border"
+        "flex min-h-[10em]  flex-col rounded-lg border"
       )}
     >
-      <div className="flex w-full justify-start p-3">
+      <div className="flex justify-start p-3">
         <button
           type="button"
           onClick={handleAddImageClick}
@@ -79,9 +86,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
           onChange={handleMarkdownChange}
           value={value}
           className="flex-grow resize-none rounded-b-lg border-t border-gray-300 bg-surface-light p-3 outline-none focus:border-none"
-        >
-          {/* <pre>{value}</pre> */}
-        </textarea>
+        ></textarea>
         {imageMutation.isLoading && (
           <div
             className="absolute top-0 left-0 flex h-full w-full items-center justify-center whitespace-pre-wrap bg-gray-100 opacity-40 outline-none focus:border-primary-light"
