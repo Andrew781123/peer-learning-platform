@@ -16,7 +16,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         ref={ref}
         className={clsx(
           error ? "border-red-500" : "border-gray-300",
-          "relative rounded-lg border bg-surface-light focus:border-primary-dark focus:ring-primary-dark"
+          "relative min-h-[2.5rem] rounded-lg border bg-surface-light p-2 focus:border-primary-dark focus:ring-primary-dark"
         )}
         {...rest}
       />

@@ -7,7 +7,7 @@ import {
 } from "@prisma/client";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Controller,
   SubmitHandler,
@@ -176,12 +176,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       resolver: zodResolver(solutionSchema),
     });
 
-  useEffect(() => {
-    const subscription = watch((value, { name, type }) =>
-      console.log(value, name, type)
-    );
-    return () => subscription.unsubscribe();
-  }, [watch]);
+  // useEffect(() => {
+  //   const subscription = watch((value, { name, type }) =>
+  //     console.log(value, name, type)
+  //   );
+  //   return () => subscription.unsubscribe();
+  // }, [watch]);
 
   const { fields, append, remove } = useFieldArray({
     name: "solutions",

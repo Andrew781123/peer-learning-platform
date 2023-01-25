@@ -4,11 +4,14 @@ import NextAuth, { type NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import EmailProvider from "next-auth/providers/email";
 import { prisma } from "../../../server/db/client";
+import { getEmailDomain } from "../../../utils/auth";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ email, user, account, profile }) {
-      const emailDomain = user.email?.split("@")[1];
+      if (!user.email) return false;
+
+      const emailDomain = getEmailDomain(user.email);
       if (emailDomain !== "connect.polyu.hk")
         return "/api/auth/error?error=invalidEmailDomain";
 
@@ -25,6 +28,7 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     newUser: "/auth/new-user",
+    signIn: "/auth/signin",
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
