@@ -14,7 +14,6 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
-import "react-quill/dist/quill.snow.css";
 import { z } from "zod";
 import useSelectOptions from "../../hooks/useSelectOptions";
 import { trpc } from "../../utils/trpc";
