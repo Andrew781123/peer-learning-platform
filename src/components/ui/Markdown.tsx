@@ -1,5 +1,6 @@
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 
 type MarkdownProps = {
   value: string;
@@ -10,7 +11,7 @@ const Markdown = (props: MarkdownProps) => {
 
   return (
     <ReactMarkdown
-      rehypePlugins={[rehypeRaw]}
+      rehypePlugins={[rehypeRaw, rehypeSanitize]}
       className="prose dark:prose-invert"
       // components={{
       //   code({ node, inline, className, children, ...props }) {
