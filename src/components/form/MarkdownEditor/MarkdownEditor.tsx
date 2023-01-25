@@ -17,11 +17,10 @@ import {
 import "@uiw/react-md-editor/markdown-editor.css";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import { uploadImage } from "../../../services/imgur";
 import { convertToBase64 } from "../../../utils/image";
 import { insertImageToMarkdown } from "../../../utils/solution/markdown";
+import Markdown from "../../ui/Markdown";
 const MDEditor = dynamic(
   () => import("@uiw/react-md-editor").then((mod) => mod.default),
   { ssr: false }
@@ -87,12 +86,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
     <div ref={editorRef} className="relative">
       {isPreview ? (
         <div className="min-h-[8rem] rounded-lg border border-gray-200 bg-surface-light p-2">
-          <ReactMarkdown
-            rehypePlugins={[rehypeRaw]}
-            className="prose dark:prose-invert"
-          >
-            {value.replace(/\n/, "  \n")}
-          </ReactMarkdown>
+          <Markdown value={value} />
         </div>
       ) : (
         <div className="min-h-[8rem] rounded-lg border border-gray-200 bg-surface-light">

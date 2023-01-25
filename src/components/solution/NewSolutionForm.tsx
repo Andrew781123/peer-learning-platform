@@ -6,7 +6,6 @@ import {
   SubjectTopic,
 } from "@prisma/client";
 import clsx from "clsx";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import {
@@ -27,8 +26,6 @@ import RadioGroup from "../form/RadioGroup";
 import Select from "../form/Select";
 import Button from "../ui/Button";
 import CrossButton from "../ui/CrossButton";
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const DEFAULT_SOLUTION = {
   questionNumber: "1",
