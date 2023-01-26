@@ -45,12 +45,13 @@ const SignInPage: NextPage<SignInPageProps> = () => {
       <Section className="flex h-4/5 p-8">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex  flex-grow flex-col items-center justify-start divide-y-2 divide-gray-500"
+          className="flex w-full flex-grow flex-col items-center justify-start divide-y-2 divide-gray-500"
         >
           <h1 className="mb-2 text-2xl">Sign in / Sign up</h1>
           <FormGroup className="mb-7 mt-4" error={!!formState.errors.email}>
             <Label text="Polyu Email" />
             <Input
+              className="w-[20rem]"
               {...register("email")}
               errorText={formState.errors.email?.message}
             />
