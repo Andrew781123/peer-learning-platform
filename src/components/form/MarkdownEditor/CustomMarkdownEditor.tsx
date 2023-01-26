@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { convertToBase64 } from "../../../utils/image";
 import { insertImageToMarkdown } from "../../../utils/solution/markdown";
@@ -15,8 +15,6 @@ type MarkdownEditorProps = {
 
 const MarkdownEditor = (props: MarkdownEditorProps) => {
   const { error, editorRef, value, onChange } = props;
-
-  useEffect(() => console.log({ value }), [value]);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
 

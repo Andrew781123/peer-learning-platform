@@ -5,7 +5,6 @@ import Section from "../../../components/ui/Section";
 export const getServerSideProps: GetServerSideProps<
   EmailVerificationPageProps
 > = async (context) => {
-  console.log(123, context);
   return {
     props: {},
   };
