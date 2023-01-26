@@ -333,11 +333,11 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
             >
               <Label
                 text={
-                  <div className="flex justify-between">
-                    <p>Write your solution here</p>
-                    <button type="button" onClick={togglePreview}>
+                  <div className="flex items-center justify-between">
+                    <p>Write your solution of all sub-questions here</p>
+                    <Button type="button" onClick={togglePreview} size="small">
                       {isPreview ? "Edit" : "Preview"}
-                    </button>
+                    </Button>
                   </div>
                 }
               />
