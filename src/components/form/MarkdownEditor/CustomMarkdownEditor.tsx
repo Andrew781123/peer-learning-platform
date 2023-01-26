@@ -1,10 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import React, { useEffect, useRef } from "react";
 import { BiImageAdd } from "react-icons/bi";
-import { uploadImage } from "../../../services/imgur";
 import { convertToBase64 } from "../../../utils/image";
 import { insertImageToMarkdown } from "../../../utils/solution/markdown";
+import { trpc } from "../../../utils/trpc";
 import Icon from "../../ui/Icon";
 
 type MarkdownEditorProps = {
@@ -29,8 +28,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
     imageInputRef.current?.click();
   };
 
-  const imageMutation = useMutation({
-    mutationFn: (base64Image: string) => uploadImage(base64Image),
+  const imageMutation = trpc.imgur.uploadImage.useMutation({
     onSuccess: (imageLink: string) => {
       onChange(
         insertImageToMarkdown({
@@ -51,7 +49,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
 
     const base64Image = await convertToBase64(file);
 
-    imageMutation.mutate(base64Image);
+    imageMutation.mutate({ base64Image });
   };
 
   return (

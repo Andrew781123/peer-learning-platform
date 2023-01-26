@@ -2,6 +2,7 @@
 import { router } from "../trpc";
 import { authRouter } from "./auth";
 import { difficultyRatingOptionRouter } from "./difficulty-rating-option";
+import { imgurRouter } from "./imgur";
 import { pastPaperRouter } from "./past-paper";
 import { questionRouter } from "./question";
 import { solutionRouter } from "./solution";
@@ -19,6 +20,7 @@ export const appRouter = router({
   solution: solutionRouter,
   solutionVote: solutionVoteRouter,
   difficultyRatingOption: difficultyRatingOptionRouter,
+  imgur: imgurRouter,
   test: testRouter,
 });
 

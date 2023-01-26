@@ -1,12 +1,21 @@
 import clsx from "clsx";
 import { ButtonHTMLAttributes } from "react";
+import Spinner from "./Spinner";
 
 type ButtonProps = {
   primary?: boolean;
+  isLoading?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = (props: ButtonProps) => {
-  const { primary, className, children, ...otherProps } = props;
+  const {
+    primary,
+    className,
+    children,
+    isLoading = false,
+    disabled = false,
+    ...otherProps
+  } = props;
 
   const classes = clsx(
     primary
@@ -17,8 +26,12 @@ const Button = (props: ButtonProps) => {
   );
 
   return (
-    <button {...otherProps} className={classes}>
-      {children}
+    <button
+      disabled={disabled || isLoading}
+      {...otherProps}
+      className={classes}
+    >
+      {isLoading ? <Spinner /> : children}
     </button>
   );
 };

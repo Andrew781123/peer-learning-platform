@@ -160,9 +160,6 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       trpcContext.question.getAllByPastPaper.invalidate();
       router.push("/");
     },
-    onSettled: () => {
-      reset();
-    },
     onError: () => alert("Error creating solutions, please try again later"),
   });
 
@@ -370,7 +367,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       <Button
         primary
         type="submit"
-        disabled={mutation.isLoading}
+        isLoading={mutation.isLoading}
         className="mt-2 ml-auto block"
       >
         Submit

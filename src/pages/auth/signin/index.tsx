@@ -57,7 +57,12 @@ const SignInPage: NextPage<SignInPageProps> = () => {
             />
           </FormGroup>
 
-          <Button type="submit" primary className="mt-auto">
+          <Button
+            type="submit"
+            primary
+            className="mt-auto"
+            isLoading={signInMutation.isLoading}
+          >
             Sign In
           </Button>
         </form>

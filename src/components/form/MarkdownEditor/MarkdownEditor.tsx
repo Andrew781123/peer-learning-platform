@@ -1,4 +1,3 @@
-import { useMutation } from "@tanstack/react-query";
 import "@uiw/react-markdown-preview/markdown.css";
 import { MDEditorProps } from "@uiw/react-md-editor";
 import {
@@ -17,9 +16,9 @@ import {
 import "@uiw/react-md-editor/markdown-editor.css";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
-import { uploadImage } from "../../../services/imgur";
 import { convertToBase64 } from "../../../utils/image";
 import { insertImageToMarkdown } from "../../../utils/solution/markdown";
+import { trpc } from "../../../utils/trpc";
 import Markdown from "../../ui/Markdown";
 const MDEditor = dynamic(
   () => import("@uiw/react-md-editor").then((mod) => mod.default),
@@ -39,8 +38,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
 
   const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const imageMutation = useMutation({
-    mutationFn: (base64Image: string) => uploadImage(base64Image),
+  const imageMutation = trpc.imgur.uploadImage.useMutation({
     onSuccess: (imageLink: string) => {
       onChange(
         insertImageToMarkdown({
@@ -79,7 +77,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
 
     const base64Image = await convertToBase64(file);
 
-    imageMutation.mutate(base64Image);
+    imageMutation.mutate({ base64Image });
   };
 
   return (
