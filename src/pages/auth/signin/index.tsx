@@ -62,14 +62,14 @@ const SignInPage: NextPage<SignInPageProps> = ({ csrfToken }) => {
 
   return (
     // TODO - fix the height
-    <div className="flex h-96 items-center justify-center">
-      <Section className="flex h-3/5 p-8">
+    <div className="flex h-1/2 items-center justify-center">
+      <Section className="flex h-4/5 p-8">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex  flex-grow flex-col items-center justify-between"
+          className="flex  flex-grow flex-col items-center justify-start divide-y-2 divide-gray-500"
         >
-          <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-          <FormGroup className="mb-7" error={!!formState.errors.email}>
+          <h1 className="mb-2 text-2xl">Sign in / Sign up</h1>
+          <FormGroup className="mb-7 mt-4" error={!!formState.errors.email}>
             <Label text="Polyu Email" />
             <Input
               {...register("email")}
@@ -77,7 +77,7 @@ const SignInPage: NextPage<SignInPageProps> = ({ csrfToken }) => {
             />
           </FormGroup>
 
-          <Button type="submit" primary>
+          <Button type="submit" primary className="mt-auto">
             Sign In
           </Button>
         </form>
