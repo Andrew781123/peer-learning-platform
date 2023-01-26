@@ -10,6 +10,7 @@ import { solutionVoteRouter } from "./solution-vote";
 import { subjectRouter } from "./subject";
 import { subjectTopicRouter } from "./subject-topic";
 import { testRouter } from "./test";
+import { userRouter } from "./user";
 
 export const appRouter = router({
   auth: authRouter,
@@ -21,6 +22,7 @@ export const appRouter = router({
   solutionVote: solutionVoteRouter,
   difficultyRatingOption: difficultyRatingOptionRouter,
   imgur: imgurRouter,
+  user: userRouter,
   test: testRouter,
 });
 
