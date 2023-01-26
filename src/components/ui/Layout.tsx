@@ -8,9 +8,9 @@ const Layout = (props: LayoutProps) => {
   const { children } = props;
 
   return (
-    <div className="flex h-screen min-h-screen flex-col">
+    <div className="flex h-screen min-h-screen flex-col items-center">
       <Navbar />
-      <main className="m-auto max-w-3xl flex-grow p-5 text-onBackground">
+      <main className="w-full max-w-3xl flex-grow p-5 text-onBackground">
         {children}
       </main>
     </div>

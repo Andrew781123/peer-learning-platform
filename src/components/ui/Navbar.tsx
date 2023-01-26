@@ -11,7 +11,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex items-center gap-10 bg-surface-default p-5 text-onSurface ">
+    <nav className="flex w-full items-center gap-10 bg-surface-default p-5 text-onSurface">
       <div className="" onClick={onLogoClick}>
         <p className="text-lg font-bold hover:cursor-pointer">
           Peer Learning Platform

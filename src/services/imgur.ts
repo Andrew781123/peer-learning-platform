@@ -4,7 +4,7 @@ const imgurAxiosInstance = axios.create({
   baseURL: "https://api.imgur.com/3/",
   timeout: 5000,
   headers: {
-    Authorization: "Client-ID a8219360c299cfe",
+    Authorization: `Client-ID ${process.env.NEXT_PUBLIC_IMGUR_CLIENT_ID}`,
     Accept: "application/json",
   },
   transformResponse: [

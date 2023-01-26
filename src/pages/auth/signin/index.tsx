@@ -51,7 +51,7 @@ const SignInPage: NextPage<SignInPageProps> = () => {
           <FormGroup className="mb-7 mt-4" error={!!formState.errors.email}>
             <Label text="Polyu Email" />
             <Input
-              className="w-[20rem]"
+              className="w-[16rem]"
               {...register("email")}
               errorText={formState.errors.email?.message}
             />

@@ -19,6 +19,7 @@ export const serverSchema = z.object({
   EMAIL_SERVER: z.string(),
   EMAIL_FROM: z.string(),
   EMAIL_PASSWORD: z.string(),
+  IMGUR_CLIENT_ID: z.string(),
 });
 
 /**
