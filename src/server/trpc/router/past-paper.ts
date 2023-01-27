@@ -25,7 +25,6 @@ export const pastPaperRouter = router({
       });
 
       const pastPaperIdToSolutionsCount = questions.reduce((map, question) => {
-        if (question.pastPaperId === 1) console.log(map[question.pastPaperId]);
         return {
           ...map,
           [question.pastPaperId]:
