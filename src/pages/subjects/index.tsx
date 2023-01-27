@@ -2,6 +2,7 @@ import { createProxySSGHelpers } from "@trpc/react/ssg";
 import { GetStaticProps, NextPage } from "next";
 import superjson from "superjson";
 import SubjectCard from "../../components/subject/SubjectCard";
+import Divider from "../../components/ui/Divider";
 import PageHeader from "../../components/ui/PageHeader";
 import { createContextInner } from "../../server/trpc/context";
 import { appRouter } from "../../server/trpc/router/_app";
@@ -31,13 +32,14 @@ const SubjectPage: NextPage<SubjectPageProps> = (props) => {
     trpc.subject.getAll.useQuery();
 
   return (
-    <div>
-      <div className="mb-3">
+    <div className="">
+      <div>
         <PageHeader title="Subjects" />
+        <Divider />
       </div>
 
       {isSuccess && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {getAllSubjectResponse.map((subject) => (
             <SubjectCard key={subject.id} subject={subject} />
           ))}

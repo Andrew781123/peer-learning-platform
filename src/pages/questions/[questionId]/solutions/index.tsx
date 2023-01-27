@@ -10,7 +10,9 @@ import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
 import SolutionCard from "../../../../components/solution/SolutionCard";
 import TopicBadge from "../../../../components/topic/TopicBadge";
+import Divider from "../../../../components/ui/Divider";
 import List from "../../../../components/ui/List";
+import PageHeader from "../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
 import { trpc } from "../../../../utils/trpc";
@@ -84,16 +86,19 @@ const SolutionPage: NextPage<SolutionPageProps> = (props) => {
 
   return (
     <div>
-      {isQuestionSuccess && (
-        <div>
-          <h2>{`Question ${getOneQuestionResponse.number} Submissions`}</h2>
+      <div>
+        <PageHeader
+          title={`Question ${getOneQuestionResponse?.number ?? ""} Submissions`}
+        />
+        {isQuestionSuccess && (
           <div className="mt-1  flex flex-wrap gap-2">
             {getOneQuestionResponse.topics.map((topic) => (
               <TopicBadge key={topic} topic={topic} />
             ))}
           </div>
-        </div>
-      )}
+        )}
+        <Divider className="mt-2" />
+      </div>
       <div className="mt-2">
         <List>
           {isSuccess &&

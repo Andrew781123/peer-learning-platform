@@ -32,7 +32,7 @@ const Button = (props: ButtonProps) => {
       ? "bg-primary-default hover:bg-primary-light text-onPrimary text-lg"
       : "bg-none hover:bg-surface-light text-onSurface border border-onSurface",
     "rounded-full py-2 px-4 w-fit transition-colors duration-300",
-    size === "large" ? "text-lg" : size === "medium" ? "text-md" : "text-sm",
+    size === "large" ? "text-lg" : size === "medium" ? "text-md" : "text-xs",
     className
   );
 

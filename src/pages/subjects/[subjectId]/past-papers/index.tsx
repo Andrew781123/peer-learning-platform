@@ -9,6 +9,7 @@ import {
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
 import PastPaperCard from "../../../../components/past-paper/PastPaperCard";
+import Divider from "../../../../components/ui/Divider";
 import List from "../../../../components/ui/List";
 import PageHeader from "../../../../components/ui/PageHeader";
 import { createContextInner } from "../../../../server/trpc/context";
@@ -70,12 +71,16 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
     trpc.pastPaper.getAllBySubject.useQuery({ subjectId });
 
   return (
-    <div>
-      <div className="mb-3">
+    <div className="">
+      <div>
         <PageHeader title="Past Papers" />
+        <Divider />
       </div>
 
-      <List emptyMessage="No past exam papers for this subject">
+      <List
+        emptyMessage="No past exam papers for this subject"
+        className="pt-4"
+      >
         {isSuccess &&
           getAllPastPaperBySubjectResponse!.map((pastPaper) => (
             <PastPaperCard key={pastPaper.id} pastPaper={pastPaper} />

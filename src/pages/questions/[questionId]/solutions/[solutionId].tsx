@@ -11,6 +11,8 @@ import { ParsedUrlQuery } from "querystring";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import superjson from "superjson";
+import Divider from "../../../../components/ui/Divider";
+import PageHeader from "../../../../components/ui/PageHeader";
 import VoteIcon from "../../../../components/vote/VoteIcon";
 import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
@@ -157,9 +159,12 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
   if (!solution.isSuccess) return null;
 
   return (
-    <div className="divide-y divide-gray-400">
-      <h1 className="mb-2">
-        <p className="text-xl font-bold">{`Solution of Question ${questionNumber}`}</p>
+    <div className="">
+      <div>
+        <PageHeader
+          title={`Solution of Question ${questionNumber}`}
+          className="mb-0"
+        />
         <p className="text-gray-400">
           from <span className="text-gray-300">{title}</span>
         </p>
@@ -169,7 +174,8 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
             {getTimeFromX({ toDate: new Date(solution.data.createdAt) })}
           </span>
         </p>
-      </h1>
+        <Divider className="mt-2" />
+      </div>
 
       <div className="flex w-full gap-4">
         <div className="mt-2 flex w-fit flex-col items-center">

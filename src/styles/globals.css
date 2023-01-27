@@ -17,7 +17,12 @@
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
-    // -webkit-box-shadow: 0 0 0 30px red inset !important;
+  }
+
+  .w-md-editor-text-pre > code,
+  .w-md-editor-text-input {
+    font-size: 1.5rem !important;
+    line-height: 1.5rem !important;
   }
 
   .w-md-editor-content,
@@ -25,4 +30,3 @@
     @apply bg-surface-light;
   }
 }
-// @import "./unreset.scss";

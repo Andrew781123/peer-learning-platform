@@ -26,10 +26,13 @@ import Select from "../form/Select";
 import Button from "../ui/Button";
 import CrossButton from "../ui/CrossButton";
 
+const generateSolutionDefaultValue = (index: number) =>
+  `**Answer of sub-questions of Question ${index}**\n${index}a) \n\`\`\`\nSelect * FROM Students\n\`\`\`\n${index}b) Solution of question ${index}b`;
+
 const DEFAULT_SOLUTION = {
   questionNumber: "1",
   topicIds: [],
-  solutionText: "",
+  solutionText: generateSolutionDefaultValue(1),
   difficultyRatingLabel: "",
 };
 
