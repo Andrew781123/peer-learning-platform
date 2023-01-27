@@ -20,6 +20,11 @@ export const getAllSolutionsByQuestion = async (
       difficultyRating: true,
       votes: true,
     },
+    orderBy: [
+      {
+        createdAt: "desc",
+      },
+    ],
   });
 
   return solutions.map((solution) => ({

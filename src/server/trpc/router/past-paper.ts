@@ -11,6 +11,11 @@ export const pastPaperRouter = router({
     .query(({ input, ctx }) => {
       return ctx.prisma.pastPaper.findMany({
         where: { subjectId: input.subjectId },
+        orderBy: [
+          {
+            academicYear: "desc",
+          },
+        ],
       });
     }),
   getOne: publicProcedure
