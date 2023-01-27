@@ -56,7 +56,7 @@ export const getStaticProps: GetStaticProps<
       subjectId: params.subjectId,
       trpcState: ssg.dehydrate(),
     },
-    // No need to revalidate, we don't have any dynamic data
+    revalidate: 5 * 60,
   };
 };
 
