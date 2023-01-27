@@ -49,7 +49,7 @@ const SignInPage: NextPage<SignInPageProps> = () => {
         >
           <h1 className="mb-2 text-2xl">Sign in / Sign up</h1>
           <FormGroup className="mb-7 mt-4" error={!!formState.errors.email}>
-            <Label text="Polyu Email" />
+            <Label text="PolyU Email" />
             <Input
               className="w-[16rem]"
               {...register("email")}

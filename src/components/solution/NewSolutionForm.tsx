@@ -7,7 +7,7 @@ import {
 } from "@prisma/client";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Controller,
   SubmitHandler,
@@ -132,7 +132,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
 
   const trpcContext = trpc.useContext();
 
-  const [isPreview, setIsPreview] = useState(false);
+  const [isPreview, setIsPreview] = useState<Record<string, boolean>>({});
 
   const { options: subjectTopicOptions } = useSelectOptions({
     data: subjectTopics,
@@ -188,6 +188,17 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     control,
   });
 
+  useEffect(() => {
+    const newIsPreview = fields.reduce((result, { id }) => {
+      return {
+        ...result,
+        [id]: isPreview[id] ?? false,
+      };
+    }, {});
+
+    setIsPreview(newIsPreview);
+  }, [fields]);
+
   const addSolutionFormItem = () => {
     append({
       questionNumber: "",
@@ -216,8 +227,11 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     });
   };
 
-  const togglePreview = () => {
-    setIsPreview((isPreview) => !isPreview);
+  const togglePreview = (id: string) => {
+    setIsPreview((isPreview) => ({
+      ...isPreview,
+      [id]: !isPreview[id],
+    }));
   };
 
   return (
@@ -338,8 +352,12 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                 text={
                   <div className="flex items-center justify-between">
                     <p>Write your solution of all sub-questions here</p>
-                    <Button type="button" onClick={togglePreview} size="small">
-                      {isPreview ? "Edit" : "Preview"}
+                    <Button
+                      type="button"
+                      onClick={() => togglePreview(solution.id)}
+                      size="small"
+                    >
+                      {isPreview[index] ? "Edit" : "Preview"}
                     </Button>
                   </div>
                 }
@@ -350,7 +368,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                 render={({ field: { ref, ...rest } }) => (
                   <MarkdownEditor
                     editorRef={ref}
-                    isPreview={isPreview}
+                    isPreview={!!isPreview[solution.id]}
                     {...rest}
                   />
                 )}
