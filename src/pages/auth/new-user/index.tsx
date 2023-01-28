@@ -27,7 +27,7 @@ const NewUserPage: NextPage<NewUserPageProps> = (props) => {
     onSuccess: () => {
       trpcUtils.auth.getMe.invalidate();
 
-      if (callbackUrl) return router.replace(decodeURIComponent(callbackUrl));
+      // if (callbackUrl) return router.replace(decodeURIComponent(callbackUrl));
       return router.push("/subjects");
     },
   });
