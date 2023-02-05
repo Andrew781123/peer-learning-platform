@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import EmailProvider from "next-auth/providers/email";
 import { prisma } from "../../../server/db/client";
 import { getEmailDomain } from "../../../utils/auth";
+import { getQueryParams } from "../../../utils/url";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -16,6 +17,23 @@ export const authOptions: NextAuthOptions = {
         return "/api/auth/error?error=invalidEmailDomain";
 
       return true;
+    },
+    async redirect({ url, baseUrl }) {
+      console.log({ url, baseUrl });
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return Promise.resolve(`${baseUrl}${url}`);
+      // Allows callback URLs on the same origin
+      if (new URL(url).origin === baseUrl) {
+        const queryParams = getQueryParams(url);
+        console.log({ queryParams });
+        if (queryParams.callbackUrl) {
+          return Promise.resolve(queryParams.callbackUrl);
+        }
+
+        return Promise.resolve(url);
+      }
+
+      return Promise.resolve(baseUrl);
     },
 
     session({ session, user }) {
