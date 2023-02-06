@@ -19,13 +19,11 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
     async redirect({ url, baseUrl }) {
-      console.log({ url, baseUrl });
       // Allows relative callback URLs
       if (url.startsWith("/")) return Promise.resolve(`${baseUrl}${url}`);
       // Allows callback URLs on the same origin
       if (new URL(url).origin === baseUrl) {
         const queryParams = getQueryParams(url);
-        console.log({ queryParams });
         if (queryParams.callbackUrl) {
           return Promise.resolve(queryParams.callbackUrl);
         }
