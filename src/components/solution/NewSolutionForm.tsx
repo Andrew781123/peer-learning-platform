@@ -381,7 +381,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
           </div>
         ))}
         <Button type="button" onClick={addSolutionFormItem}>
-          Add Solution
+          Answer another question
         </Button>
       </div>
 
