@@ -43,9 +43,9 @@ export const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    newUser: "/auth/new-user",
-    signIn: "/auth/signin",
-    verifyRequest: "/auth/verify-email",
+    // newUser: "/auth/new-user",
+    // signIn: "/auth/signin",
+    // verifyRequest: "/auth/verify-email",
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
