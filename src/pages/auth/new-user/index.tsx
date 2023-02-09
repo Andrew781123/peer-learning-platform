@@ -16,10 +16,10 @@ const NewUserPage: NextPage<NewUserPageProps> = (props) => {
   const trpcUtils = trpc.useContext();
 
   // ! This is a hacky way to get the callbackUrl from the query string
-  const callbackUrl = useMemo(() => {
-    if (!router.query?.callbackUrl) return null;
-    return (router.query.callbackUrl as string).split("?")[1]!.split("=")[1]!;
-  }, [router]);
+  // const callbackUrl = useMemo(() => {
+  //   if (!router.query?.callbackUrl) return null;
+  //   return (router.query.callbackUrl as string).split("?")[1]!.split("=")[1]!;
+  // }, [router]);
 
   const { data: user } = trpc.auth.getMe.useQuery();
 
