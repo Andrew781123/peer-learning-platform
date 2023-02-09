@@ -9,30 +9,30 @@ import { getQueryParams } from "../../../utils/url";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    // async signIn({ email, user, account, profile }) {
-    //   if (!user.email) return false;
+    async signIn({ email, user, account, profile }) {
+      if (!user.email) return false;
 
-    //   const emailDomain = getEmailDomain(user.email);
-    //   if (emailDomain !== "connect.polyu.hk")
-    //     return "/api/auth/error?error=invalidEmailDomain";
+      const emailDomain = getEmailDomain(user.email);
+      if (emailDomain !== "connect.polyu.hk")
+        return "/api/auth/error?error=invalidEmailDomain";
 
-    //   return true;
-    // },
-    // redirect({ url, baseUrl }) {
-    //   // Allows relative callback URLs
-    //   if (url.startsWith("/")) return `${baseUrl}${url}`;
-    //   // Allows callback URLs on the same origin
-    //   if (new URL(url).origin === baseUrl) {
-    //     const queryParams = getQueryParams(url);
-    //     if (queryParams.callbackUrl) {
-    //       return queryParams.callbackUrl;
-    //     }
+      return true;
+    },
+    redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      if (new URL(url).origin === baseUrl) {
+        const queryParams = getQueryParams(url);
+        if (queryParams.callbackUrl) {
+          return queryParams.callbackUrl;
+        }
 
-    //     return url;
-    //   }
+        return url;
+      }
 
-    //   return baseUrl;
-    // },
+      return baseUrl;
+    },
 
     session({ session, user }) {
       if (session.user) {
@@ -43,9 +43,9 @@ export const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    // newUser: "/auth/new-user",
-    // signIn: "/auth/signin",
-    // verifyRequest: "/auth/verify-email",
+    newUser: "/auth/new-user",
+    signIn: "/auth/signin",
+    verifyRequest: "/auth/verify-email",
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
