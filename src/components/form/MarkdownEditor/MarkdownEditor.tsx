@@ -92,7 +92,6 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
               strikethrough,
               title2,
               divider,
-              code,
               codeBlock,
               uploadImageCommand,
               divider,
