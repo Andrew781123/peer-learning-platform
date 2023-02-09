@@ -18,21 +18,21 @@ export const authOptions: NextAuthOptions = {
 
       return true;
     },
-    redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
-      if (new URL(url).origin === baseUrl) {
-        const queryParams = getQueryParams(url);
-        if (queryParams.callbackUrl) {
-          return queryParams.callbackUrl;
-        }
+    // redirect({ url, baseUrl }) {
+    //   // Allows relative callback URLs
+    //   if (url.startsWith("/")) return `${baseUrl}${url}`;
+    //   // Allows callback URLs on the same origin
+    //   if (new URL(url).origin === baseUrl) {
+    //     const queryParams = getQueryParams(url);
+    //     if (queryParams.callbackUrl) {
+    //       return queryParams.callbackUrl;
+    //     }
 
-        return url;
-      }
+    //     return url;
+    //   }
 
-      return baseUrl;
-    },
+    //   return baseUrl;
+    // },
 
     session({ session, user }) {
       if (session.user) {
