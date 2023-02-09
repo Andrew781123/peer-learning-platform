@@ -23,94 +23,109 @@ export const solutionRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { pastPaperId, solutions } = input;
+      try {
+        if (!ctx.session?.user)
+          return new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "User not logged in",
+          });
 
-      const questionIdToSolutionMap = new Map<
-        [string, string],
-        {
-          isNewQuestion: boolean;
-          number: number;
-          markdown: string;
-          difficultyRatingId: number;
-          topicIds: number[];
-        }
-      >();
+        const userId = ctx.session.user.id;
 
-      const existingQuestions = await ctx.prisma.question.findMany({
-        where: {
-          pastPaperId,
-        },
-      });
+        const { pastPaperId, solutions } = input;
 
-      for (const solution of solutions) {
-        const isNewQuestion = !existingQuestions.some(
-          (question) => question.number === solution.questionNumber
-        );
+        const questionIdToSolutionMap = new Map<
+          [string, string],
+          {
+            isNewQuestion: boolean;
+            number: number;
+            markdown: string;
+            difficultyRatingId: number;
+            topicIds: number[];
+          }
+        >();
 
-        const solutionId = cuid();
-
-        const questionId = isNewQuestion
-          ? cuid()
-          : existingQuestions.find(
-              (question) => question.number === solution.questionNumber
-            )!.id;
-
-        questionIdToSolutionMap.set([questionId, solutionId], {
-          isNewQuestion,
-          number: solution.questionNumber,
-          markdown: solution.markdown,
-          difficultyRatingId: solution.difficultyRatingId,
-          topicIds: solution.topicIds,
-        });
-      }
-
-      const createQuestions = ctx.prisma.question.createMany({
-        data: Array.from(questionIdToSolutionMap.entries())
-          .filter(([_, solution]) => solution.isNewQuestion)
-          .map(([[questionId, _], solution]) => ({
-            id: questionId,
-            number: solution.number,
+        const existingQuestions = await ctx.prisma.question.findMany({
+          where: {
             pastPaperId,
-          })),
-      });
+          },
+        });
 
-      const addTopicsToQuestions = ctx.prisma.questionTopic.createMany({
-        data: Array.from(questionIdToSolutionMap.entries()).flatMap(
-          ([[questionId, _], solution]) =>
-            solution.topicIds.map((topicId) => ({
-              questionId,
-              topicId,
-            }))
-        ),
-      });
+        for (const solution of solutions) {
+          const isNewQuestion = !existingQuestions.some(
+            (question) => question.number === solution.questionNumber
+          );
 
-      const createSolutions = ctx.prisma.solution.createMany({
-        data: Array.from(questionIdToSolutionMap.entries()).map(
-          ([[_, solutionId], solution]) => ({
-            id: solutionId,
-            // TODO - replace with auth
-            userId: "cld303y730000vgcvlua2spnk",
+          const solutionId = cuid();
+
+          const questionId = isNewQuestion
+            ? cuid()
+            : existingQuestions.find(
+                (question) => question.number === solution.questionNumber
+              )!.id;
+
+          questionIdToSolutionMap.set([questionId, solutionId], {
+            isNewQuestion,
+            number: solution.questionNumber,
             markdown: solution.markdown,
             difficultyRatingId: solution.difficultyRatingId,
-          })
-        ),
-      });
+            topicIds: solution.topicIds,
+          });
+        }
 
-      const createQuestionSolution = ctx.prisma.questionSolution.createMany({
-        data: Array.from(questionIdToSolutionMap.entries()).map(
-          ([[questionId, solutionId], _]) => ({
-            questionId,
-            solutionId,
-          })
-        ),
-      });
+        const createQuestions = ctx.prisma.question.createMany({
+          data: Array.from(questionIdToSolutionMap.entries())
+            .filter(([_, solution]) => solution.isNewQuestion)
+            .map(([[questionId, _], solution]) => ({
+              id: questionId,
+              number: solution.number,
+              pastPaperId,
+            })),
+        });
 
-      return await ctx.prisma.$transaction([
-        createQuestions,
-        addTopicsToQuestions,
-        createSolutions,
-        createQuestionSolution,
-      ]);
+        const addTopicsToQuestions = ctx.prisma.questionTopic.createMany({
+          data: Array.from(questionIdToSolutionMap.entries()).flatMap(
+            ([[questionId, _], solution]) =>
+              solution.topicIds.map((topicId) => ({
+                questionId,
+                topicId,
+              }))
+          ),
+        });
+
+        const createSolutions = ctx.prisma.solution.createMany({
+          data: Array.from(questionIdToSolutionMap.entries()).map(
+            ([[_, solutionId], solution]) => ({
+              id: solutionId,
+              userId,
+              markdown: solution.markdown,
+              difficultyRatingId: solution.difficultyRatingId,
+            })
+          ),
+        });
+
+        const createQuestionSolution = ctx.prisma.questionSolution.createMany({
+          data: Array.from(questionIdToSolutionMap.entries()).map(
+            ([[questionId, solutionId], _]) => ({
+              questionId,
+              solutionId,
+            })
+          ),
+        });
+
+        return await ctx.prisma.$transaction([
+          createQuestions,
+          addTopicsToQuestions,
+          createSolutions,
+          createQuestionSolution,
+        ]);
+      } catch (err) {
+        console.error(err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal Server Error",
+        });
+      }
     }),
   getAllByQuestion: publicProcedure
     .input(

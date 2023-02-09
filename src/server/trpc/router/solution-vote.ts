@@ -20,7 +20,11 @@ export const solutionVoteRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       try {
-        if (!ctx.session?.user) throw new Error("User not logged in");
+        if (!ctx.session?.user)
+          return new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "User not logged in",
+          });
 
         const response = await vote(ctx.prisma.solutionQuestionVote, {
           value: input.voteValue,
