@@ -9,15 +9,15 @@ import { getQueryParams } from "../../../utils/url";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    async signIn({ email, user, account, profile }) {
-      if (!user.email) return false;
+    // async signIn({ email, user, account, profile }) {
+    //   if (!user.email) return false;
 
-      const emailDomain = getEmailDomain(user.email);
-      if (emailDomain !== "connect.polyu.hk")
-        return "/api/auth/error?error=invalidEmailDomain";
+    //   const emailDomain = getEmailDomain(user.email);
+    //   if (emailDomain !== "connect.polyu.hk")
+    //     return "/api/auth/error?error=invalidEmailDomain";
 
-      return true;
-    },
+    //   return true;
+    // },
     // redirect({ url, baseUrl }) {
     //   // Allows relative callback URLs
     //   if (url.startsWith("/")) return `${baseUrl}${url}`;
