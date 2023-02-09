@@ -57,17 +57,6 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
     },
   };
 
-  // const previewCommand: ICommand = {
-  //   name: "preview",
-  //   keyCommand: "preview",
-  //   value: "preview",
-  //   icon: (
-  //     <button type="button" onClick={handlePreview}>
-  //       Preview
-  //     </button>
-  //   ),
-  // };
-
   const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -93,6 +82,10 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
             preview="edit"
             value={value}
             onChange={onChange}
+            textareaProps={{
+              placeholder:
+                "**Answer of sub-questions**\na) \n```\nSelect * FROM Students\n```\nb) Solution of question b",
+            }}
             commands={[
               bold,
               italic,

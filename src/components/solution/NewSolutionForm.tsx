@@ -26,13 +26,10 @@ import Select from "../form/Select";
 import Button from "../ui/Button";
 import CrossButton from "../ui/CrossButton";
 
-const generateSolutionDefaultValue = (index: number) =>
-  `**Answer of sub-questions of Question ${index}**\n${index}a) \n\`\`\`\nSelect * FROM Students\n\`\`\`\n${index}b) Solution of question ${index}b`;
-
 const DEFAULT_SOLUTION = {
   questionNumber: "1",
   topicIds: [],
-  solutionText: generateSolutionDefaultValue(1),
+  solutionText: "",
   difficultyRatingLabel: "",
 };
 
@@ -122,11 +119,6 @@ type NewSolutionFormProps = {
 const NewSolutionForm = (props: NewSolutionFormProps) => {
   const { subjectTopics, subjects, pastPapers, difficultyRatingOptions } =
     props;
-
-  // const { data, isSuccess } = useQuery({
-  //   queryKey: ["image"],
-  //   queryFn: () => getImage("o0ckX8G"),
-  // });
 
   const router = useRouter();
 
