@@ -33,7 +33,7 @@ const Markdown = (props: MarkdownProps) => {
       //   },
       // }}
     >
-      {value.replace(/\n/, "  \n")}
+      {value.replaceAll(/\n/g, "  \n")}
     </ReactMarkdown>
   );
 };
