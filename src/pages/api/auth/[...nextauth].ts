@@ -18,20 +18,20 @@ export const authOptions: NextAuthOptions = {
 
       return true;
     },
-    async redirect({ url, baseUrl }) {
+    redirect({ url, baseUrl }) {
       // Allows relative callback URLs
-      if (url.startsWith("/")) return Promise.resolve(`${baseUrl}${url}`);
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
       // Allows callback URLs on the same origin
       if (new URL(url).origin === baseUrl) {
         const queryParams = getQueryParams(url);
         if (queryParams.callbackUrl) {
-          return Promise.resolve(queryParams.callbackUrl);
+          return queryParams.callbackUrl;
         }
 
-        return Promise.resolve(url);
+        return url;
       }
 
-      return Promise.resolve(baseUrl);
+      return baseUrl;
     },
 
     session({ session, user }) {
