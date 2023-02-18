@@ -66,6 +66,7 @@ export default function auth(req: NextApiRequest, res: NextApiResponse) {
   console.log("authHandler", req.method, req.url);
   // Workaround for known email scanners that send GET or HEAD requests which have
   // the effect of cancelling the one time token. We have seen:
+  console.log("user agent", req.headers["user-agent"]);
 
   // HEAD request with user-agent: Barracude Sentinel (EE)
   // GET request with user-agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729)
