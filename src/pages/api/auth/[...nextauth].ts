@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
 const authHandler = NextAuth(authOptions);
 
 export default function auth(req: NextApiRequest, res: NextApiResponse) {
-  console.log("authHandler", req.method, req.url);
+  console.log("authHandler", req.method, req.url, req.domain);
   // Workaround for known email scanners that send GET or HEAD requests which have
   // the effect of cancelling the one time token. We have seen:
   console.log("user agent", req.headers["user-agent"]);
@@ -73,9 +73,9 @@ export default function auth(req: NextApiRequest, res: NextApiResponse) {
   if (
     req.method === "HEAD" ||
     /Mozilla.+MSIE.+Windows NT.+WOW64.+Trident.+SLCC2.+NET CLR/.test(
-      req.headers["user-agent"] ?? ""
+      req.headers["user-agent"]!
     ) ||
-    /lua-resty-http.+ngx_lua/.test(req.headers["user-agent"] ?? "")
+    /lua-resty-http.+ngx_lua/.test(req.headers["user-agent"]!)
   ) {
     console.log("authHandler", "HEAD or IE8 request");
     return res.status(200).send("Please visit the link from a browser.");
