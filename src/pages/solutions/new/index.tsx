@@ -6,6 +6,8 @@ import {
 } from "@prisma/client";
 import { createProxySSGHelpers } from "@trpc/react/ssg";
 import { GetStaticProps, NextPage } from "next";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import superjson from "superjson";
 import NewSolutionForm from "../../../components/solution/NewSolutionForm";
 import PageHeader from "../../../components/ui/PageHeader";
@@ -56,6 +58,16 @@ type NewSolutionPageProps = {
 const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
   const { subjectTopics, subjects, pastPapers, difficultyRatingOptions } =
     props;
+
+  const { status } = useSession();
+  const router = useRouter();
+
+  if (status === "loading") return <h1>Loading...</h1>;
+
+  if (status === "unauthenticated") {
+    router.push("/auth/signin");
+    return null;
+  }
 
   return (
     <div>
