@@ -16,9 +16,15 @@ const signInSchema = z.object({
   email: z
     .string()
     .email()
-    .refine((email) => getEmailDomain(email) === "connect.polyu.hk", {
-      message: "Please enter your PolyU email address",
-    }),
+    .refine(
+      (email) =>
+        process.env.NODE_ENV === "development"
+          ? true
+          : getEmailDomain(email) === "connect.polyu.hk",
+      {
+        message: "Please enter your PolyU email address",
+      }
+    ),
 });
 
 type SignInPageProps = {};
