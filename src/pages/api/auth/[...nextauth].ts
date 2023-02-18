@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
 const authHandler = NextAuth(authOptions);
 
 export default function auth(req: NextApiRequest, res: NextApiResponse) {
-  console.log("authHandler", req.method, req.url, req.domain);
+  console.log("authHandler", req.method, req.url);
   // Workaround for known email scanners that send GET or HEAD requests which have
   // the effect of cancelling the one time token. We have seen:
   console.log("user agent", req.headers["user-agent"]);
