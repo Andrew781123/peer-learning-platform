@@ -63,6 +63,7 @@ export const authOptions: NextAuthOptions = {
 const authHandler = NextAuth(authOptions);
 
 export default function auth(req: NextApiRequest, res: NextApiResponse) {
+  console.log("authHandler", req.method, req.url);
   // Workaround for known email scanners that send GET or HEAD requests which have
   // the effect of cancelling the one time token. We have seen:
 
@@ -75,14 +76,15 @@ export default function auth(req: NextApiRequest, res: NextApiResponse) {
     ) ||
     /lua-resty-http.+ngx_lua/.test(req.headers["user-agent"] ?? "")
   ) {
+    console.log("authHandler", "HEAD or IE8 request");
     return res.status(200).send("Please visit the link from a browser.");
   }
 
-  // GET request with double URL encoded param callbackUrl=https%253A%252F%252F
-  if (req.url!.includes("callbackUrl=https%253A%252F%252F"))
-    return res
-      .status(400)
-      .send("Your proxy has mangled the callbackUrl parameter in the URL.");
+  // // GET request with double URL encoded param callbackUrl=https%253A%252F%252F
+  // if (req.url!.includes("callbackUrl=https%253A%252F%252F"))
+  //   return res
+  //     .status(400)
+  //     .send("Your proxy has mangled the callbackUrl parameter in the URL.");
 
   return authHandler(req, res);
 }
