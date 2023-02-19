@@ -146,7 +146,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
       voteInfo.data?.voteOfUser !== SOLUTION_VOTE_VALUE.notVoted;
     // TODO: Show error message
     if (isUserVoted) {
-      alert("You have already voted");
+      toast.error("You have already voted");
       return;
     }
 

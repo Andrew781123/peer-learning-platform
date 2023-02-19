@@ -47,7 +47,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
 
     const base64Image = await convertToBase64(file);
 
-    imageMutation.mutate({ base64Image });
+    // imageMutation.mutate({ base64Image });
   };
 
   return (
