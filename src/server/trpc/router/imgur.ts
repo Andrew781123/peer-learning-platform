@@ -4,7 +4,7 @@ import { protectedProcedure, router } from "../trpc";
 
 export const imgurRouter = router({
   uploadImage: protectedProcedure
-    .input(z.object({ base64Image: z.string() }))
+    .input(z.object({ base64Image: z.string(), name: z.string() }))
     .mutation(async ({ input, ctx }) => {
       const response = await axios.post<{ link: string }>(
         "https://api.imgur.com/3/image",
