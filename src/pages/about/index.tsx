@@ -14,24 +14,30 @@ const AboutPage = () => {
           You can find the links to the evaluation forms and bug report here.
         </p>
         <div className="mt-2 flex flex-col items-center">
-          <Link
+          <a
             href="https://forms.gle/yaLq2HLnApa63QiC7"
             className="cursor-pointer text-primary-default hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Pre-evaluation Form
-          </Link>
-          <Link
+          </a>
+          <a
             href="https://forms.gle/MxbURd72zFJNCYXD9"
             className="cursor-pointer text-primary-default hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Post-evaluation Form
-          </Link>
-          <Link
+          </a>
+          <a
             href="https://forms.gle/ATPeArME6hzzCAuU8"
             className="cursor-pointer text-primary-default hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Bug Report
-          </Link>
+          </a>
         </div>
       </Section>
     </div>
