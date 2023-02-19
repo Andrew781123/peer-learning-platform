@@ -36,7 +36,11 @@ const DEFAULT_SOLUTION = {
 
 const solutionSchema = z.object({
   subjectId: z.string(),
-  pastPaperId: z.number().int(),
+  pastPaperId: z
+    .number({
+      required_error: "Please select a past paper",
+    })
+    .int(),
   solutions: z
     .array(
       z.object({
@@ -165,7 +169,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     useForm<z.infer<typeof solutionSchema>>({
       defaultValues: {
         subjectId: subjectOptions[0]!.value,
-        pastPaperId: pastPaperOptions[0]!.value,
+        pastPaperId: undefined,
         solutions: [DEFAULT_SOLUTION],
       },
       resolver: zodResolver(solutionSchema),
@@ -257,6 +261,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               {...restFields}
               myRef={ref}
               multiple={false}
+              error={!!formState.errors.pastPaperId}
+              errorText={formState.errors.pastPaperId?.message}
               options={pastPaperOptions}
             />
           )}

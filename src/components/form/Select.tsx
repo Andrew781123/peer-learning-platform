@@ -100,7 +100,7 @@ const Select = <TValue extends string | number>(
             ))
           ) : (
             <span>
-              {options.find((option) => option.value === value)!.label}
+              {options.find((option) => option.value === value)?.label ?? ""}
             </span>
           )}
         </div>
