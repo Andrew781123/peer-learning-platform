@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import superjson from "superjson";
 import NewSolutionForm from "../../../components/solution/NewSolutionForm";
+import Divider from "../../../components/ui/Divider";
 import PageHeader from "../../../components/ui/PageHeader";
 import { createContextInner } from "../../../server/trpc/context";
 import { appRouter } from "../../../server/trpc/router/_app";
@@ -73,6 +74,7 @@ const NewSolutionPage: NextPage<NewSolutionPageProps> = (props) => {
     <div>
       <div className="mb-3">
         <PageHeader title="Submit Solution" />
+        <Divider />
       </div>
 
       <NewSolutionForm
