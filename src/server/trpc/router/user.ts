@@ -11,7 +11,7 @@ export const userRouter = router({
     )
     .mutation(({ ctx, input }) => {
       const studentId = input.email.split("@")[0]!;
-      const newUserName = `${studentId.slice(-4)}${input.userId.slice(-4)}`;
+      const newUserName = `${studentId.slice(-5, -1)}${input.userId.slice(-4)}`;
 
       return ctx.prisma.user.update({
         where: {
