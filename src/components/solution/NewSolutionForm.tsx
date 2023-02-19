@@ -14,6 +14,7 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { z } from "zod";
 import useSelectOptions from "../../hooks/useSelectOptions";
 import { trpc } from "../../utils/trpc";
@@ -153,9 +154,11 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   const mutation = trpc.solution.createMany.useMutation({
     onSuccess: () => {
       trpcContext.question.getAllByPastPaper.invalidate();
+      toast.success("Submission created");
       router.push("/");
     },
-    onError: () => alert("Error creating solutions, please try again later"),
+    onError: () =>
+      toast.error("Error creating solutions, please try again later"),
   });
 
   const { handleSubmit, register, control, reset, formState, watch, setValue } =

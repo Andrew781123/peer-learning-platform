@@ -8,6 +8,7 @@ import {
 } from "next";
 import { useSession } from "next-auth/react";
 import { ParsedUrlQuery } from "querystring";
+import { toast } from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import superjson from "superjson";
@@ -138,7 +139,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
   const onVoteClick = (voteValue: SolutionVoteValue) => {
     if (authStatus !== "authenticated") {
-      alert("You must be logged in to vote");
+      toast.error("You must be logged in to vote");
     }
 
     const isUserVoted =

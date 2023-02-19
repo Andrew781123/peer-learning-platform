@@ -16,6 +16,7 @@ import {
 import "@uiw/react-md-editor/markdown-editor.css";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
+import { toast } from "react-hot-toast";
 import { convertToBase64 } from "../../../utils/image";
 import { insertImageToMarkdown } from "../../../utils/solution/markdown";
 import { trpc } from "../../../utils/trpc";
@@ -47,7 +48,7 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
         })
       );
     },
-    onError: () => alert("Can't upload image, try again later"),
+    onError: () => toast.error("Can't upload image, try again later"),
   });
 
   const uploadImageCommand: ICommand = {
