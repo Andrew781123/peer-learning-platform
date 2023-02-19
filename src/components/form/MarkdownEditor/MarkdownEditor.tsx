@@ -2,7 +2,6 @@ import "@uiw/react-markdown-preview/markdown.css";
 import { MDEditorProps } from "@uiw/react-md-editor";
 import {
   bold,
-  code,
   codeBlock,
   divider,
   ICommand,
@@ -62,6 +61,11 @@ const MarkdownEditor = (props: MarkdownEditorProps) => {
     const file = e.target.files?.[0];
 
     if (!file) {
+      return;
+    }
+
+    if (file.size > 1 * 1024 * 1024) {
+      toast.error("Image size must be less than 1MB");
       return;
     }
 
