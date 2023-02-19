@@ -72,11 +72,12 @@ export default function auth(req: NextApiRequest, res: NextApiResponse) {
   // HEAD request with user-agent: Barracude Sentinel (EE)
   // GET request with user-agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729)
   if (
-    req.method === "HEAD" ||
-    /Mozilla.+MSIE.+Windows NT.+WOW64.+Trident.+SLCC2.+NET CLR/.test(
-      req.headers["user-agent"]!
-    ) ||
-    /lua-resty-http.+ngx_lua/.test(req.headers["user-agent"]!)
+    // req.method === "HEAD" ||
+    // /Mozilla.+MSIE.+Windows NT.+WOW64.+Trident.+SLCC2.+NET CLR/.test(
+    //   req.headers["user-agent"]!
+    // ) ||
+    // /lua-resty-http.+ngx_lua/.test(req.headers["user-agent"]!)
+    req.headers["x-vercel-ip-country"] === "JP"
   ) {
     console.log("authHandler", "HEAD or IE8 request");
     return res.status(200).send("Please visit the link from a browser.");
