@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { NextPage } from "next";
-import { signIn } from "next-auth/react";
-import { env } from "process";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import FormGroup from "../../../components/form/FormGroup";
@@ -30,6 +30,9 @@ const signInSchema = z.object({
 type SignInPageProps = {};
 
 const SignInPage: NextPage<SignInPageProps> = () => {
+  const router = useRouter();
+  const { status } = useSession();
+
   const { register, handleSubmit, formState } = useForm<
     z.infer<typeof signInSchema>
   >({
@@ -46,6 +49,13 @@ const SignInPage: NextPage<SignInPageProps> = () => {
   const signInMutation = useMutation({
     mutationFn: (email: string) => signIn("email", { email }),
   });
+
+  if (status === "loading") return <h1 className="text-2xl">Loading...</h1>;
+
+  if (status === "authenticated") {
+    router.push("/subjects");
+    return null;
+  }
 
   return (
     <div className="flex h-1/2 items-center justify-center">
