@@ -14,7 +14,7 @@ export const imgurRouter = router({
           name: "test.jpg",
         },
         {
-          timeout: 5000,
+          timeout: 10000,
           headers: {
             Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
             Accept: "application/json",
