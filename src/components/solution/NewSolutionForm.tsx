@@ -355,7 +355,9 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
               <Label
                 text={
                   <div className="flex items-center justify-between">
-                    <p>Write your solution of all sub-questions here</p>
+                    <p className="cursor-default">
+                      Write your solution of all sub-questions here
+                    </p>
                     <Button
                       type="button"
                       onClick={() => togglePreview(solution.id)}
