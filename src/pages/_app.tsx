@@ -19,7 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ReactQueryDevtools initialIsOpen={false} />
       <Toaster />
-      <NextNProgress options={{ showSpinner: false }} />
+      <NextNProgress startPosition={0.5} options={{ showSpinner: false }} />
       <Layout>
         <Component {...pageProps} />
       </Layout>
