@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import Layout from "../components/ui/Layout";
 import "../styles/globals.css";
 import { trpc } from "../utils/trpc";
+import NextNProgress from "nextjs-progressbar";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -16,6 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ReactQueryDevtools initialIsOpen={false} />
       <Toaster />
+      <NextNProgress />
       <Layout>
         <Component {...pageProps} />
       </Layout>
