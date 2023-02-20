@@ -1,14 +1,10 @@
-import Markdown from "@/components/ui/Markdown";
-import { convertToBase64 } from "@/utils/image";
-import { insertImageToMarkdown } from "@/utils/solution/markdown";
-import { trpc } from "@/utils/trpc";
 import "@uiw/react-markdown-preview/markdown.css";
 import { MDEditorProps } from "@uiw/react-md-editor";
 import {
+  ICommand,
   bold,
   codeBlock,
   divider,
-  ICommand,
   image,
   italic,
   orderedListCommand,
@@ -20,6 +16,12 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
 import { toast } from "react-hot-toast";
+
+import Markdown from "@/components/ui/Markdown";
+import { convertToBase64 } from "@/utils/image";
+import { insertImageToMarkdown } from "@/utils/solution/markdown";
+import { trpc } from "@/utils/trpc";
+
 const MDEditor = dynamic(
   () => import("@uiw/react-md-editor").then((mod) => mod.default),
   { ssr: false }
