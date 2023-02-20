@@ -16,6 +16,7 @@ import {
 } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
+
 import useSelectOptions from "../../hooks/useSelectOptions";
 import { trpc } from "../../utils/trpc";
 import FormGroup from "../form/FormGroup";
@@ -158,8 +159,8 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
   const mutation = trpc.solution.createMany.useMutation({
     onSuccess: () => {
       trpcContext.question.getAllByPastPaper.invalidate();
-      toast.success("Submission created");
       router.push("/");
+      toast.success("Submission created");
     },
     onError: () =>
       toast.error("Error creating solutions, please try again later"),
@@ -212,8 +213,10 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
     remove(index);
   };
 
-  const onSubmit: SubmitHandler<z.infer<typeof solutionSchema>> = (data) => {
-    mutation.mutate({
+  const onSubmit: SubmitHandler<z.infer<typeof solutionSchema>> = async (
+    data
+  ) => {
+    await mutation.mutateAsync({
       pastPaperId: data.pastPaperId,
       solutions: data.solutions.map((solution) => ({
         questionNumber: parseInt(solution.questionNumber),
@@ -389,7 +392,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       <Button
         primary
         type="submit"
-        isLoading={mutation.isLoading}
+        isLoading={formState.isSubmitting}
         className="mt-2 ml-auto block"
       >
         Submit

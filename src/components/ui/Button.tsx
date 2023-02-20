@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { ButtonHTMLAttributes } from "react";
+
 import Spinner from "./Spinner";
 
 type ButtonSize = "small" | "medium" | "large";
@@ -36,7 +37,13 @@ const Button = (props: ButtonProps) => {
       {...otherProps}
       className={classes}
     >
-      {isLoading ? <Spinner /> : children}
+      {isLoading ? (
+        <div className="flex justify-center">
+          <Spinner />
+        </div>
+      ) : (
+        children
+      )}
     </button>
   );
 };
