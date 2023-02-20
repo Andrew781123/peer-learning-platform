@@ -3,11 +3,13 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppType } from "next/app";
-import { Toaster } from "react-hot-toast";
-import Layout from "../components/ui/Layout";
-import "../styles/globals.css";
-import { trpc } from "../utils/trpc";
 import NextNProgress from "nextjs-progressbar";
+import { Toaster } from "react-hot-toast";
+
+import Layout from "@/components/ui/Layout";
+import { trpc } from "@/utils/trpc";
+
+import "../styles/globals.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,7 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <ReactQueryDevtools initialIsOpen={false} />
       <Toaster />
-      <NextNProgress />
+      <NextNProgress options={{ showSpinner: false }} />
       <Layout>
         <Component {...pageProps} />
       </Layout>
