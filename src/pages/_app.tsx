@@ -2,6 +2,7 @@
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
+import { withPasswordProtect } from "next-password-protect";
 import type { AppType } from "next/app";
 import NextNProgress from "nextjs-progressbar";
 import { Toaster } from "react-hot-toast";
@@ -27,4 +28,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
   );
 };
 
-export default trpc.withTRPC(MyApp);
+export default process.env.PASSWORD_PROTECT
+  ? withPasswordProtect(trpc.withTRPC(MyApp), {
+      loginApiUrl: "/api/preview/login",
+      checkApiUrl: "/api/preview/passwordCheck",
+    })
+  : trpc.withTRPC(MyApp);

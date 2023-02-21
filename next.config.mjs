@@ -14,6 +14,10 @@ function defineNextConfig(config) {
 }
 
 export default defineNextConfig({
+  env: {
+    // Add any logic you want here, returning `true` to enable password protect.
+    PASSWORD_PROTECT: process.env.ENVIRONMENT === "preview" ? "true" : "false",
+  },
   reactStrictMode: true,
   swcMinify: true,
   // Next.js i18n docs: https://nextjs.org/docs/advanced-features/i18n-routing
