@@ -55,7 +55,7 @@ const SignInPage: NextPage<SignInPageProps> = () => {
   });
 
   const handlePreviewSignIn = () => {
-    handleSubmit(() => signInMutation.mutate(getValues("email")));
+    handleSubmit(() => signInMutation.mutate(getValues("email")))();
   };
 
   if (status === "loading") return <h1 className="text-2xl">Loading...</h1>;

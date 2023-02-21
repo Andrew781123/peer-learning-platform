@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import Divider from "../../components/ui/Divider";
 import Section from "../../components/ui/Section";
 
@@ -20,7 +21,7 @@ const AboutPage = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Pre-evaluation Form
+            Pre-survey
           </a>
           <a
             href="https://forms.gle/MxbURd72zFJNCYXD9"
@@ -28,7 +29,7 @@ const AboutPage = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Post-evaluation Form
+            Post-survey
           </a>
           <a
             href="https://forms.gle/ATPeArME6hzzCAuU8"
