@@ -36,6 +36,7 @@ type SignInPageProps = {};
 const SignInPage: NextPage<SignInPageProps> = () => {
   const router = useRouter();
   const { status } = useSession();
+  console.log(process.env.NODE_ENV);
 
   const { register, handleSubmit, formState, getValues } = useForm<
     z.infer<typeof signInSchema>
@@ -96,7 +97,7 @@ const SignInPage: NextPage<SignInPageProps> = () => {
             type="button"
             primary
             className={clsx(
-              process.env.NODE_ENV === "production" && "hidden",
+              process.env.ENVIRONMENT === "production" && "hidden",
               "mt-2"
             )}
             isLoading={signInMutation.isLoading}
