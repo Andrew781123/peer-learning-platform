@@ -1,17 +1,17 @@
-import NextAuth, { type NextAuthOptions } from "next-auth";
-
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { NextApiRequest, NextApiResponse } from "next";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
+
 import { prisma } from "../../../server/db/client";
 import { getEmailDomain } from "../../../utils/auth";
 import { getQueryParams } from "../../../utils/url";
-import { NextApiRequest, NextApiResponse } from "next";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ email, user, account, profile }) {
-      if (process.env.NODE_ENV === "development") return true;
+      if (process.env.NODE_ENV !== "production") return true;
 
       if (!user.email) return false;
 

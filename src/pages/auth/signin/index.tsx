@@ -1,10 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import clsx from "clsx";
 import { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import Divider from "@/components/ui/Divider";
+
 import FormGroup from "../../../components/form/FormGroup";
 import Input from "../../../components/form/Input";
 import Label from "../../../components/form/Label";
@@ -62,9 +66,10 @@ const SignInPage: NextPage<SignInPageProps> = () => {
       <Section className="flex h-4/5 p-8">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex w-full flex-grow flex-col items-center justify-start divide-y-2 divide-gray-500"
+          className="flex w-full flex-grow flex-col items-center justify-start"
         >
           <h1 className="mb-2 text-2xl">Sign in / Sign up</h1>
+          <Divider />
           <FormGroup className="mb-7 mt-4" error={!!formState.errors.email}>
             <Label text="PolyU Email" />
             <Input
