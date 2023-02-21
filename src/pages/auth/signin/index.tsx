@@ -37,7 +37,7 @@ const SignInPage: NextPage<SignInPageProps> = () => {
   const router = useRouter();
   const { status } = useSession();
 
-  const { register, handleSubmit, formState } = useForm<
+  const { register, handleSubmit, formState, getValues } = useForm<
     z.infer<typeof signInSchema>
   >({
     defaultValues: {
@@ -53,6 +53,10 @@ const SignInPage: NextPage<SignInPageProps> = () => {
   const signInMutation = useMutation({
     mutationFn: (email: string) => signIn("email", { email }),
   });
+
+  const handlePreviewSignIn = () => {
+    handleSubmit(() => signInMutation.mutate(getValues("email")));
+  };
 
   if (status === "loading") return <h1 className="text-2xl">Loading...</h1>;
 
@@ -86,6 +90,19 @@ const SignInPage: NextPage<SignInPageProps> = () => {
             isLoading={signInMutation.isLoading}
           >
             Sign In
+          </Button>
+
+          <Button
+            type="button"
+            primary
+            className={clsx(
+              process.env.NODE_ENV === "production" && "hidden",
+              "mt-2"
+            )}
+            isLoading={signInMutation.isLoading}
+            onClick={handlePreviewSignIn}
+          >
+            Dev Sign in
           </Button>
         </form>
       </Section>
