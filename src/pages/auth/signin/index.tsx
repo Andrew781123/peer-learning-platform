@@ -36,7 +36,6 @@ type SignInPageProps = {};
 const SignInPage: NextPage<SignInPageProps> = () => {
   const router = useRouter();
   const { status } = useSession();
-  console.log(process.env.NODE_ENV);
 
   const { register, handleSubmit, formState, getValues } = useForm<
     z.infer<typeof signInSchema>
