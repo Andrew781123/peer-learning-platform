@@ -22,7 +22,7 @@ const signInSchema = z.object({
     .email()
     .refine(
       (email) =>
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV !== "production"
           ? true
           : getEmailDomain(email) === "connect.polyu.hk",
       {
