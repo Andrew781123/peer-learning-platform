@@ -8,6 +8,7 @@ import NextNProgress from "nextjs-progressbar";
 import { Toaster } from "react-hot-toast";
 
 import Layout from "@/components/ui/Layout";
+import { ImageModalContextProvider } from "@/hooks/useImageModalContext";
 import { trpc } from "@/utils/trpc";
 
 import "../styles/globals.css";
@@ -18,12 +19,14 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <Toaster />
-      <NextNProgress startPosition={0.5} options={{ showSpinner: false }} />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <ImageModalContextProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <Toaster />
+        <NextNProgress startPosition={0.5} options={{ showSpinner: false }} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ImageModalContextProvider>
     </SessionProvider>
   );
 };
