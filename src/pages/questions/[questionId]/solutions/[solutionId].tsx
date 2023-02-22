@@ -14,19 +14,15 @@ import rehypeRaw from "rehype-raw";
 import superjson from "superjson";
 
 import { MarkdownImage } from "@/components/solution/MarkdownImage";
-
-import Divider from "../../../../components/ui/Divider";
-import PageHeader from "../../../../components/ui/PageHeader";
-import VoteIcon from "../../../../components/vote/VoteIcon";
-import { createContextInner } from "../../../../server/trpc/context";
-import { appRouter } from "../../../../server/trpc/router/_app";
-import { getTimeFromX } from "../../../../server/utils/dates";
-import {
-  SOLUTION_VOTE_VALUE,
-  SolutionVoteValue,
-} from "../../../../types/solution-vote";
-import generateSolutionTitle from "../../../../utils/solution/generate-solution-title";
-import { trpc } from "../../../../utils/trpc";
+import Divider from "@/components/ui/Divider";
+import PageHeader from "@/components/ui/PageHeader";
+import VoteIcon from "@/components/vote/VoteIcon";
+import { createContextInner } from "@/server/trpc/context";
+import { appRouter } from "@/server/trpc/router/_app";
+import { getTimeFromX } from "@/server/utils/dates";
+import { SOLUTION_VOTE_VALUE, SolutionVoteValue } from "@/types/solution-vote";
+import generateSolutionTitle from "@/utils/solution/generate-solution-title";
+import { trpc } from "@/utils/trpc";
 
 interface IParams extends ParsedUrlQuery {
   solutionId: string;
