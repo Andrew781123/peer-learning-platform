@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { createProxySSGHelpers } from "@trpc/react/ssg";
-import { divider } from "@uiw/react-md-editor";
 import {
   GetStaticPaths,
   GetStaticProps,
@@ -8,12 +7,10 @@ import {
   NextPage,
 } from "next";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { ParsedUrlQuery } from "querystring";
 import { toast } from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import remarkUnwrapImages from "remark-unwrap-images";
 import superjson from "superjson";
 
 import { MarkdownImage } from "@/components/solution/MarkdownImage";
@@ -218,7 +215,6 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
           <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
             components={{
-              // add onClick to img
               img: ({ src, alt }) => <MarkdownImage src={src!} alt={alt!} />,
             }}
             className="prose dark:prose-invert"
