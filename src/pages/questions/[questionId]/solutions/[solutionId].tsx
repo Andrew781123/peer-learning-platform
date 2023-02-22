@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { createProxySSGHelpers } from "@trpc/react/ssg";
+import { divider } from "@uiw/react-md-editor";
 import {
   GetStaticPaths,
   GetStaticProps,
@@ -7,11 +8,16 @@ import {
   NextPage,
 } from "next";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { ParsedUrlQuery } from "querystring";
 import { toast } from "react-hot-toast";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import remarkUnwrapImages from "remark-unwrap-images";
 import superjson from "superjson";
+
+import { MarkdownImage } from "@/components/solution/MarkdownImage";
+
 import Divider from "../../../../components/ui/Divider";
 import PageHeader from "../../../../components/ui/PageHeader";
 import VoteIcon from "../../../../components/vote/VoteIcon";
@@ -19,8 +25,8 @@ import { createContextInner } from "../../../../server/trpc/context";
 import { appRouter } from "../../../../server/trpc/router/_app";
 import { getTimeFromX } from "../../../../server/utils/dates";
 import {
-  SolutionVoteValue,
   SOLUTION_VOTE_VALUE,
+  SolutionVoteValue,
 } from "../../../../types/solution-vote";
 import generateSolutionTitle from "../../../../utils/solution/generate-solution-title";
 import { trpc } from "../../../../utils/trpc";
@@ -144,7 +150,6 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
     const isUserVoted =
       voteInfo.data?.voteOfUser !== SOLUTION_VOTE_VALUE.notVoted;
-    // TODO: Show error message
     if (isUserVoted) {
       toast.error("You have already voted");
       return;
@@ -209,9 +214,13 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
           </button>
         </div>
 
-        <div className="mt-2">
+        <div className="mt-2 w-full">
           <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
+            components={{
+              // add onClick to img
+              img: ({ src, alt }) => <MarkdownImage src={src!} alt={alt!} />,
+            }}
             className="prose dark:prose-invert"
           >
             {solution.data.markdown.replace(/\n/, "  \n")}
