@@ -9,13 +9,13 @@ import {
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
 
-import PastPaperCard from "../../../../components/past-paper/PastPaperCard";
-import Divider from "../../../../components/ui/Divider";
-import List from "../../../../components/ui/List";
-import PageHeader from "../../../../components/ui/PageHeader";
-import { createContextInner } from "../../../../server/trpc/context";
-import { appRouter } from "../../../../server/trpc/router/_app";
-import { trpc } from "../../../../utils/trpc";
+import PastPaperCard from "@/components/past-paper/PastPaperCard";
+import Divider from "@/components/ui/Divider";
+import List from "@/components/ui/List";
+import PageHeader from "@/components/ui/PageHeader";
+import { createContextInner } from "@/server/trpc/context";
+import { appRouter } from "@/server/trpc/router/_app";
+import { trpc } from "@/utils/trpc";
 
 interface IParams extends ParsedUrlQuery {
   subjectId: string;

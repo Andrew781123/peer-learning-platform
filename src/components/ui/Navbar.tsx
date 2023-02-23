@@ -1,10 +1,19 @@
 import { signIn, signOut, useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
+
+import { useUser } from "@/hooks/useUser";
+
+const FaUserAlt = dynamic(
+  () => import("react-icons/fa").then((mod) => mod.FaUserAlt),
+  { ssr: false }
+);
 
 const Navbar = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const { user } = useUser();
 
   const onLogoClick = () => {
     router.push("/subjects");
@@ -36,7 +45,11 @@ const Navbar = () => {
           </>
         ) : status === "authenticated" ? (
           <>
-            <li className="hover:cursor-default">{session?.user?.name}</li>
+            <div className="text-primary-dark flex items-center space-x-1">
+              <FaUserAlt />
+              <span className="hover:cursor-default">{user?.name}</span>
+            </div>
+
             <li className="hover:cursor-pointer" onClick={() => signOut()}>
               Sign out
             </li>
