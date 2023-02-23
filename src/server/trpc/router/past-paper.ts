@@ -1,4 +1,5 @@
-import { z } from "zod";
+import { TRPCError } from "@trpc/server";
+import { string, z } from "zod";
 
 import { getAllBySubject } from "../../../services/past-paper-service";
 import { publicProcedure, router } from "../trpc";
@@ -44,5 +45,36 @@ export const pastPaperRouter = router({
       return ctx.prisma.pastPaper.findFirst({
         where: { id: input.id },
       });
+    }),
+
+  getMySubmissionsCount: publicProcedure
+    .input(
+      z.object({
+        pastPaperId: z.number(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      try {
+        const userId = ctx.session?.user?.id;
+        if (!userId) return 0;
+
+        const count = await ctx.prisma.questionSolution.count({
+          where: {
+            solution: {
+              userId,
+            },
+            question: {
+              pastPaperId: input.pastPaperId,
+            },
+          },
+        });
+
+        return count;
+      } catch (err) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal Server Error",
+        });
+      }
     }),
 });

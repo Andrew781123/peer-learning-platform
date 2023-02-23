@@ -1,6 +1,11 @@
 import { PastPaper } from "@prisma/client";
+import clsx from "clsx";
 import { useRouter } from "next/router";
 import { AiOutlineLink } from "react-icons/ai";
+import { FaUserAlt } from "react-icons/fa";
+
+import { useUser } from "@/hooks/useUser";
+import { trpc } from "@/utils/trpc";
 
 type PastPaperCardProps = {
   pastPaper: PastPaper & {
@@ -13,6 +18,17 @@ const PastPaperCard = (props: PastPaperCardProps) => {
   const { pastPaper } = props;
 
   const router = useRouter();
+  const { user } = useUser();
+
+  const { data: mySubmissionCount = 0 } =
+    trpc.pastPaper.getMySubmissionsCount.useQuery(
+      {
+        pastPaperId: pastPaper.id,
+      },
+      {
+        enabled: !!user,
+      }
+    );
 
   const onSubjectCardClick = () => {
     router.push(`${router.asPath}/${pastPaper.id}/questions`);
@@ -45,9 +61,25 @@ const PastPaperCard = (props: PastPaperCardProps) => {
           <span className="text-gray-300">{pastPaper.questionsCount}</span>{" "}
           Questions answered
         </p>
-        <p className="text-sm text-gray-400">
-          <span className="text-gray-300">{pastPaper.solutionsCount}</span>{" "}
-          Submissions
+        <p className="text-sm text-gray-400 flex items-center space-x-1">
+          <span className="text-gray-300">{pastPaper.solutionsCount}</span>
+          <span>Submissions</span>
+          <span
+            className={clsx(!mySubmissionCount && "hidden", "text-gray-400")}
+          >
+            &#x2022;
+          </span>
+          <div
+            className={clsx(
+              !mySubmissionCount && "hidden",
+              "flex items-center space-x-1"
+            )}
+          >
+            <span className={clsx("text-yellow-800 text-sm font-bold")}>
+              {mySubmissionCount}
+            </span>
+            <FaUserAlt className="text-yellow-800" />
+          </div>
         </p>
       </div>
     </div>
