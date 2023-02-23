@@ -12,7 +12,7 @@ const FaUserAlt = dynamic(
 
 const Navbar = () => {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const { user } = useUser();
 
   const onLogoClick = () => {
