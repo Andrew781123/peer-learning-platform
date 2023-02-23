@@ -1,5 +1,10 @@
+import clsx from "clsx";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { FaUserCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
+
+import { useUser } from "@/hooks/useUser";
 
 import { getTimeFromX } from "../../server/utils/dates";
 import { GetAllSolutionsResponse } from "../../types/solution";
@@ -14,6 +19,7 @@ const SolutionCard = (props: SolutionCardProps) => {
   const { solution } = props;
 
   const router = useRouter();
+  const { user } = useUser();
 
   const title = generateSolutionTitle(solution.id);
 
@@ -29,6 +35,17 @@ const SolutionCard = (props: SolutionCardProps) => {
       <div className="flex w-full items-center justify-between">
         <div>
           <h1 className="text-md font-bold">From {title}</h1>
+
+          <div
+            className={clsx(
+              user?.id !== solution.userId && "hidden",
+              "flex items-center space-x-1"
+            )}
+          >
+            <FaUserCheck />
+            <span className="text-yellow-200 text-sm">By you</span>
+          </div>
+
           <p className="text-sm text-gray-400">
             Posted{" "}
             <span className="text-gray-300">
