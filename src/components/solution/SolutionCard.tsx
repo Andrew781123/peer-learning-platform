@@ -41,7 +41,7 @@ const SolutionCard = (props: SolutionCardProps) => {
             )}
           >
             <FaUserCheck />
-            <span className="text-yellow-800 text-sm">By you</span>
+            <span className="text-yellow-300 text-sm">By you</span>
           </div>
 
           <p className="text-sm text-gray-400">

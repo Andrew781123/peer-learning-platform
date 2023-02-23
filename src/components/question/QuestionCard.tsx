@@ -36,7 +36,7 @@ const QuestionCard = (props: QuestionCardProps) => {
 
         <div className="flex items-center space-x-1">
           <FaUserCheck />
-          <span className="text-yellow-800 text-sm">
+          <span className="text-yellow-300 text-sm">
             You have submission for this question
           </span>
         </div>

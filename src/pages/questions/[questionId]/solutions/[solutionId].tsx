@@ -183,7 +183,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
         <div
           className={clsx(
             user?.id !== solution.data.user.id && "hidden",
-            "flex items-center space-x-1 text-yellow-800"
+            "flex items-center space-x-1 text-yellow-300"
           )}
         >
           <FaUserAlt />

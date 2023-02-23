@@ -6,15 +6,16 @@ import {
   GetStaticPropsContext,
   NextPage,
 } from "next";
+import Link from "next/link";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
 
-import QuestionCard from "../../../../../../components/question/QuestionCard";
-import List from "../../../../../../components/ui/List";
-import PageHeader from "../../../../../../components/ui/PageHeader";
-import { createContextInner } from "../../../../../../server/trpc/context";
-import { appRouter } from "../../../../../../server/trpc/router/_app";
-import { trpc } from "../../../../../../utils/trpc";
+import QuestionCard from "@/components/question/QuestionCard";
+import List from "@/components/ui/List";
+import PageHeader from "@/components/ui/PageHeader";
+import { createContextInner } from "@/server/trpc/context";
+import { appRouter } from "@/server/trpc/router/_app";
+import { trpc } from "@/utils/trpc";
 
 interface IParams extends ParsedUrlQuery {
   pastPaperId: string;
@@ -93,17 +94,11 @@ const QuestionPage: NextPage<QuestionPageProps> = (props) => {
       <div className="mb-3">
         <PageHeader title="Questions" />
       </div>
-      <p className="mb-2">
-        Link to exam paper:{" "}
-        <a
-          href={pastPaperLink}
-          target="_blank"
-          rel="noreferrer"
-          className="underline"
-        >
-          {pastPaperLink}
-        </a>
-      </p>
+      <div className="mb-2 text-primary-light underline">
+        <Link href={pastPaperLink} target="_blank" rel="noreferrer">
+          Link to exam Paper
+        </Link>
+      </div>
 
       <List emptyMessage="No submissions for this exam paper yet">
         {isSuccess &&

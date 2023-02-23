@@ -1,11 +1,19 @@
 import { PastPaper } from "@prisma/client";
 import clsx from "clsx";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { AiOutlineLink } from "react-icons/ai";
-import { FaUserAlt } from "react-icons/fa";
 
 import { useUser } from "@/hooks/useUser";
 import { trpc } from "@/utils/trpc";
+
+const AiOutlineLink = dynamic(
+  () => import("react-icons/ai").then((mod) => mod.AiOutlineLink),
+  { ssr: false }
+);
+const FaUserAlt = dynamic(
+  () => import("react-icons/fa").then((mod) => mod.FaUserAlt),
+  { ssr: false }
+);
 
 type PastPaperCardProps = {
   pastPaper: PastPaper & {
@@ -61,7 +69,7 @@ const PastPaperCard = (props: PastPaperCardProps) => {
           <span className="text-gray-300">{pastPaper.questionsCount}</span>{" "}
           Questions answered
         </p>
-        <p className="text-sm text-gray-400 flex items-center space-x-1">
+        <div className="text-sm text-gray-400 flex items-center space-x-1">
           <span className="text-gray-300">{pastPaper.solutionsCount}</span>
           <span>Submissions</span>
           <span
@@ -75,12 +83,12 @@ const PastPaperCard = (props: PastPaperCardProps) => {
               "flex items-center space-x-1"
             )}
           >
-            <span className={clsx("text-yellow-800 text-sm font-bold")}>
+            <span className={clsx("text-yellow-300 text-sm font-bold")}>
               {mySubmissionCount}
             </span>
-            <FaUserAlt className="text-yellow-800" />
+            <FaUserAlt className="text-yellow-300" />
           </div>
-        </p>
+        </div>
       </div>
     </div>
   );
