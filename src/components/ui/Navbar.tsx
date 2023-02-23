@@ -13,7 +13,9 @@ const Navbar = () => {
   return (
     <nav className="flex w-full items-center gap-10 bg-surface-default p-5 text-onSurface">
       <div className="" onClick={onLogoClick}>
-        <p className="text-2xl font-bold hover:cursor-pointer">ExamPeer</p>
+        <p className="text-2xl font-bold hover:cursor-pointer text-primary-default">
+          ExamPeer
+        </p>
       </div>
 
       <ul className="flex gap-7">
