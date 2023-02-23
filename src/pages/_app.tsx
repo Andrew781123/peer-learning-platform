@@ -31,7 +31,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   );
 };
 
-export default process.env.PASSWORD_PROTECT
+export default process.env.PASSWORD_PROTECT === "true"
   ? withPasswordProtect(trpc.withTRPC(MyApp), {
       loginApiUrl: "/api/preview/login",
       checkApiUrl: "/api/preview/passwordCheck",
