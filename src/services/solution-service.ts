@@ -45,6 +45,7 @@ export const getOneById = async (
       include: {
         difficultyRating: true,
         votes: true,
+        user: true,
       },
     });
 
