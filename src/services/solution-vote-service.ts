@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+
 import { SolutionVoteValue } from "../types/solution-vote";
 
 export const vote = (

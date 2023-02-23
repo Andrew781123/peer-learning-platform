@@ -8,14 +8,15 @@ import {
 } from "next";
 import { ParsedUrlQuery } from "querystring";
 import superjson from "superjson";
+
+import SolutionCard from "@/components/solution/SolutionCard";
 import TopicBadge from "@/components/topic/TopicBadge";
 import Divider from "@/components/ui/Divider";
+import List from "@/components/ui/List";
 import PageHeader from "@/components/ui/PageHeader";
 import { createContextInner } from "@/server/trpc/context";
 import { appRouter } from "@/server/trpc/router/_app";
 import { trpc } from "@/utils/trpc";
-import List from "@/components/ui/List";
-import SolutionCard from "@/components/solution/SolutionCard";
 
 interface IParams extends ParsedUrlQuery {
   questionId: string;

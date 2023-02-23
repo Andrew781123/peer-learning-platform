@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
+
 import { trpc } from "../../../utils/trpc";
 
 type NewUserPageProps = {};

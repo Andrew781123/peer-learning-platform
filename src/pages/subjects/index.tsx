@@ -1,6 +1,7 @@
 import { createProxySSGHelpers } from "@trpc/react/ssg";
 import { GetStaticProps, NextPage } from "next";
 import superjson from "superjson";
+
 import SubjectCard from "../../components/subject/SubjectCard";
 import Divider from "../../components/ui/Divider";
 import PageHeader from "../../components/ui/PageHeader";

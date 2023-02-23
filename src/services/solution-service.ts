@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+
 import { calculateVoteCount } from "../utils/solution/calculate-votes";
 
 export const getAllSolutionsByQuestion = async (

@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { IoIosArrowForward } from "react-icons/io";
+
 import { getTimeFromX } from "../../server/utils/dates";
 import { GetAllSolutionsResponse } from "../../types/solution";
 import generateSolutionTitle from "../../utils/solution/generate-solution-title";

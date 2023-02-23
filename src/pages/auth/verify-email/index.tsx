@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
+
 import Section from "../../../components/ui/Section";
 
 export const getServerSideProps: GetServerSideProps<

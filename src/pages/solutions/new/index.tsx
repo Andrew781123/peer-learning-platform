@@ -9,6 +9,7 @@ import { GetStaticProps, NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import superjson from "superjson";
+
 import NewSolutionForm from "../../../components/solution/NewSolutionForm";
 import Divider from "../../../components/ui/Divider";
 import PageHeader from "../../../components/ui/PageHeader";

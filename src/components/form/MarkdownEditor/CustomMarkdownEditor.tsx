@@ -1,10 +1,11 @@
+import clsx from "clsx";
+import React, { useRef } from "react";
+import { BiImageAdd } from "react-icons/bi";
+
 import Icon from "@/components/ui/Icon";
 import { convertToBase64 } from "@/utils/image";
 import { insertImageToMarkdown } from "@/utils/solution/markdown";
 import { trpc } from "@/utils/trpc";
-import clsx from "clsx";
-import React, { useRef } from "react";
-import { BiImageAdd } from "react-icons/bi";
 
 type MarkdownEditorProps = {
   error?: boolean;

@@ -1,4 +1,5 @@
 import { GoTriangleUp } from "react-icons/go";
+
 import { IconSize } from "../types/icon-size";
 import Icon from "../ui/Icon";
 

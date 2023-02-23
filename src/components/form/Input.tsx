@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { DetailedHTMLProps, forwardRef, InputHTMLAttributes } from "react";
+import { DetailedHTMLProps, InputHTMLAttributes, forwardRef } from "react";
+
 import ErrorText from "./ErrorText";
 
 type InputProps = {
