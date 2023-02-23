@@ -17,7 +17,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  console.log(process.env.ENVIRONMENT);
   return (
     <SessionProvider session={session}>
       <ImageModalContextProvider>

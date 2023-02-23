@@ -20,6 +20,7 @@ export const getAllSolutionsByQuestion = async (
     include: {
       difficultyRating: true,
       votes: true,
+      user: true,
     },
     orderBy: [
       {
