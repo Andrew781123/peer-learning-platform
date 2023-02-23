@@ -1,5 +1,8 @@
 import { useRouter } from "next/router";
 import { AiOutlineSolution } from "react-icons/ai";
+import { FaUserCheck } from "react-icons/fa";
+
+import { trpc } from "@/utils/trpc";
 
 import { GetAllQuestionsByPastPaperResponse } from "../../types/question";
 import TopicBadge from "../topic/TopicBadge";
@@ -14,6 +17,11 @@ const QuestionCard = (props: QuestionCardProps) => {
 
   const router = useRouter();
 
+  const { data: mySolutionsCount = 0 } =
+    trpc.question.getNumberOfSolutionOfQuestionByMe.useQuery({
+      questionId: question.id,
+    });
+
   const onQuestionCardClick = () => {
     router.push(`/questions/${question.id}/solutions`);
   };
@@ -23,8 +31,16 @@ const QuestionCard = (props: QuestionCardProps) => {
       onClick={onQuestionCardClick}
       className="flex items-center  justify-between bg-surface-default p-3 hover:cursor-pointer hover:bg-surface-light"
     >
-      <div className="max-w-[50%]">
-        <p className="mb-1">Question {question.number}</p>
+      <div className="max-w-[50%] flex flex-col space-y-1">
+        <p>Question {question.number}</p>
+
+        <div className="flex items-center space-x-1">
+          <FaUserCheck />
+          <span className="text-yellow-800 text-sm">
+            You have submission for this question
+          </span>
+        </div>
+
         <div className="flex  flex-wrap gap-2">
           {question.topics.map((topic) => (
             <TopicBadge key={topic} topic={topic} />

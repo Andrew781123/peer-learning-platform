@@ -1,15 +1,13 @@
 import clsx from "clsx";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FaUserCheck } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 
+import VoteInfo from "@/components/vote/VoteInfo";
 import { useUser } from "@/hooks/useUser";
-
-import { getTimeFromX } from "../../server/utils/dates";
-import { GetAllSolutionsResponse } from "../../types/solution";
-import generateSolutionTitle from "../../utils/solution/generate-solution-title";
-import VoteInfo from "../vote/VoteInfo";
+import { getTimeFromX } from "@/server/utils/dates";
+import { GetAllSolutionsResponse } from "@/types/solution";
+import generateSolutionTitle from "@/utils/solution/generate-solution-title";
 
 type SolutionCardProps = {
   solution: GetAllSolutionsResponse[number];
@@ -43,7 +41,7 @@ const SolutionCard = (props: SolutionCardProps) => {
             )}
           >
             <FaUserCheck />
-            <span className="text-yellow-200 text-sm">By you</span>
+            <span className="text-yellow-800 text-sm">By you</span>
           </div>
 
           <p className="text-sm text-gray-400">

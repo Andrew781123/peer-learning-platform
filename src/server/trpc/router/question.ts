@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import {
   getAllQuestionsByPastPaper,
+  getNumberOfSolutionOfQuestionByMe,
   getOneQuestion,
 } from "../../../services/question-service";
 import { getValidTopics } from "../../../utils/question";
@@ -61,6 +62,36 @@ export const questionRouter = router({
         };
 
         return response;
+      } catch (err) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Internal Server Error",
+        });
+      }
+    }),
+
+  getNumberOfSolutionOfQuestionByMe: publicProcedure
+    .input(
+      z.object({
+        questionId: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      try {
+        const { questionId } = input;
+
+        const userId = ctx?.session?.user?.id;
+        if (!userId) return 0;
+
+        const count = await getNumberOfSolutionOfQuestionByMe(
+          ctx.prisma.questionSolution,
+          {
+            questionId,
+            userId,
+          }
+        );
+
+        return count;
       } catch (err) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",

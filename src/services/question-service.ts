@@ -130,6 +130,35 @@ export const getOneQuestion = async (
   }
 };
 
+export const getNumberOfSolutionOfQuestionByMe = async (
+  repo: PrismaClient["questionSolution"],
+  {
+    questionId,
+    userId,
+  }: {
+    questionId: string;
+    userId: string;
+  }
+) => {
+  try {
+    const solutionCount = await repo.count({
+      where: {
+        questionId,
+        solution: {
+          userId,
+        },
+      },
+    });
+
+    return solutionCount;
+  } catch (err) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Internal Server Error",
+    });
+  }
+};
+
 const formatQuestion = (question: {
   number: number;
   id: string;
