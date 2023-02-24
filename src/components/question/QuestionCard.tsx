@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useRouter } from "next/router";
 import { AiOutlineSolution } from "react-icons/ai";
 import { FaUserCheck } from "react-icons/fa";
@@ -34,14 +35,19 @@ const QuestionCard = (props: QuestionCardProps) => {
       <div className="max-w-[50%] flex flex-col space-y-1">
         <p>Question {question.number}</p>
 
-        <div className="flex items-center space-x-1">
+        <div
+          className={clsx(
+            !mySolutionsCount && "hidden",
+            "flex items-center space-x-1"
+          )}
+        >
           <FaUserCheck />
-          <span className="text-yellow-300 text-sm">
+          <span className={clsx("text-yellow-300 text-sm")}>
             You have submission for this question
           </span>
         </div>
 
-        <div className="flex  flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           {question.topics.map((topic) => (
             <TopicBadge key={topic} topic={topic} />
           ))}
@@ -49,7 +55,9 @@ const QuestionCard = (props: QuestionCardProps) => {
       </div>
 
       <div className="flex items-center gap-5">
-        <DifficultyLevelChip score={question.averageDifficultyScore} />
+        <div className={clsx(!question.solutionCount && "hidden")}>
+          <DifficultyLevelChip score={question.averageDifficultyScore} />
+        </div>
         <div className="flex items-center gap-1">
           <AiOutlineSolution />
           <p>{question.solutionCount}</p>
