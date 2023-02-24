@@ -1,11 +1,25 @@
 import { GetServerSideProps, NextPage } from "next";
+import { getServerSession } from "next-auth";
 import { useRouter } from "next/router";
+
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import Section from "../../../components/ui/Section";
 
 export const getServerSideProps: GetServerSideProps<
   EmailVerificationPageProps
 > = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {},
   };
