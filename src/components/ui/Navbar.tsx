@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { useUser } from "@/hooks/useUser";
+import { trpc } from "@/utils/trpc";
 
 const FaUserAlt = dynamic(
   () => import("react-icons/fa").then((mod) => mod.FaUserAlt),
@@ -14,6 +15,10 @@ const Navbar = () => {
   const router = useRouter();
   const { status } = useSession();
   const { user } = useUser();
+
+  const { data: userData } = trpc.user.getMe.useQuery(undefined, {
+    enabled: !!user && !user?.name,
+  });
 
   const onLogoClick = () => {
     router.push("/subjects");
@@ -47,7 +52,9 @@ const Navbar = () => {
           <>
             <div className="text-primary-dark flex items-center space-x-1">
               <FaUserAlt />
-              <span className="hover:cursor-default">{user?.name}</span>
+              <span className="hover:cursor-default">
+                {user?.name ?? userData?.name}
+              </span>
             </div>
 
             <li className="hover:cursor-pointer" onClick={() => signOut()}>

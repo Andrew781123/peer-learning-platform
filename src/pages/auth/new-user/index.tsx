@@ -28,6 +28,10 @@ const NewUserPage: NextPage<NewUserPageProps> = (props) => {
     onSuccess: () => {
       trpcUtils.auth.getMe.invalidate();
 
+      // ! This is a hacky way to trigger the useSession hook to update
+      const event = new Event("visibilitychange");
+      document.dispatchEvent(event);
+
       // if (callbackUrl) return router.replace(decodeURIComponent(callbackUrl));
       return router.push("/subjects");
     },

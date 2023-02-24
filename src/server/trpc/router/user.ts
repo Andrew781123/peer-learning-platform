@@ -1,8 +1,30 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { protectedProcedure, router } from "../trpc";
 
 export const userRouter = router({
+  getMe: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      const userId = ctx.session.user.id;
+
+      const user = await ctx.prisma.user.findFirst({
+        where: {
+          id: userId,
+        },
+        select: {
+          name: true,
+        },
+      });
+
+      return user;
+    } catch (err) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Internal Server Error",
+      });
+    }
+  }),
   patchNewUser: protectedProcedure
     .input(
       z.object({
