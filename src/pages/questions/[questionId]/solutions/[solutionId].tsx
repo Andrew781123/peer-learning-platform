@@ -19,6 +19,7 @@ import { MarkdownImage } from "@/components/solution/MarkdownImage";
 import Divider from "@/components/ui/Divider";
 import PageHeader from "@/components/ui/PageHeader";
 import VoteIcon from "@/components/vote/VoteIcon";
+import { SolutionVote } from "@/features/solution/components/solutionDetail/SolutionVote";
 import { useUser } from "@/hooks/useUser";
 import { createContextInner } from "@/server/trpc/context";
 import { appRouter } from "@/server/trpc/router/_app";
@@ -95,69 +96,13 @@ type PastPaperPageProps = {
 const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
   const { solutionId, questionId, questionNumber } = props;
 
-  const trpcUtils = trpc.useContext();
-
-  const { status: authStatus } = useSession();
   const { user } = useUser();
 
   const solution = trpc.solution.getOneById.useQuery({
     id: solutionId,
   });
 
-  const voteInfo = trpc.solutionVote.getVoteInfo.useQuery({
-    solutionId,
-  });
-
-  const voteMutation = trpc.solutionVote.vote.useMutation({
-    onMutate: async ({ voteValue }) => {
-      await trpcUtils.solutionVote.getVoteInfo.cancel();
-
-      const previousVoteInfo = trpcUtils.solutionVote.getVoteInfo.getData();
-
-      trpcUtils.solutionVote.getVoteInfo.setData(
-        {
-          voteOfUser: voteValue,
-          votes: previousVoteInfo?.votes ?? solution.data!.votes + voteValue,
-        },
-        {
-          solutionId,
-        }
-      );
-
-      return { previousVoteInfo };
-    },
-
-    onError: (err, _, context) => {
-      if (context?.previousVoteInfo) {
-        trpcUtils.solutionVote.getVoteInfo.setData(context.previousVoteInfo);
-      }
-    },
-
-    onSettled: () => {
-      trpcUtils.solutionVote.getVoteInfo.refetch();
-    },
-  });
-
   const title = generateSolutionTitle(solutionId);
-
-  const onVoteClick = (voteValue: SolutionVoteValue) => {
-    if (authStatus !== "authenticated") {
-      toast.error("You must be logged in to vote");
-    }
-
-    const isUserVoted =
-      voteInfo.data?.voteOfUser !== SOLUTION_VOTE_VALUE.notVoted;
-    if (isUserVoted) {
-      toast.error("You have already voted");
-      return;
-    }
-
-    voteMutation.mutate({
-      solutionId,
-      questionId,
-      voteValue,
-    });
-  };
 
   if (!solution.isSuccess) return null;
 
@@ -194,36 +139,13 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
       </div>
 
       <div className="flex w-full gap-4">
-        <div className="mt-2 flex w-fit flex-col items-center">
-          <button
-            onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.upVoted)}
-            disabled={!voteInfo.data}
-          >
-            <VoteIcon
-              type="upVote"
-              size="medium"
-              voted={voteInfo.data?.voteOfUser === SOLUTION_VOTE_VALUE.upVoted}
-            />
-          </button>
-
-          <p className="cursor-default">
-            {voteInfo.data?.votes ?? solution.data.votes}
-          </p>
-
-          <button
-            onClick={() => onVoteClick(SOLUTION_VOTE_VALUE.downVoted)}
-            disabled={!voteInfo.data}
-          >
-            <VoteIcon
-              type="downVote"
-              size="medium"
-              voted={
-                voteInfo.data?.voteOfUser === SOLUTION_VOTE_VALUE.downVoted
-              }
-            />
-          </button>
+        <div className="mt-2">
+          <SolutionVote
+            solutionId={solutionId}
+            questionId={questionId}
+            fallbackVoteCount={solution.data.votes}
+          />
         </div>
-
         <div className="mt-2 w-full">
           <ReactMarkdown
             rehypePlugins={[rehypeRaw]}
