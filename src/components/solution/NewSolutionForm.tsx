@@ -363,7 +363,7 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
                       onClick={() => togglePreview(solution.id)}
                       size="small"
                     >
-                      {isPreview[index] ? "Edit" : "Preview"}
+                      {isPreview[solution.id] ? "Edit" : "Preview"}
                     </Button>
                   </div>
                 }
