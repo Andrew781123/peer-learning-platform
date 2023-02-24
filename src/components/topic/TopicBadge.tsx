@@ -6,7 +6,7 @@ const TopicBadge = (props: TopicBadgeProps) => {
   return (
     <p
       key={topic}
-      className="rounded-full bg-primary-default py-1 px-3 text-xs text-onPrimary"
+      className="rounded-full bg-primary-default py-1 px-3 text-xs text-black"
     >
       {topic}
     </p>

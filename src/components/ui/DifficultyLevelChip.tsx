@@ -1,3 +1,5 @@
+import { Badge } from "@mantine/core";
+
 import { DifficultyLevel } from "../../constants/difficultyRating";
 import getDifficultyLevel from "../../utils/getDifficultyRating";
 
@@ -7,15 +9,15 @@ type DifficultyChipProps = {
 
 const ChipUIMap = {
   [DifficultyLevel.EASY]: {
-    color: "bg-green-500",
+    color: "green",
     displayText: DifficultyLevel.EASY,
   },
   [DifficultyLevel.MEDIUM]: {
-    color: "bg-yellow-500",
+    color: "yellow",
     displayText: DifficultyLevel.MEDIUM,
   },
   [DifficultyLevel.HARD]: {
-    color: "bg-red-500",
+    color: "red",
     displayText: DifficultyLevel.HARD,
   },
 } as const;
@@ -26,11 +28,9 @@ const DifficultyLevelChip = (props: DifficultyChipProps) => {
   const level = getDifficultyLevel(score);
 
   return (
-    <div
-      className={`flex items-center justify-center rounded-full ${ChipUIMap[level].color} px-3 py-1 text-xs font-bold text-white`}
-    >
+    <Badge color={ChipUIMap[level].color} size="lg" variant="filled">
       {ChipUIMap[level].displayText}
-    </div>
+    </Badge>
   );
 };
 
