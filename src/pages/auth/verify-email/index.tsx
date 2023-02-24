@@ -43,15 +43,6 @@ const EmailVerificationPage: NextPage<EmailVerificationPageProps> = ({}) => {
             email
           </p>
         </div>
-        <p className="mb-0 text-gray-200">
-          If you don&#39;t receive the email, click{" "}
-          <span
-            className="cursor-pointer self-end text-primary-default"
-            onClick={() => router.back()}
-          >
-            here
-          </span>
-        </p>
       </Section>
     </div>
   );
