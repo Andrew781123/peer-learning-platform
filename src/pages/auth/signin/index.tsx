@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Section } from "@mantine/core/lib/AppShell/HorizontalSection/Section/Section";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import { NextPage } from "next";
@@ -7,14 +8,12 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import FormGroup from "@/components/form/FormGroup";
+import Input from "@/components/form/Input";
+import Label from "@/components/form/Label";
+import Button from "@/components/ui/Button";
 import Divider from "@/components/ui/Divider";
-
-import FormGroup from "../../../components/form/FormGroup";
-import Input from "../../../components/form/Input";
-import Label from "../../../components/form/Label";
-import Button from "../../../components/ui/Button";
-import Section from "../../../components/ui/Section";
-import { getEmailDomain } from "../../../utils/auth";
+import { getEmailDomain } from "@/utils/auth";
 
 const signInSchema = z.object({
   email: z
@@ -22,7 +21,7 @@ const signInSchema = z.object({
     .email()
     .refine(
       (email) =>
-        process.env.NODE_ENV !== "production"
+        process.env.VERCEL_ENV !== "production"
           ? true
           : getEmailDomain(email) === "connect.polyu.hk",
       {
