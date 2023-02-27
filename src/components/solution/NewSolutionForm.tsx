@@ -5,6 +5,7 @@ import {
   Subject,
   SubjectTopic,
 } from "@prisma/client";
+import { captureException } from "@sentry/nextjs";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -162,8 +163,10 @@ const NewSolutionForm = (props: NewSolutionFormProps) => {
       router.push("/");
       toast.success("Submission created");
     },
-    onError: () =>
-      toast.error("Error creating solutions, please try again later"),
+    onError: (err) => {
+      captureException(err);
+      toast.error("Error creating solutions, please try again later");
+    },
   });
 
   const { handleSubmit, register, control, reset, formState, watch, setValue } =

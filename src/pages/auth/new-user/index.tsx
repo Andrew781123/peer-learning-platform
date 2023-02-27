@@ -1,7 +1,8 @@
+import { captureException } from "@sentry/nextjs";
 import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 import { trpc } from "../../../utils/trpc";
 
@@ -34,6 +35,10 @@ const NewUserPage: NextPage<NewUserPageProps> = (props) => {
 
       // if (callbackUrl) return router.replace(decodeURIComponent(callbackUrl));
       return router.push("/subjects");
+    },
+    onError: (err) => {
+      captureException(err);
+      router.push("/subjects");
     },
   });
 

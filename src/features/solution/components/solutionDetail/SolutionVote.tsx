@@ -1,3 +1,4 @@
+import { captureException } from "@sentry/nextjs";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 
@@ -43,6 +44,8 @@ export const SolutionVote = ({
     },
 
     onError: (err, _, context) => {
+      captureException(err);
+
       if (context?.previousVoteInfo) {
         trpcUtils.solutionVote.getVoteInfo.setData(context.previousVoteInfo);
       }
