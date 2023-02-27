@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Section } from "@mantine/core/lib/AppShell/HorizontalSection/Section/Section";
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import { NextPage } from "next";
@@ -13,6 +12,7 @@ import Input from "@/components/form/Input";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/Button";
 import Divider from "@/components/ui/Divider";
+import Section from "@/components/ui/Section";
 import { getEmailDomain } from "@/utils/auth";
 
 const signInSchema = z.object({
