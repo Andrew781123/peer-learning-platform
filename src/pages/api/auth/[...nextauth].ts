@@ -11,7 +11,7 @@ import { getQueryParams } from "../../../utils/url";
 export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ email, user, account, profile }) {
-      if (process.env.NODE_ENV !== "production") return true;
+      if (process.env.VERCEL_ENV !== "production") return true;
 
       if (!user.email) return false;
 
@@ -48,6 +48,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     newUser: "/auth/new-user",
     signIn: "/auth/signin",
+    error: "/auth/error",
     verifyRequest: "/auth/verify-email",
   },
   // Configure one or more authentication providers

@@ -1,3 +1,4 @@
+import { MantineProvider, createEmotionCache } from "@mantine/core";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -16,20 +17,27 @@ const NextNProgress = dynamic(() => import("nextjs-progressbar"), {
   ssr: false,
 });
 
+const myCache = createEmotionCache({
+  key: "mantine",
+  prepend: true,
+});
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
   return (
     <SessionProvider session={session}>
-      <ImageModalContextProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-        <Toaster />
-        <NextNProgress startPosition={0.5} options={{ showSpinner: false }} />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </ImageModalContextProvider>
+      <MantineProvider withGlobalStyles withNormalizeCSS emotionCache={myCache}>
+        <ImageModalContextProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <Toaster />
+          <NextNProgress startPosition={0.5} options={{ showSpinner: false }} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ImageModalContextProvider>
+      </MantineProvider>
     </SessionProvider>
   );
 };

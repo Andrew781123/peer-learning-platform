@@ -7,14 +7,13 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import FormGroup from "@/components/form/FormGroup";
+import Input from "@/components/form/Input";
+import Label from "@/components/form/Label";
+import Button from "@/components/ui/Button";
 import Divider from "@/components/ui/Divider";
-
-import FormGroup from "../../../components/form/FormGroup";
-import Input from "../../../components/form/Input";
-import Label from "../../../components/form/Label";
-import Button from "../../../components/ui/Button";
-import Section from "../../../components/ui/Section";
-import { getEmailDomain } from "../../../utils/auth";
+import Section from "@/components/ui/Section";
+import { getEmailDomain } from "@/utils/auth";
 
 const signInSchema = z.object({
   email: z
@@ -22,7 +21,7 @@ const signInSchema = z.object({
     .email()
     .refine(
       (email) =>
-        process.env.NODE_ENV !== "production"
+        process.env.VERCEL_ENV !== "production"
           ? true
           : getEmailDomain(email) === "connect.polyu.hk",
       {
@@ -37,7 +36,7 @@ const SignInPage: NextPage<SignInPageProps> = () => {
   const router = useRouter();
   const { status } = useSession();
 
-  const { register, handleSubmit, formState, getValues } = useForm<
+  const { register, handleSubmit, formState } = useForm<
     z.infer<typeof signInSchema>
   >({
     defaultValues: {
@@ -53,10 +52,6 @@ const SignInPage: NextPage<SignInPageProps> = () => {
   const signInMutation = useMutation({
     mutationFn: (email: string) => signIn("email", { email }),
   });
-
-  const handlePreviewSignIn = () => {
-    handleSubmit(() => signInMutation.mutate(getValues("email")))();
-  };
 
   if (status === "loading") return <h1 className="text-2xl">Loading...</h1>;
 
@@ -96,11 +91,11 @@ const SignInPage: NextPage<SignInPageProps> = () => {
             type="button"
             primary
             className={clsx(
-              process.env.NODE_ENV === "production" && "hidden",
+              process.env.VERCEL_ENV === "production" && "hidden",
               "mt-2"
             )}
             isLoading={signInMutation.isLoading}
-            onClick={handlePreviewSignIn}
+            onClick={handleSubmit(onSubmit)}
           >
             Dev Sign in
           </Button>
