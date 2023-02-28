@@ -1,4 +1,5 @@
 import "@uiw/react-markdown-preview/markdown.css";
+import { MDEditorProps } from "@uiw/react-md-editor";
 import {
   ICommand,
   bold,
@@ -32,7 +33,7 @@ type MarkdownEditorProps = {
   onChange: (markdown: string) => void;
   value: string;
   isPreview: boolean;
-};
+} & MDEditorProps;
 
 const MarkdownEditor = (props: MarkdownEditorProps) => {
   const { error, isPreview, editorRef, onChange, value, ...restProps } = props;
