@@ -1,4 +1,4 @@
-// import "@uiw/react-markdown-preview/markdown.css";
+import "@uiw/react-markdown-preview/markdown.css";
 import {
   ICommand,
   bold,
@@ -11,6 +11,7 @@ import {
   title2,
   unorderedListCommand,
 } from "@uiw/react-md-editor/lib/commands";
+import "@uiw/react-md-editor/markdown-editor.css";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
 import { toast } from "react-hot-toast";
@@ -28,7 +29,7 @@ const MDEditor = dynamic(
 type MarkdownEditorProps = {
   error?: boolean;
   editorRef: React.LegacyRef<HTMLDivElement>;
-  onChange: (markdown?: string) => void;
+  onChange: (markdown: string) => void;
   value: string;
   isPreview: boolean;
 };
