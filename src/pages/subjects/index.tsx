@@ -38,13 +38,6 @@ const SubjectPage: NextPage<SubjectPageProps> = (props) => {
         <PageHeader title="Subjects" />
         <Divider />
       </div>
-      <button
-        onClick={() => {
-          throw new Error("test");
-        }}
-      >
-        test
-      </button>
 
       {isSuccess && (
         <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
