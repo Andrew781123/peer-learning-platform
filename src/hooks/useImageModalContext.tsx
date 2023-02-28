@@ -36,10 +36,10 @@ export const ImageModalContextProvider = ({
         <div
           tabIndex={-1}
           aria-hidden="true"
-          className="fixed top-0 right-0 w-full h-full z-50 overflow-x-hidden overflow-y-auto "
+          className="fixed top-0 right-0 w-full h-full z-50 overflow-x-hidden overflow-y-auto"
           onClick={closeImageModal}
         >
-          <div className="relative w-full mw-6xl h-full flex justify-center items-center m-auto px-10">
+          <div className="relative w-full max-w-6xl h-full flex justify-center items-center m-auto px-10">
             <Image
               width={2000}
               height={2000}
