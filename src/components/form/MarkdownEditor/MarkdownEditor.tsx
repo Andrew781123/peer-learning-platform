@@ -12,7 +12,6 @@ import {
   title2,
   unorderedListCommand,
 } from "@uiw/react-md-editor/lib/commands";
-import "@uiw/react-md-editor/markdown-editor.css";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
 import { toast } from "react-hot-toast";
