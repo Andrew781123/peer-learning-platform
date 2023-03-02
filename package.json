@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
-    "dev": "next dev",
+    "build": "turbo build",
+    "dev": "turbo run dev --parallel",
     "postinstall": "prisma generate",
-    "lint": "next lint",
+    "lint": "turbo lint",
     "start": "next start",
     "prepare": "husky install",
     "typecheck": "tsc --noEmit"
