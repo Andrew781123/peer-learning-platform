@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import clsx from "clsx";
 import { NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -21,7 +20,7 @@ const signInSchema = z.object({
     .email()
     .refine(
       (email) =>
-        process.env.VERCEL_ENV !== "production"
+        process.env.NEXT_PUBLIC_VERCEL_ENV !== "production"
           ? true
           : getEmailDomain(email) === "connect.polyu.hk",
       {
@@ -33,7 +32,11 @@ const signInSchema = z.object({
 type SignInPageProps = {};
 
 const SignInPage: NextPage<SignInPageProps> = () => {
-  console.log("env", process.env.VERCEL_ENV, process.env.ENVIRONMENT);
+  console.log(
+    "env",
+    process.env.NEXT_PUBLIC_VERCEL_ENV,
+    process.env.ENVIRONMENT
+  );
   const router = useRouter();
   const { status } = useSession();
 
@@ -88,18 +91,17 @@ const SignInPage: NextPage<SignInPageProps> = () => {
             Sign In
           </Button>
 
-          <Button
-            type="button"
-            primary
-            className={clsx(
-              process.env.NEXT_PUBLIC_VERCEL_ENV === "production" && "hidden",
-              "mt-2"
-            )}
-            isLoading={signInMutation.isLoading}
-            onClick={handleSubmit(onSubmit)}
-          >
-            Dev Sign in
-          </Button>
+          {process.env.NEXT_PUBLIC_NEXT_PUBLIC_VERCEL_ENV === "production" && (
+            <Button
+              type="button"
+              primary
+              className="mt-2"
+              isLoading={signInMutation.isLoading}
+              onClick={handleSubmit(onSubmit)}
+            >
+              Dev Sign in
+            </Button>
+          )}
         </form>
       </Section>
     </div>

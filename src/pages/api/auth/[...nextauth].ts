@@ -11,7 +11,7 @@ import { getQueryParams } from "../../../utils/url";
 export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ email, user, account, profile }) {
-      if (process.env.VERCEL_ENV !== "production") return true;
+      if (process.env.NEXT_PUBLIC_VERCEL_ENV !== "production") return true;
 
       if (!user.email) return false;
 
