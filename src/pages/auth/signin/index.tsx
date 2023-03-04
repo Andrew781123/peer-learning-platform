@@ -33,6 +33,7 @@ const signInSchema = z.object({
 type SignInPageProps = {};
 
 const SignInPage: NextPage<SignInPageProps> = () => {
+  console.log("env", process.env.VERCEL_ENV, process.env.ENVIRONMENT);
   const router = useRouter();
   const { status } = useSession();
 
@@ -91,7 +92,7 @@ const SignInPage: NextPage<SignInPageProps> = () => {
             type="button"
             primary
             className={clsx(
-              process.env.VERCEL_ENV === "Production" && "hidden",
+              process.env.ENVIRONMENT === "production" && "hidden",
               "mt-2"
             )}
             isLoading={signInMutation.isLoading}
