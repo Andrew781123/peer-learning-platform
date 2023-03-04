@@ -91,7 +91,7 @@ const SignInPage: NextPage<SignInPageProps> = () => {
             type="button"
             primary
             className={clsx(
-              process.env.VERCEL_ENV === "production" && "hidden",
+              process.env.VERCEL_ENV === "Production" && "hidden",
               "mt-2"
             )}
             isLoading={signInMutation.isLoading}
