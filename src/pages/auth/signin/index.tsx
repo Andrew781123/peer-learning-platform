@@ -32,11 +32,6 @@ const signInSchema = z.object({
 type SignInPageProps = {};
 
 const SignInPage: NextPage<SignInPageProps> = () => {
-  console.log(
-    "env",
-    process.env.NEXT_PUBLIC_VERCEL_ENV,
-    process.env.ENVIRONMENT
-  );
   const router = useRouter();
   const { status } = useSession();
 
