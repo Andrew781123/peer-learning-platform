@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { protectedProcedure, router } from "@/server/trpc/trpc";
+import {
+  protectedProcedure,
+  publicProcedure,
+  router,
+} from "@/server/trpc/trpc";
 
 export const solutionCommentRouter = router({
   create: protectedProcedure
@@ -18,6 +22,25 @@ export const solutionCommentRouter = router({
           solutionId,
           markdown,
           userId: ctx.session.user.id,
+        },
+      });
+
+      return response;
+    }),
+
+  getAll: publicProcedure
+    .input(
+      z.object({
+        where: z.object({
+          solutionId: z.string(),
+        }),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const response = await ctx.prisma.solutionComment.findMany({
+        where: input.where,
+        include: {
+          user: true,
         },
       });
 
