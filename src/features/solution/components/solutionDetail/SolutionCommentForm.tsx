@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 import Input from "@/components/form/Input";
+import { useUser } from "@/hooks/useUser";
 import { trpc } from "@/utils/trpc";
 
 const commentSchema = z.object({
@@ -19,6 +20,8 @@ type SolutionCommentFormProps = {
 export const SolutionCommentForm = ({
   solutionId,
 }: SolutionCommentFormProps) => {
+  const { user } = useUser();
+
   const { mutateAsync } = trpc.solutionComment.create.useMutation({
     onSuccess: () => {
       reset();
@@ -38,12 +41,17 @@ export const SolutionCommentForm = ({
 
   const onSubmit = useCallback(
     async (data: SolutionCommentSchema) => {
+      if (!user) {
+        toast.error("You must be logged in to comment");
+        return;
+      }
+
       await mutateAsync({
         markdown: data.markdown,
         solutionId,
       });
     },
-    [solutionId, mutateAsync]
+    [solutionId, mutateAsync, user]
   );
 
   return (

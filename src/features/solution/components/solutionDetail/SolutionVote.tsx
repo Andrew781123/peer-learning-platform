@@ -59,6 +59,7 @@ export const SolutionVote = ({
   const onVoteClick = (voteValue: SolutionVoteValue) => {
     if (authStatus !== "authenticated") {
       toast.error("You must be logged in to vote");
+      return;
     }
 
     const isUserVoted =
