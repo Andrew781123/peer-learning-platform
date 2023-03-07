@@ -1,8 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { z } from "zod";
 
 import Input from "@/components/form/Input";
+import { trpc } from "@/utils/trpc";
 
 const commentSchema = z.object({
   markdown: z.string().min(1),
@@ -11,15 +14,37 @@ const commentSchema = z.object({
 export type SolutionCommentSchema = z.infer<typeof commentSchema>;
 
 type SolutionCommentFormProps = {
-  onSubmit: (data: SolutionCommentSchema) => void;
+  solutionId: string;
 };
-export const SolutionCommentForm = ({ onSubmit }: SolutionCommentFormProps) => {
-  const { register, handleSubmit, formState } = useForm<SolutionCommentSchema>({
-    defaultValues: {
-      markdown: "",
+export const SolutionCommentForm = ({
+  solutionId,
+}: SolutionCommentFormProps) => {
+  const { mutateAsync } = trpc.solutionComment.create.useMutation({
+    onSuccess: () => {
+      reset();
     },
-    resolver: zodResolver(commentSchema),
+    onError: () => {
+      toast.error("Failed to create comment");
+    },
   });
+
+  const { register, handleSubmit, formState, reset } =
+    useForm<SolutionCommentSchema>({
+      defaultValues: {
+        markdown: "",
+      },
+      resolver: zodResolver(commentSchema),
+    });
+
+  const onSubmit = useCallback(
+    async (data: SolutionCommentSchema) => {
+      await mutateAsync({
+        markdown: data.markdown,
+        solutionId,
+      });
+    },
+    [solutionId, mutateAsync]
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">

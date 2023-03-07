@@ -1,12 +1,6 @@
-import { useCallback } from "react";
-
 import Divider from "@/components/ui/Divider";
-import {
-  SolutionCommentForm,
-  SolutionCommentSchema,
-} from "@/features/solution/components/solutionDetail/SolutionCommentForm";
+import { SolutionCommentForm } from "@/features/solution/components/solutionDetail/SolutionCommentForm";
 import { SolutionCommentItem } from "@/features/solution/components/solutionDetail/SolutionCommentItem";
-import { trpc } from "@/utils/trpc";
 
 type SolutionCommentProps = {
   solutionId: string;
@@ -24,22 +18,9 @@ export const SolutionCommentSection = ({
     },
   ];
 
-  const { mutateAsync } = trpc.solutionComment.create.useMutation({});
-
-  const onSubmit = useCallback(
-    async (data: SolutionCommentSchema) => {
-      console.log(data);
-      await mutateAsync({
-        markdown: data.markdown,
-        solutionId,
-      });
-    },
-    [solutionId, mutateAsync]
-  );
-
   return (
     <div>
-      <SolutionCommentForm onSubmit={onSubmit} />
+      <SolutionCommentForm solutionId={solutionId} />
 
       <Divider />
       {comments.map((comment) => (
