@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import Divider from "@/components/ui/Divider";
 import { SolutionCommentItem } from "@/features/solution/components/solutionDetail/SolutionCommentItem";
 import { trpc } from "@/utils/trpc";
@@ -16,15 +18,15 @@ export const SolutionCommentList = ({
     <div>
       <Divider />
       {comments.map((comment) => (
-        <>
+        <Fragment key={comment.id}>
           <SolutionCommentItem
             key={comment.id}
-            username={comment.user.name!}
+            author={comment.user}
             markdown={comment.markdown}
             createdAt={comment.createdAt}
           />
           <Divider />
-        </>
+        </Fragment>
       ))}
 
       <button className="text-primary-dark hover:underline">Load more</button>
