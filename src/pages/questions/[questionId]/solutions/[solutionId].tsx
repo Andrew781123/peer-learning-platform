@@ -79,7 +79,7 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
 
           <Divider className="mt-5" />
 
-          <SolutionCommentSection />
+          <SolutionCommentSection solutionId={solutionId} />
         </div>
       </div>
     </div>

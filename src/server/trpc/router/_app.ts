@@ -1,4 +1,6 @@
 // src/server/trpc/router/_app.ts
+import { solutionCommentRouter } from "@/server/trpc/router/solution-comment";
+
 import { router } from "../trpc";
 import { authRouter } from "./auth";
 import { difficultyRatingOptionRouter } from "./difficulty-rating-option";
@@ -20,6 +22,7 @@ export const appRouter = router({
   subjectTopic: subjectTopicRouter,
   solution: solutionRouter,
   solutionVote: solutionVoteRouter,
+  solutionComment: solutionCommentRouter,
   difficultyRatingOption: difficultyRatingOptionRouter,
   imgur: imgurRouter,
   user: userRouter,

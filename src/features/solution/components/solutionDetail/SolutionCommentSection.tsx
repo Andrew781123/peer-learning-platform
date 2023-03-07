@@ -1,10 +1,20 @@
-import Input from "@/components/form/Input";
+import { useCallback } from "react";
+
 import Divider from "@/components/ui/Divider";
+import {
+  SolutionCommentForm,
+  SolutionCommentSchema,
+} from "@/features/solution/components/solutionDetail/SolutionCommentForm";
 import { SolutionCommentItem } from "@/features/solution/components/solutionDetail/SolutionCommentItem";
+import { trpc } from "@/utils/trpc";
 
-type SolutionCommentProps = {};
+type SolutionCommentProps = {
+  solutionId: string;
+};
 
-export const SolutionCommentSection = ({}: SolutionCommentProps) => {
+export const SolutionCommentSection = ({
+  solutionId,
+}: SolutionCommentProps) => {
   const comments = [
     {
       id: "1",
@@ -14,9 +24,22 @@ export const SolutionCommentSection = ({}: SolutionCommentProps) => {
     },
   ];
 
+  const { mutateAsync } = trpc.solutionComment.create.useMutation({});
+
+  const onSubmit = useCallback(
+    async (data: SolutionCommentSchema) => {
+      console.log(data);
+      await mutateAsync({
+        markdown: data.markdown,
+        solutionId,
+      });
+    },
+    [solutionId, mutateAsync]
+  );
+
   return (
     <div>
-      <Input className="w-1/2 text-sm my-2" placeholder="Write a comment..." />
+      <SolutionCommentForm onSubmit={onSubmit} />
 
       <Divider />
       {comments.map((comment) => (

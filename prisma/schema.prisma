@@ -88,7 +88,7 @@ model SolutionQuestionVote {
 }
 
 model SolutionComment {
-  id         Int              @id @default(autoincrement())
+  id         String           @id @default(cuid())
   solution   QuestionSolution @relation(fields: [solutionId], references: [id])
   solutionId String
   user       User             @relation(fields: [userId], references: [id])
