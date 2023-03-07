@@ -17,10 +17,11 @@ export const SolutionCommentList = ({
   return (
     <div>
       <Divider />
-      {comments.map((comment) => (
+      {comments.map((comment, index) => (
         <Fragment key={comment.id}>
           <SolutionCommentItem
             key={comment.id}
+            floor={index + 1}
             author={comment.user}
             markdown={comment.markdown}
             createdAt={comment.createdAt}

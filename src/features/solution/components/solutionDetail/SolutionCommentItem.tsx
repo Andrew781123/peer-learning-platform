@@ -5,12 +5,14 @@ import { useUser } from "@/hooks/useUser";
 import { getTimeFromX } from "@/server/utils/dates";
 
 type SolutionCommentItemProps = {
+  floor: number;
   author: User;
   markdown: string;
   createdAt: Date;
 };
 
 export const SolutionCommentItem = ({
+  floor,
   author,
   markdown,
   createdAt,
@@ -25,6 +27,7 @@ export const SolutionCommentItem = ({
   return (
     <div className="space-y-1 py-2 w-full text-sm">
       <div className="space-x-2">
+        <span className="text-primary-dark">#{floor}</span>
         <span className="text-gray-200 font-medium">{displayName}</span>
         <span className="text-gray-400">
           {getTimeFromX({ toDate: new Date(createdAt) })}
