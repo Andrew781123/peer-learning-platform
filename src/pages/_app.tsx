@@ -1,4 +1,4 @@
-import { MantineProvider, createEmotionCache } from "@mantine/core";
+import { createEmotionCache } from "@mantine/core";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -28,16 +28,16 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <MantineProvider withGlobalStyles withNormalizeCSS emotionCache={myCache}>
-        <ImageModalContextProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <Toaster />
-          <NextNProgress startPosition={0.5} options={{ showSpinner: false }} />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ImageModalContextProvider>
-      </MantineProvider>
+      {/* <MantineProvider withGlobalStyles withNormalizeCSS emotionCache={myCache}> */}
+      <ImageModalContextProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <Toaster />
+        <NextNProgress startPosition={0.5} options={{ showSpinner: false }} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ImageModalContextProvider>
+      {/* </MantineProvider> */}
     </SessionProvider>
   );
 };

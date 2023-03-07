@@ -14,6 +14,7 @@ import superjson from "superjson";
 import { MarkdownImage } from "@/components/solution/MarkdownImage";
 import Divider from "@/components/ui/Divider";
 import PageHeader from "@/components/ui/PageHeader";
+import { SolutionCommentSection } from "@/features/solution/components/solutionDetail/SolutionCommentSection";
 import { SolutionInfo } from "@/features/solution/components/solutionDetail/SolutionInfo";
 import { SolutionVote } from "@/features/solution/components/solutionDetail/SolutionVote";
 import { createContextInner } from "@/server/trpc/context";
@@ -62,16 +63,23 @@ const PastPaperPage: NextPage<PastPaperPageProps> = (props) => {
             fallbackVoteCount={solution.data.votes}
           />
         </div>
+
         <div className="mt-2 w-full">
-          <ReactMarkdown
-            rehypePlugins={[rehypeRaw]}
-            components={{
-              img: ({ src, alt }) => <MarkdownImage src={src!} alt={alt!} />,
-            }}
-            className="prose dark:prose-invert"
-          >
-            {solution.data.markdown.replace(/\n/, "  \n")}
-          </ReactMarkdown>
+          <div className="min-h-[8rem]">
+            <ReactMarkdown
+              rehypePlugins={[rehypeRaw]}
+              components={{
+                img: ({ src, alt }) => <MarkdownImage src={src!} alt={alt!} />,
+              }}
+              className="prose dark:prose-invert"
+            >
+              {solution.data.markdown.replace(/\n/, "  \n")}
+            </ReactMarkdown>
+          </div>
+
+          <Divider className="mt-5" />
+
+          <SolutionCommentSection />
         </div>
       </div>
     </div>
