@@ -25,6 +25,7 @@ export const SolutionCommentForm = ({
 
   const { mutateAsync } = trpc.solutionComment.create.useMutation({
     onSuccess: () => {
+      toast.success("Comment created");
       trpcUtils.solutionComment.getAll.invalidate();
       reset();
     },
