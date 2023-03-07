@@ -21,9 +21,11 @@ export const SolutionCommentForm = ({
   solutionId,
 }: SolutionCommentFormProps) => {
   const { user } = useUser();
+  const trpcUtils = trpc.useContext();
 
   const { mutateAsync } = trpc.solutionComment.create.useMutation({
     onSuccess: () => {
+      trpcUtils.solutionComment.getAll.invalidate();
       reset();
     },
     onError: () => {
