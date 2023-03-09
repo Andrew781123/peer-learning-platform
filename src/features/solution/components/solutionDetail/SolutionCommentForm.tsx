@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 import Input from "@/components/form/Input";
+import { useQueryParam } from "@/features/common/hooks/useQueryParam";
 import { useUser } from "@/hooks/useUser";
 import { trpc } from "@/utils/trpc";
 
@@ -14,14 +15,10 @@ const commentSchema = z.object({
 
 export type SolutionCommentSchema = z.infer<typeof commentSchema>;
 
-type SolutionCommentFormProps = {
-  solutionId: string;
-};
-export const SolutionCommentForm = ({
-  solutionId,
-}: SolutionCommentFormProps) => {
+export const SolutionCommentForm = () => {
   const { user } = useUser();
   const trpcUtils = trpc.useContext();
+  const { query } = useQueryParam<{ solutionId: string }>();
 
   const { mutateAsync } = trpc.solutionComment.create.useMutation({
     onSuccess: () => {
@@ -51,10 +48,10 @@ export const SolutionCommentForm = ({
 
       await mutateAsync({
         markdown: data.markdown,
-        solutionId,
+        solutionId: query.solutionId,
       });
     },
-    [solutionId, mutateAsync, user]
+    [mutateAsync, user, query.solutionId]
   );
 
   return (

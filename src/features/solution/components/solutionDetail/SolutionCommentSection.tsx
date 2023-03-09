@@ -10,7 +10,7 @@ export const SolutionCommentSection = ({
 }: SolutionCommentProps) => {
   return (
     <div>
-      <SolutionCommentForm solutionId={solutionId} />
+      <SolutionCommentForm />
 
       <SolutionCommentList solutionId={solutionId} />
     </div>
