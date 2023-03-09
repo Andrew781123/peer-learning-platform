@@ -61,6 +61,7 @@ export const SolutionCommentForm = () => {
         <Input
           className="w-1/2 text-sm my-2"
           placeholder="Write a comment..."
+          disabled={formState.isSubmitting}
           {...register("markdown")}
         />
 

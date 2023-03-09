@@ -29,8 +29,7 @@ export const SolutionCommentList = ({
           <Divider />
         </Fragment>
       ))}
-
-      <button className="text-primary-dark hover:underline">Load more</button>
+      {/* <button className="text-primary-dark hover:underline">Load more</button> */}
     </div>
   );
 };
