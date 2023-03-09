@@ -46,10 +46,11 @@ export const SolutionCommentForm = () => {
         return;
       }
 
+      // ? The empty catch block is a workaround for isSubmitting not being reset
       await mutateAsync({
         markdown: data.markdown,
         solutionId: query.solutionId,
-      });
+      }).catch((err) => {});
     },
     [mutateAsync, user, query.solutionId]
   );
