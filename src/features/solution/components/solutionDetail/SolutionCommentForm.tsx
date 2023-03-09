@@ -59,7 +59,7 @@ export const SolutionCommentForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="flex gap-2 w-full">
         <Input
-          className="w-1/2 text-sm my-2"
+          className="flex-1 text-sm my-2"
           placeholder="Write a comment..."
           disabled={formState.isSubmitting}
           {...register("markdown")}
