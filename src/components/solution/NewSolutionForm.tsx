@@ -18,8 +18,9 @@ import {
 import { toast } from "react-hot-toast";
 import { z } from "zod";
 
+import { trpc } from "@/utils/trpc";
+
 import useSelectOptions from "../../hooks/useSelectOptions";
-import { trpc } from "../../utils/trpc";
 import FormGroup from "../form/FormGroup";
 import Input from "../form/Input";
 import Label from "../form/Label";
