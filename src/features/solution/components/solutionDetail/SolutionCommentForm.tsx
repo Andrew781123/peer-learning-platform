@@ -10,7 +10,7 @@ import { useUser } from "@/hooks/useUser";
 import { trpc } from "@/utils/trpc";
 
 const commentSchema = z.object({
-  markdown: z.string().min(1),
+  markdown: z.string().min(1, "Comment cannot be empty"),
 });
 
 export type SolutionCommentSchema = z.infer<typeof commentSchema>;
@@ -59,9 +59,12 @@ export const SolutionCommentForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="flex gap-2 w-full">
         <Input
-          className="flex-1 text-sm my-2"
+          // TODO: remove my-5 when refactored errorText style of Input
+          className="flex-1 text-sm my-5"
           placeholder="Write a comment..."
           disabled={formState.isSubmitting}
+          error={!!formState.errors.markdown}
+          errorText={formState.errors.markdown?.message}
           {...register("markdown")}
         />
 
