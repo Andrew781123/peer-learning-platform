@@ -64,8 +64,10 @@ export const authOptions: NextAuthOptions = {
 const authHandler = NextAuth(authOptions);
 
 export default function auth(req: NextApiRequest, res: NextApiResponse) {
-  if (req.headers["x-vercel-ip-country"] === "JP") {
-    return res.status(200).send("Please visit the link from a browser.");
+  console.log(123, req.headers["x-vercel-ip-country"]);
+  console.log(req.headers);
+  if (req.headers["x-vercel-ip-country"] !== "HK" || req.method === "HEAD") {
+    return res.status(200).end();
   }
 
   return authHandler(req, res);
