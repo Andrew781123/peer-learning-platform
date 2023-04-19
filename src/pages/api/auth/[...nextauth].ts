@@ -64,6 +64,7 @@ export const authOptions: NextAuthOptions = {
 const authHandler = NextAuth(authOptions);
 
 export default function auth(req: NextApiRequest, res: NextApiResponse) {
+  console.log("x-vercel-ip-country", req.headers["x-vercel-ip-country"]);
   console.log("user agent", req.headers["user-agent"]);
 
   if (req.headers["x-vercel-ip-country"] !== "HK" || req.method === "HEAD") {
