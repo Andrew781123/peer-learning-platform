@@ -1,5 +1,6 @@
 # ExamPeer
-Add .env to the root directory
+Add `.env` to the root directory
+
 To start the application, go to the root directory, and run
 
 ```bash
