@@ -1,9 +1,9 @@
 # ExamPeer
-
+Add .env to the root directory
 To start the application, go to the root directory, and run
 
 ```bash
-docker compose up --build
+docker compose up --buildCancel changes
 ```
 
 to start the MySQL server, then run
